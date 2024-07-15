@@ -1,3 +1,17 @@
 {
-  "item.camping.example_item": "Example Item"
+  "item.camping.example_item": "Example Item",
+  "item.camping.ender_backpack": "Ender Backpack",
+  "item.camping.small_backpack": "Small Backpack",
+  "item.camping.wanderer_backpack": "Wanderer Backpack",
+  "item.camping.large_backpack": "Large Backpack",
+
+  "block.camping.ender_backpack": "Ender Backpack",
+  "block.camping.small_backpack": "Small Backpack",
+  "block.camping.wanderer_backpack": "Wanderer Backpack",
+  "block.camping.large_backpack": "Large Backpack",
+
+  "container.camping.ender_backpack": "Ender Backpack",
+  "container.camping.small_backpack": "Small Backpack",
+  "container.camping.wanderer_backpack": "Wanderer Backpack",
+  "container.camping.large_backpack": "Large Backpack"
 }
