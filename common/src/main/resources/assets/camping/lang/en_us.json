@@ -1,10 +1,26 @@
 {
-  "item.camping.example_item": "Example Item",
+  "itemGroup.camping.camping_tab": "[Let's Do] Camping",
   "item.camping.ender_backpack": "Ender Backpack",
   "item.camping.small_backpack": "Small Backpack",
   "item.camping.wanderer_backpack": "Wanderer Backpack",
   "item.camping.large_backpack": "Large Backpack",
-
+  "block.camping.grill": "Grill",
+  "block.camping.sleeping_bag_white": "White Sleeping Bag",
+  "block.camping.sleeping_bag_orange": "Orange Sleeping Bag",
+  "block.camping.sleeping_bag_magenta": "Magenta Sleeping Bag",
+  "block.camping.sleeping_bag_light_blue": "Light Blue Sleeping Bag",
+  "block.camping.sleeping_bag_yellow": "Yellow Sleeping Bag",
+  "block.camping.sleeping_bag_lime": "Lime Sleeping Bag",
+  "block.camping.sleeping_bag_pink": "Pink Sleeping Bag",
+  "block.camping.sleeping_bag_gray": "Gray Sleeping Bag",
+  "block.camping.sleeping_bag_light_gray": "Light Gray Sleeping Bag",
+  "block.camping.sleeping_bag_cyan": "Cyan Sleeping Bag",
+  "block.camping.sleeping_bag_purple": "Purple Sleeping Bag",
+  "block.camping.sleeping_bag_blue": "Blue Sleeping Bag",
+  "block.camping.sleeping_bag_brown": "Brown Sleeping Bag",
+  "block.camping.sleeping_bag_green": "Green Sleeping Bag",
+  "block.camping.sleeping_bag_red": "Red Sleeping Bag",
+  "block.camping.sleeping_bag_black": "Black Sleeping Bag",
   "block.camping.ender_backpack": "Ender Backpack",
   "block.camping.small_backpack": "Small Backpack",
   "block.camping.wanderer_backpack": "Wanderer Backpack",
@@ -13,5 +29,8 @@
   "container.camping.ender_backpack": "Ender Backpack",
   "container.camping.small_backpack": "Small Backpack",
   "container.camping.wanderer_backpack": "Wanderer Backpack",
-  "container.camping.large_backpack": "Large Backpack"
+  "container.camping.large_backpack": "Large Backpack",
+  "tooltip.camping.grilled": "This item has been flame grilled:",
+  "tooltip.camping.grilled.nutrition": "+25% Nutrition",
+  "tooltip.camping.grilled.saturationModifier": "+25% Saturation"
 }

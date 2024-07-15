@@ -14,7 +14,7 @@ import net.satisfy.camping.block.GrillBlock;
 import net.satisfy.camping.block.entity.GrillBlockEntity;
 
 public class GrillRenderer implements BlockEntityRenderer<GrillBlockEntity> {
-    private static final float SIZE = 0.375F;
+    private static final float SIZE = 0.3F;
     private final ItemRenderer itemRenderer;
 
     public GrillRenderer(BlockEntityRendererProvider.Context context) {
@@ -31,12 +31,12 @@ public class GrillRenderer implements BlockEntityRenderer<GrillBlockEntity> {
             ItemStack itemStack = items.get(i);
             if (!itemStack.isEmpty()) {
                 poseStack.pushPose();
-                poseStack.translate(0.5F, 1F, 0.5F);  // Changed to bring items closer to the center
+                poseStack.translate(0.5F, 1F, 0.5F);
                 Direction itemDirection = Direction.from2DDataValue((i + direction.get2DDataValue()) % 4);
                 float rotation = -itemDirection.toYRot();
                 poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
                 poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-                poseStack.translate(-0.15625F, -0.15625F, 0.0F);  // Adjusted translation to make items closer to the center
+                poseStack.translate(-0.15625F, -0.15625F, 0.0F);
                 poseStack.scale(SIZE, SIZE, SIZE);
                 this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, grillBlockEntity.getLevel(), posLong + i);
                 poseStack.popPose();

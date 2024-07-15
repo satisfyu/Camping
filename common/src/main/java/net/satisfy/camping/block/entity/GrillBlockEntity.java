@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.GameEvent.Context;
+import net.satisfy.camping.Util.CampingUtil;
 import net.satisfy.camping.block.GrillBlock;
 import net.satisfy.camping.registry.EntityTypeRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +56,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
                     Container container = new SimpleContainer(itemStack);
                     ItemStack result = grill.quickCheck.getRecipeFor(container, level).map((recipe) -> recipe.assemble(container, level.registryAccess())).orElse(itemStack);
                     if (result.isItemEnabled(level.enabledFeatures())) {
+                        CampingUtil.Grilling.setGrilled(result);
                         Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), result);
                         grill.items.set(i, ItemStack.EMPTY);
                         level.sendBlockUpdated(pos, state, state, 3);
@@ -83,9 +85,9 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         for (int j = 0; j < grill.items.size(); ++j) {
             if (!grill.items.get(j).isEmpty() && randomSource.nextFloat() < 0.2F) {
                 Direction direction = Direction.from2DDataValue(Math.floorMod(j + i, 4));
-                float offset = 0.15625F;  // Adjusted offset to bring particles closer to the center
+                float offset = 0.15625F;
                 double d = pos.getX() + 0.5 - direction.getStepX() * offset + direction.getClockWise().getStepX() * offset;
-                double e = pos.getY() + 1.2;  // Smoke particles 1 block up
+                double e = pos.getY() + 1.2;
                 double g = pos.getZ() + 0.5 - direction.getStepZ() * offset + direction.getClockWise().getStepZ() * offset;
 
                 for (int k = 0; k < 4; ++k) {
@@ -98,7 +100,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
 
     private static void makeParticles(Level level, BlockPos pos) {
         RandomSource randomSource = level.random;
-        level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, pos.getX() + 0.5 + randomSource.nextDouble() / 3.0 * (randomSource.nextBoolean() ? 1 : -1), pos.getY() + 1.3 + randomSource.nextDouble() + randomSource.nextDouble(), pos.getZ() + 0.5 + randomSource.nextDouble() / 3.0 * (randomSource.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
+        level.addAlwaysVisibleParticle(ParticleTypes.SMOKE, true, pos.getX() + 0.5 + randomSource.nextDouble() / 3.0 * (randomSource.nextBoolean() ? 1 : -1), pos.getY() + 1.3 + randomSource.nextDouble() + randomSource.nextDouble(), pos.getZ() + 0.5 + randomSource.nextDouble() / 3.0 * (randomSource.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
     }
 
     public NonNullList<ItemStack> getItems() {

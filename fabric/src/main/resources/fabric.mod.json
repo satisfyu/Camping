@@ -23,7 +23,7 @@
     ]
   },
   "mixins": [
-    "camping.mixins.json",
+    "camping.fabric.mixins.json",
     "camping-common.mixins.json"
   ],
   "depends": {
