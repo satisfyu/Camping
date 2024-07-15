@@ -8,10 +8,12 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.Util.CampingIdentifier;
 import net.satisfy.camping.Util.CampingUtil;
+import net.satisfy.camping.block.GrillBlock;
 import net.satisfy.camping.block.SleepingBagBlock;
 
 import java.util.HashMap;
@@ -25,6 +27,7 @@ public class ObjectRegistry {
     public static final Registrar<Block> BLOCK_REGISTRAR = BLOCKS.getRegistrar();
 
     public static final Map<String, RegistrySupplier<Block>> SLEEPING_BAGS = new HashMap<>();
+    public static final RegistrySupplier<Block> GRILL = registerWithItem("grill", () -> new GrillBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN)));
 
 
     public static final String[] colors = {
