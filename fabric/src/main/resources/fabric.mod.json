@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.camping.fabric.CampingFabric"
+      "net.satisfy.camping.fabric.CampingFabric"
     ]
   },
   "mixins": [

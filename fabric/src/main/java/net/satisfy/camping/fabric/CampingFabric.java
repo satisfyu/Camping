@@ -1,6 +1,6 @@
-package net.camping.fabric;
+package net.satisfy.camping.fabric;
 
-import net.camping.Camping;
+import net.satisfy.camping.Camping;
 import net.fabricmc.api.ModInitializer;
 
 public class CampingFabric implements ModInitializer {

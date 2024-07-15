@@ -1,4 +1,4 @@
-package net.camping.mixin;
+package net.satisfy.camping.mixin;
 
 import net.minecraft.client.gui.screens.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
