@@ -21,6 +21,9 @@ public class TabRegistry {
                         "white", "light_gray", "gray", "black", "red", "orange", "yellow", "lime", "green", "cyan", "light_blue", "blue", "purple", "magenta", "pink", "brown"
                 };
                 for (String color : colorOrder) {
+                    ObjectRegistry.TENT_MAIN.get(color).ifPresent(out::accept);
+                }
+                for (String color : colorOrder) {
                     ObjectRegistry.SLEEPING_BAGS.get(color).ifPresent(out::accept);
                 }
                 out.accept(ObjectRegistry.MULTITOOL.get());

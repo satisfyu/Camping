@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.item.DyeColor;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.Util.CampingIdentifier;
 import net.satisfy.camping.Util.CampingUtil;
@@ -34,29 +35,29 @@ public class ObjectRegistry {
 
     public static final Map<String, RegistrySupplier<Block>> SLEEPING_BAGS = new HashMap<>();
     public static final RegistrySupplier<Block> GRILL = registerWithItem("grill", () -> new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON), 1));
-    public static final RegistrySupplier<Block> ENDER_BACKPACK_BLOCK = registerWithoutItem("ender_backpack", () -> new Block(BlockBehaviour.Properties.copy(Blocks.RED_WOOL)));;
+    public static final RegistrySupplier<Block> ENDER_BACKPACK_BLOCK = registerWithoutItem("ender_backpack", () -> new Block(BlockBehaviour.Properties.copy(Blocks.RED_WOOL)));
     public static final RegistrySupplier<Item> MULTITOOL = registerItem("multitool", () -> new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant()));
-
-
-    public static final RegistrySupplier<Block> TENT_MAIN = registerWithItem("tent_main", () -> new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE)));
-    public static final RegistrySupplier<Block> TENT_MAIN_HEAD = registerWithoutItem("tent_main_head", () -> new TentMainHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE)));
-    public static final RegistrySupplier<Block> TENT_RIGHT = registerWithoutItem("tent_right", () -> new TentRightBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE)));
-    public static final RegistrySupplier<Block> TENT_HEAD_RIGHT = registerWithoutItem("tent_head_right", () -> new TentRightHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE)));
-
-
 
     public static final String[] colors = {
             "white", "light_gray", "gray", "black", "red", "orange", "yellow", "lime", "green", "cyan", "light_blue", "blue", "purple", "magenta", "pink", "brown"
     };
 
+    public static final Map<String, RegistrySupplier<Block>> TENT_MAIN = new HashMap<>();
+    public static final Map<String, RegistrySupplier<Block>> TENT_MAIN_HEAD = new HashMap<>();
+    public static final Map<String, RegistrySupplier<Block>> TENT_RIGHT = new HashMap<>();
+    public static final Map<String, RegistrySupplier<Block>> TENT_HEAD_RIGHT = new HashMap<>();
 
     static {
-
-        // sleeping bags
         for (String color : colors) {
-            SLEEPING_BAGS.put(color, registerWithItem("sleeping_bag_" + color, () -> new SleepingBagBlock(DyeColor.BLUE, Block.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
-        }
+            DyeColor dyeColor = DyeColor.valueOf(color.toUpperCase());
 
+            SLEEPING_BAGS.put(color, registerWithItem("sleeping_bag_" + color, () -> new SleepingBagBlock(dyeColor, BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
+
+            TENT_MAIN.put(color, registerWithItem("tent_" + color, () -> new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE), DyeColor.valueOf(color.toUpperCase()))));
+            TENT_MAIN_HEAD.put(color, registerWithoutItem("tent_head_" + color, () -> new TentMainHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
+            TENT_RIGHT.put(color, registerWithoutItem("tent_right_" + color, () -> new TentRightBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
+            TENT_HEAD_RIGHT.put(color, registerWithoutItem("tent_head_right_" + color, () -> new TentRightHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
+        }
 
         registerItem("ender_backpack", () -> new EnderBackpackItem(ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
 

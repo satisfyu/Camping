@@ -4,6 +4,7 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -29,8 +30,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-//TODO: Maybe add open/close for the curtains?
-@SuppressWarnings("deprecation")
 public class TentMainBlock extends TentBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF;
     private static final Supplier<VoxelShape> bottomVoxelShapeSupplier = () -> {
@@ -66,11 +65,17 @@ public class TentMainBlock extends TentBlock {
         HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     }
 
-    public TentMainBlock(Properties properties) {
+    private final DyeColor color;
+
+    public TentMainBlock(Properties properties, DyeColor color) {
         super(properties);
+        this.color = color;
         this.registerDefaultState(this.defaultBlockState().setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
+    public DyeColor getColor() {
+        return this.color;
+    }
 
     @Override
     public void onPlace(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
@@ -78,7 +83,6 @@ public class TentMainBlock extends TentBlock {
             level.setBlockAndUpdate(blockPos.above(), blockState.setValue(HALF, DoubleBlockHalf.UPPER));
         }
     }
-
 
     public @NotNull BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
         DoubleBlockHalf doubleBlockHalf = blockState.getValue(HALF);
@@ -136,10 +140,9 @@ public class TentMainBlock extends TentBlock {
         BlockPos diagonalPos = sidePos.relative(facing.getOpposite());
         BlockPos topPos = diagonalPos.above();
         if (!canPlace(level, backPos, sidePos, diagonalPos, topPos)) return;
-        level.setBlock(backPos, ObjectRegistry.TENT_MAIN_HEAD.get().defaultBlockState().setValue(FACING, facing), 3);
-        level.setBlock(sidePos, ObjectRegistry.TENT_RIGHT.get().defaultBlockState().setValue(FACING, facing), 3);
-        level.setBlock(diagonalPos, ObjectRegistry.TENT_HEAD_RIGHT.get().defaultBlockState().setValue(FACING, facing), 3);
-
+        level.setBlock(backPos, ObjectRegistry.TENT_MAIN_HEAD.get(this.color.getName()).get().defaultBlockState().setValue(FACING, facing), 3);
+        level.setBlock(sidePos, ObjectRegistry.TENT_RIGHT.get(this.color.getName()).get().defaultBlockState().setValue(FACING, facing), 3);
+        level.setBlock(diagonalPos, ObjectRegistry.TENT_HEAD_RIGHT.get(this.color.getName()).get().defaultBlockState().setValue(FACING, facing), 3);
     }
 
     private boolean canPlace(Level level, BlockPos... blockPoses) {
@@ -162,5 +165,4 @@ public class TentMainBlock extends TentBlock {
             return TOP_SHAPE.get(facing);
         }
     }
-
 }
