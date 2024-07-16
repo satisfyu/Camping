@@ -8,6 +8,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Container;
@@ -68,8 +70,10 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
 
         if (hasItems) {
             setChanged(level, pos, state);
+            level.playSound(null, pos, SoundEvents.SMOKER_SMOKE, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }
+
 
     public static void particleTick(Level level, BlockPos pos, BlockState state, GrillBlockEntity grill) {
         RandomSource randomSource = level.random;

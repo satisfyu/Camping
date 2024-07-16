@@ -20,6 +20,9 @@
     ],
     "client": [
       "net.satisfy.camping.fabric.client.CampingClientFabric"
+    ],
+    "modmenu": [
+      "net.satisfy.camping.fabric.config.ModMenu"
     ]
   },
   "mixins": [

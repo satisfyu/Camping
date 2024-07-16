@@ -6,8 +6,6 @@
   "client": [
   ],
   "mixins": [
-    "FoodDataMixin",
-    "ItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1

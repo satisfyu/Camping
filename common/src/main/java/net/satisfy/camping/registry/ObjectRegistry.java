@@ -13,12 +13,7 @@ import net.minecraft.world.item.DyeColor;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.Util.CampingIdentifier;
 import net.satisfy.camping.Util.CampingUtil;
-import net.satisfy.camping.block.GrillBlock;
-import net.satisfy.camping.block.SleepingBagBlock;
-import net.satisfy.camping.block.TentMainBlock;
-import net.satisfy.camping.block.TentMainHeadBlock;
-import net.satisfy.camping.block.TentRightBlock;
-import net.satisfy.camping.block.TentRightHeadBlock;
+import net.satisfy.camping.block.*;
 import net.satisfy.camping.item.MultitoolItem;
 import net.satisfy.camping.item.backpack.EnderBackpackItem;
 
@@ -27,7 +22,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class ObjectRegistry {
-
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Camping.MODID, Registries.ITEM);
     public static final Registrar<Item> ITEM_REGISTRAR = ITEMS.getRegistrar();
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Camping.MODID, Registries.BLOCK);
@@ -38,7 +32,7 @@ public class ObjectRegistry {
     public static final RegistrySupplier<Block> ENDER_BACKPACK_BLOCK = registerWithoutItem("ender_backpack", () -> new Block(BlockBehaviour.Properties.copy(Blocks.RED_WOOL)));
     public static final RegistrySupplier<Item> MULTITOOL = registerItem("multitool", () -> new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant()));
 
-    public static final String[] colors = {
+    public static final String[] COLORS = {
             "white", "light_gray", "gray", "black", "red", "orange", "yellow", "lime", "green", "cyan", "light_blue", "blue", "purple", "magenta", "pink", "brown"
     };
 
@@ -48,12 +42,11 @@ public class ObjectRegistry {
     public static final Map<String, RegistrySupplier<Block>> TENT_HEAD_RIGHT = new HashMap<>();
 
     static {
-        for (String color : colors) {
+        for (String color : COLORS) {
             DyeColor dyeColor = DyeColor.valueOf(color.toUpperCase());
 
             SLEEPING_BAGS.put(color, registerWithItem("sleeping_bag_" + color, () -> new SleepingBagBlock(dyeColor, BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
-
-            TENT_MAIN.put(color, registerWithItem("tent_" + color, () -> new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE), DyeColor.valueOf(color.toUpperCase()))));
+            TENT_MAIN.put(color, registerWithItem("tent_" + color, () -> new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE), dyeColor)));
             TENT_MAIN_HEAD.put(color, registerWithoutItem("tent_head_" + color, () -> new TentMainHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
             TENT_RIGHT.put(color, registerWithoutItem("tent_right_" + color, () -> new TentRightBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
             TENT_HEAD_RIGHT.put(color, registerWithoutItem("tent_head_right_" + color, () -> new TentRightHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));

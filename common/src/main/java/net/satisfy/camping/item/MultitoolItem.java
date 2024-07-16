@@ -215,6 +215,7 @@ public class MultitoolItem extends Item {
             mode = Mode.values()[(mode.ordinal() + 1) % Mode.values().length];
             if (!level.isClientSide) {
                 player.displayClientMessage(Component.translatable("item.utility_knife.mode." + mode.name().toLowerCase()), true);
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_LOADING_END, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
             return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
         }

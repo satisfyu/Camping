@@ -36,6 +36,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.satisfy.camping.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -94,8 +95,9 @@ public class SleepingBagBlock extends BedBlock {
                     if (failureReason.getMessage() != null) {
                         player.displayClientMessage(failureReason.getMessage(), true);
                     }
+                }).ifRight((success) -> {
+                    PlatformHelper.addRegenEffect(player, new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
                 });
-                player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
                 return InteractionResult.SUCCESS;
             }
         }

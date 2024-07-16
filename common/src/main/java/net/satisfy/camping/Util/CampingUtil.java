@@ -17,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
+import net.satisfy.camping.platform.PlatformHelper;
 
 import java.util.List;
 import java.util.Objects;
@@ -69,12 +70,10 @@ public class CampingUtil {
         }
 
         public static void setGrilled(ItemStack itemStack) {
-            CompoundTag tag = itemStack.getOrCreateTag();
-            tag.putBoolean(GRILLED_KEY, true);
-            increaseFoodValue(itemStack);
+            PlatformHelper.setGrilled(itemStack);
         }
 
-        private static void increaseFoodValue(ItemStack itemStack) {
+        public static void increaseFoodValue(ItemStack itemStack) {
             FoodProperties food = itemStack.getItem().getFoodProperties();
             if (food != null) {
                 int newNutrition = (int) (food.getNutrition() * 1.25);

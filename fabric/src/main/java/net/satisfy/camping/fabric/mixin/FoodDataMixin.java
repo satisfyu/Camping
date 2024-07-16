@@ -1,10 +1,11 @@
-package net.satisfy.camping.mixin;
+package net.satisfy.camping.fabric.mixin;
 
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.Util.CampingUtil;
+import net.satisfy.camping.fabric.config.ConfigFabric;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +21,7 @@ public class FoodDataMixin {
     @Inject(method = "eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;eat(IF)V"), cancellable = true)
     private void onEat(Item item, ItemStack itemStack, CallbackInfo ci) {
-        if (!CampingUtil.Grilling.isGrilled(itemStack)) {
+        if (!CampingUtil.Grilling.isGrilled(itemStack) || !ConfigFabric.enableGrilling) {
             return;
         }
 

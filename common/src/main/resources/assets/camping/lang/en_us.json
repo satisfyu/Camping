@@ -34,5 +34,12 @@
   "container.camping.large_backpack": "Large Backpack",
   "tooltip.camping.grilled": "This item has been flame grilled:",
   "tooltip.camping.grilled.nutrition": "+25% Nutrition",
-  "tooltip.camping.grilled.saturationModifier": "+25% Saturation"
+  "tooltip.camping.grilled.saturationModifier": "+25% Saturation",
+  "text.autoconfig.camping.title": "Camping Config (Experimental)",
+  "text.autoconfig.camping.option.enableGrilling.@PrefixText": "Grilling",
+  "text.autoconfig.camping.option.enableGrilling": "Enable Grilling",
+  "text.autoconfig.camping.option.enableGlint": "Enable Glint for grilled Items",
+  "text.autoconfig.camping.option.enableEffect.@PrefixText": "Sleeping Bag",
+  "text.autoconfig.camping.option.enableEffect": "Enable Regeneration while Sleeping"
+
 }
