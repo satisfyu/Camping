@@ -25,7 +25,9 @@
   "block.camping.small_backpack": "Small Backpack",
   "block.camping.wanderer_backpack": "Wanderer Backpack",
   "block.camping.large_backpack": "Large Backpack",
-
+  "item.multitool.mode.shears": "Current Tool: Shears",
+  "item.multitool.mode.saw": "Current Tool: Saw",
+  "item.multitool.mode.flint_and_steel": "Current Tool: Flint and Steel",
   "container.camping.ender_backpack": "Ender Backpack",
   "container.camping.small_backpack": "Small Backpack",
   "container.camping.wanderer_backpack": "Wanderer Backpack",

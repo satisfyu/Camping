@@ -23,6 +23,7 @@ public class TabRegistry {
                 for (String color : colorOrder) {
                     ObjectRegistry.SLEEPING_BAGS.get(color).ifPresent(out::accept);
                 }
+                out.accept(ObjectRegistry.MULTITOOL.get());
                 out.accept(ObjectRegistry.GRILL.get());
             })
             .build());
