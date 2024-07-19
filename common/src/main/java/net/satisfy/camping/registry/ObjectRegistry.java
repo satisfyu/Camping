@@ -29,8 +29,15 @@ public class ObjectRegistry {
 
     public static final Map<String, RegistrySupplier<Block>> SLEEPING_BAGS = new HashMap<>();
     public static final RegistrySupplier<Block> GRILL = registerWithItem("grill", () -> new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON), 1));
-    public static final RegistrySupplier<Block> ENDER_BACKPACK_BLOCK = registerWithoutItem("ender_backpack", () -> new Block(BlockBehaviour.Properties.copy(Blocks.RED_WOOL)));
     public static final RegistrySupplier<Item> MULTITOOL = registerItem("multitool", () -> new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant()));
+
+    public static final RegistrySupplier<Item> SMALL_BACKPACK = registerItem("small_backpack", () -> new Item(new Item.Properties()));
+    public static final RegistrySupplier<Item> LARGE_BACKPACK = registerItem("large_backpack", () -> new Item(new Item.Properties()));
+    public static final RegistrySupplier<Item> WANDERER_BACKPACK = registerItem("wanderer_backpack", () -> new Item(new Item.Properties()));
+
+
+    public static final RegistrySupplier<Block> ENDER_BACKPACK_BLOCK = registerWithoutItem("ender_backpack", () -> new Block(BlockBehaviour.Properties.copy(Blocks.RED_WOOL)));
+    public static final RegistrySupplier<Item> ENDER_BACKPACK = registerItem("ender_backpack", () -> new Item(new Item.Properties()));
 
     public static final String[] COLORS = {
             "white", "light_gray", "gray", "black", "red", "orange", "yellow", "lime", "green", "cyan", "light_blue", "blue", "purple", "magenta", "pink", "brown"
@@ -52,7 +59,7 @@ public class ObjectRegistry {
             TENT_HEAD_RIGHT.put(color, registerWithoutItem("tent_head_right_" + color, () -> new TentRightHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
         }
 
-        registerItem("ender_backpack", () -> new EnderBackpackItem(ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+        //registerItem("ender_backpack", () -> new EnderBackpackItem(ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
 
         BLOCKS.register();
         ITEMS.register();

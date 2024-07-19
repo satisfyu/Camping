@@ -18,7 +18,7 @@ public class Camping {
     // [✓] swiss utility knife
     /* Config for */
     // [ ] FoodDataMixin -> Values configurable
-    // [ ] ItemMixin -> Glint yes / no
+    // [✓] ItemMixin -> Glint yes / no
     // [ ] SleepingBag -> MobEffect yes / no
     // [ ] More Ideas here...
 
