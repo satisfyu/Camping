@@ -1,4 +1,4 @@
-package net.satisfy.camping.client.render;
+package net.satisfy.camping.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

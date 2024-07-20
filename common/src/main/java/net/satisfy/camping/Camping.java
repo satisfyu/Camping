@@ -1,9 +1,8 @@
 package net.satisfy.camping;
 
 import com.google.common.reflect.Reflection;
-import net.satisfy.camping.registry.EntityTypeRegistry;
-import net.satisfy.camping.registry.ObjectRegistry;
-import net.satisfy.camping.registry.TabRegistry;
+import net.satisfy.camping.block.satpack.OpenBackpackPacket;
+import net.satisfy.camping.registry.*;
 
 public class Camping {
     public static final String MODID = "camping";
@@ -26,10 +25,14 @@ public class Camping {
         Reflection.initialize(
                 ObjectRegistry.class,
                 EntityTypeRegistry.class,
-                TabRegistry.class
-
+                TabRegistry.class,
+                TagRegistry.class,
+                ScreenhandlerTypeRegistry.class,
+                KeyHandlerRegistry.class
         );
+        OpenBackpackPacket.register();
     }
+
 
     public static void commonSetup() {
         Reflection.initialize(

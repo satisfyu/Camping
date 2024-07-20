@@ -7,13 +7,18 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.item.DyeColor;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.Util.CampingIdentifier;
 import net.satisfy.camping.Util.CampingUtil;
 import net.satisfy.camping.block.*;
+import net.satisfy.camping.block.satpack.BackpackBlock;
+import net.satisfy.camping.block.satpack.BackpackItem;
 import net.satisfy.camping.item.MultitoolItem;
 import net.satisfy.camping.item.backpack.EnderBackpackItem;
 
@@ -31,13 +36,17 @@ public class ObjectRegistry {
     public static final RegistrySupplier<Block> GRILL = registerWithItem("grill", () -> new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON), 1));
     public static final RegistrySupplier<Item> MULTITOOL = registerItem("multitool", () -> new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant()));
 
-    public static final RegistrySupplier<Item> SMALL_BACKPACK = registerItem("small_backpack", () -> new Item(new Item.Properties()));
+    //public static final RegistrySupplier<Item> SMALL_BACKPACK = registerItem("small_backpack", () -> new Item(new Item.Properties()));
     public static final RegistrySupplier<Item> LARGE_BACKPACK = registerItem("large_backpack", () -> new Item(new Item.Properties()));
     public static final RegistrySupplier<Item> WANDERER_BACKPACK = registerItem("wanderer_backpack", () -> new Item(new Item.Properties()));
 
 
     public static final RegistrySupplier<Block> ENDER_BACKPACK_BLOCK = registerWithoutItem("ender_backpack", () -> new Block(BlockBehaviour.Properties.copy(Blocks.RED_WOOL)));
     public static final RegistrySupplier<Item> ENDER_BACKPACK = registerItem("ender_backpack", () -> new Item(new Item.Properties()));
+
+    public static final RegistrySupplier<Block> SATPACK = registerWithoutItem("small_backpack", () -> new BackpackBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion()));
+    public static final RegistrySupplier<Item> SATPACK_ITEM = registerItem("small_backpack", () -> new BackpackItem(SATPACK.get(), new Item.Properties()));
+
 
     public static final String[] COLORS = {
             "white", "light_gray", "gray", "black", "red", "orange", "yellow", "lime", "green", "cyan", "light_blue", "blue", "purple", "magenta", "pink", "brown"
