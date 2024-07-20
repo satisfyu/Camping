@@ -1,7 +1,6 @@
 package net.satisfy.camping.network;
 
 import dev.architectury.networking.NetworkManager;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -21,30 +20,25 @@ import java.util.function.Supplier;
 
 public class OpenBackpackPacket {
     public static final ResourceLocation ID = new ResourceLocation(Camping.MODID, "open_backpack");
-    private final BlockPos pos;
+    private final ItemStack backpackItem;
 
-    public OpenBackpackPacket(BlockPos pos) {
-        this.pos = pos;
+    public OpenBackpackPacket(ItemStack backpackItem) {
+        this.backpackItem = backpackItem;
     }
 
     public OpenBackpackPacket(FriendlyByteBuf buf) {
-        this.pos = buf.readBlockPos();
+        this.backpackItem = buf.readItem();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeBlockPos(pos);
+        buf.writeItem(backpackItem);
     }
 
     public void handle(Supplier<NetworkManager.PacketContext> contextSupplier) {
         NetworkManager.PacketContext context = contextSupplier.get();
         ServerPlayer player = (ServerPlayer) context.getPlayer();
         context.queue(() -> {
-            ItemStack backpackItem = player.getInventory().items.stream()
-                    .filter(itemStack -> itemStack.getItem() instanceof BackpackItem)
-                    .findFirst()
-                    .orElse(ItemStack.EMPTY);
-
-            if (!backpackItem.isEmpty()) {
+            if (backpackItem.getItem() instanceof BackpackItem) {
                 SimpleContainer backpackContainer = BackpackItem.getContainer(backpackItem);
 
                 MenuProvider provider = new MenuProvider() {

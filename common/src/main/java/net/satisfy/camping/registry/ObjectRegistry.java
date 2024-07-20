@@ -43,7 +43,7 @@ public class ObjectRegistry {
     public static final RegistrySupplier<Item> ENDER_BACKPACK = registerItem("ender_backpack", () -> new Item(new Item.Properties()));
 
     public static final RegistrySupplier<Block> SMALL_BACKPACK = registerWithoutItem("small_backpack", () -> new BackpackBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion()));
-    public static final RegistrySupplier<Item> SMALL_BACKPACK_ITEM = registerItem("small_backpack", () -> new BackpackItem(SMALL_BACKPACK.get(), new Item.Properties()));
+    public static final RegistrySupplier<Item> SMALL_BACKPACK_ITEM = registerItem("small_backpack", () -> new BackpackItem(SMALL_BACKPACK.get(), new Item.Properties(), ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE));
 
 
     public static final String[] COLORS = {

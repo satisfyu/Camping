@@ -8,9 +8,11 @@ import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.satisfy.camping.item.BackpackItem;
 import net.satisfy.camping.network.OpenBackpackPacket;
 
 @Environment(EnvType.CLIENT)
@@ -29,10 +31,12 @@ public class KeyHandlerRegistry {
             if (open_backpack.consumeClick()) {
                 Player player = client.player;
                 if (player != null) {
-                    BlockPos pos = player.blockPosition();
-                    FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-                    new OpenBackpackPacket(pos).toBytes(buf);
-                    NetworkManager.sendToServer(OpenBackpackPacket.ID, buf);
+                    ItemStack chestSlotItem = player.getItemBySlot(EquipmentSlot.CHEST);
+                    if (chestSlotItem.getItem() instanceof BackpackItem) {
+                        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+                        new OpenBackpackPacket(chestSlotItem).toBytes(buf);
+                        NetworkManager.sendToServer(OpenBackpackPacket.ID, buf);
+                    }
                 }
             }
         });

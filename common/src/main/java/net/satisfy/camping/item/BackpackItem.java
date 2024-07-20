@@ -4,11 +4,12 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +18,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class BackpackItem extends BlockItem {
-    public BackpackItem(Block block, Properties settings) {
+public class BackpackItem extends BlockItem implements Equipable {
+    protected final ArmorMaterial material;
+    protected final ArmorItem.Type type;
+
+    public BackpackItem(Block block, Properties settings, ArmorMaterial material, ArmorItem.Type type) {
         super(block, settings.stacksTo(1));
+        this.material = material;
+        this.type = type;
     }
 
     private static Stream<ItemStack> getContents(ItemStack itemStack) {
@@ -59,5 +65,15 @@ public class BackpackItem extends BlockItem {
         }
 
         return container;
+    }
+
+    @Override
+    public @NotNull EquipmentSlot getEquipmentSlot() {
+        return this.type.getSlot();
+    }
+
+    @Override
+    public @NotNull SoundEvent getEquipSound() {
+        return this.material.getEquipSound();
     }
 }

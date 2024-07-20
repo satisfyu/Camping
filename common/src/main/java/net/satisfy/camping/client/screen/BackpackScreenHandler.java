@@ -7,21 +7,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.registry.ScreenhandlerTypeRegistry;
 import net.satisfy.camping.registry.TagRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class BackpackScreenHandler extends AbstractContainerMenu {
-    private static final int CONTAINER_SIZE = 24;
     private final Container container;
 
     public BackpackScreenHandler(int syncId, Inventory playerInventory) {
-        this(syncId, playerInventory, new SimpleContainer(CONTAINER_SIZE));
+        this(syncId, playerInventory, new SimpleContainer(BackpackBlockEntity.CONTAINER_SIZE));
     }
 
     public BackpackScreenHandler(int syncId, Inventory playerInventory, Container container) {
         super(ScreenhandlerTypeRegistry.BACKPACK_SCREENHANDLER.get(), syncId);
-        checkContainerSize(container, CONTAINER_SIZE);
+        checkContainerSize(container, BackpackBlockEntity.CONTAINER_SIZE);
         this.container = container;
         container.startOpen(playerInventory.player);
 
@@ -57,11 +57,11 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
             if (slot.hasItem()) {
                 ItemStack itemStack2 = slot.getItem();
                 itemStack = itemStack2.copy();
-                if (i < CONTAINER_SIZE) {
-                    if (!this.moveItemStackTo(itemStack2, CONTAINER_SIZE, this.slots.size(), true)) {
+                if (i < BackpackBlockEntity.CONTAINER_SIZE) {
+                    if (!this.moveItemStackTo(itemStack2, BackpackBlockEntity.CONTAINER_SIZE, this.slots.size(), true)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.moveItemStackTo(itemStack2, 0, CONTAINER_SIZE, false)) {
+                } else if (!this.moveItemStackTo(itemStack2, 0, BackpackBlockEntity.CONTAINER_SIZE, false)) {
                     return ItemStack.EMPTY;
                 }
 
@@ -84,9 +84,20 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     }
 
     @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        if (this.container instanceof BackpackBlockEntity) {
+            ((BackpackBlockEntity) this.container).setChanged();
+        }
+    }
+
+    @Override
     public void removed(Player player) {
         super.removed(player);
         this.container.stopOpen(player);
+        if (this.container instanceof BackpackBlockEntity) {
+            ((BackpackBlockEntity) this.container).setChanged();
+        }
     }
 
     @Override
