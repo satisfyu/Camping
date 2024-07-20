@@ -31,7 +31,7 @@ public class GrillRenderer implements BlockEntityRenderer<GrillBlockEntity> {
             ItemStack itemStack = items.get(i);
             if (!itemStack.isEmpty()) {
                 poseStack.pushPose();
-                poseStack.translate(0.5F, 1F, 0.5F);
+                poseStack.translate(0.5F, 0.95F, 0.5F);
                 Direction itemDirection = Direction.from2DDataValue((i + direction.get2DDataValue()) % 4);
                 float rotation = -itemDirection.toYRot();
                 poseStack.mulPose(Axis.YP.rotationDegrees(rotation));

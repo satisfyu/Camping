@@ -1,0 +1,9 @@
+{
+  "parent": "camping:block/template_sleeping_bag_foot",
+  "textures": {
+        "1": "camping:block/sleeping_bag_light_blue_back_bottom",
+        "2": "camping:block/sleeping_bag_light_blue_side",
+        "3": "camping:block/sleeping_bag_light_blue_bottom",
+        "particle": "camping:block/sleeping_bag_light_blue_back_bottom"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "UAU",
+    "U U"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:campfire"
+    },
+    "B": {
+      "item": "minecraft:iron_ingot"
+    },
+    "U": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "camping:grill"
+  }
+}

@@ -23,6 +23,7 @@ import static net.satisfy.camping.registry.ObjectRegistry.*;
 public class CampingClient {
 
     public static void onInitializeClient() {
+        RenderTypeRegistry.register(RenderType.cutout(), GRILL.get());
         for (RegistrySupplier<Block> block : Stream.concat(TENT_MAIN.values().stream(), Stream.concat(TENT_MAIN_HEAD.values().stream(), Stream.concat(TENT_RIGHT.values().stream(), TENT_HEAD_RIGHT.values().stream()))).toList()) {
             RenderTypeRegistry.register(RenderType.cutout(), block.get());}
 

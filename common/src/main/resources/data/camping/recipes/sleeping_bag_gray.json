@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "B  ",
+    "B  "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:white_wool"
+    },
+    "B": {
+      "item": "minecraft:gray_wool"
+    }
+  },
+  "result": {
+    "item": "camping:sleeping_bag_gray"
+  }
+}

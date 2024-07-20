@@ -21,7 +21,7 @@ public class TabRegistry {
                         "white", "light_gray", "gray", "black", "red", "orange", "yellow", "lime", "green", "cyan", "light_blue", "blue", "purple", "magenta", "pink", "brown"
                 };
                 out.accept(Items.BUNDLE);
-                out.accept(ObjectRegistry.SATPACK_ITEM.get());
+                out.accept(ObjectRegistry.SMALL_BACKPACK_ITEM.get());
                 out.accept(ObjectRegistry.LARGE_BACKPACK.get());
                 out.accept(ObjectRegistry.WANDERER_BACKPACK.get());
                 out.accept(ObjectRegistry.ENDER_BACKPACK.get());

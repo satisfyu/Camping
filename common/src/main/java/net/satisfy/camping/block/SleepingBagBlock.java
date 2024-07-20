@@ -49,7 +49,7 @@ public class SleepingBagBlock extends BedBlock {
     public static final EnumProperty<BedPart> PART = BlockStateProperties.BED_PART;
     public static final BooleanProperty OCCUPIED = BlockStateProperties.OCCUPIED;
     public static final BooleanProperty CAN_DROP = BlockStateProperties.CONDITIONAL;
-    protected static final VoxelShape SLEEPING_BAG_SHAPE = Shapes.box(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D);
+    protected static final VoxelShape SLEEPING_BAG_SHAPE = Shapes.box(0.0D, 0.0D, 0.0D, 1.0D, 0.25, 1.0D);
 
     public SleepingBagBlock(DyeColor color, Properties properties) {
         super(color, properties.forceSolidOn());
@@ -95,9 +95,7 @@ public class SleepingBagBlock extends BedBlock {
                     if (failureReason.getMessage() != null) {
                         player.displayClientMessage(failureReason.getMessage(), true);
                     }
-                }).ifRight((success) -> {
-                    PlatformHelper.addRegenEffect(player, new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-                });
+                }).ifRight((success) -> PlatformHelper.addRegenEffect(player, new MobEffectInstance(MobEffects.REGENERATION, 200, 1)));
                 return InteractionResult.SUCCESS;
             }
         }

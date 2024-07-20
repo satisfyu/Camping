@@ -1,0 +1,9 @@
+{
+  "parent": "camping:block/template_sleeping_bag_head",
+  "textures": {
+        "0": "camping:block/sleeping_bag_light_gray_top",
+        "1": "camping:block/sleeping_bag_light_gray_back_bottom_topside",
+        "2": "camping:block/sleeping_bag_light_gray_side",
+        "particle": "camping:block/sleeping_bag_light_gray_top"
+  }
+}

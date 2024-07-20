@@ -35,7 +35,6 @@ public class ObjectRegistry {
     public static final RegistrySupplier<Block> GRILL = registerWithItem("grill", () -> new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON), 1));
     public static final RegistrySupplier<Item> MULTITOOL = registerItem("multitool", () -> new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant()));
 
-    //public static final RegistrySupplier<Item> SMALL_BACKPACK = registerItem("small_backpack", () -> new Item(new Item.Properties()));
     public static final RegistrySupplier<Item> LARGE_BACKPACK = registerItem("large_backpack", () -> new Item(new Item.Properties()));
     public static final RegistrySupplier<Item> WANDERER_BACKPACK = registerItem("wanderer_backpack", () -> new Item(new Item.Properties()));
 
@@ -43,8 +42,8 @@ public class ObjectRegistry {
     public static final RegistrySupplier<Block> ENDER_BACKPACK_BLOCK = registerWithoutItem("ender_backpack", () -> new Block(BlockBehaviour.Properties.copy(Blocks.RED_WOOL)));
     public static final RegistrySupplier<Item> ENDER_BACKPACK = registerItem("ender_backpack", () -> new Item(new Item.Properties()));
 
-    public static final RegistrySupplier<Block> SATPACK = registerWithoutItem("small_backpack", () -> new BackpackBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion()));
-    public static final RegistrySupplier<Item> SATPACK_ITEM = registerItem("small_backpack", () -> new BackpackItem(SATPACK.get(), new Item.Properties()));
+    public static final RegistrySupplier<Block> SMALL_BACKPACK = registerWithoutItem("small_backpack", () -> new BackpackBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion()));
+    public static final RegistrySupplier<Item> SMALL_BACKPACK_ITEM = registerItem("small_backpack", () -> new BackpackItem(SMALL_BACKPACK.get(), new Item.Properties()));
 
 
     public static final String[] COLORS = {
@@ -60,7 +59,7 @@ public class ObjectRegistry {
         for (String color : COLORS) {
             DyeColor dyeColor = DyeColor.valueOf(color.toUpperCase());
 
-            SLEEPING_BAGS.put(color, registerWithItem("sleeping_bag_" + color, () -> new SleepingBagBlock(dyeColor, BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
+            SLEEPING_BAGS.put(color, registerWithItem("sleeping_bag_" + color, () -> new SleepingBagBlock(dyeColor, BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak().mapColor(DyeColor.WHITE))));
             TENT_MAIN.put(color, registerWithItem("tent_" + color, () -> new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE), dyeColor)));
             TENT_MAIN_HEAD.put(color, registerWithoutItem("tent_head_" + color, () -> new TentMainHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
             TENT_RIGHT.put(color, registerWithoutItem("tent_right_" + color, () -> new TentRightBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
