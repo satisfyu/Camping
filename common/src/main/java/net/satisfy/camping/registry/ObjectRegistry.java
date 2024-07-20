@@ -17,10 +17,9 @@ import net.satisfy.camping.Camping;
 import net.satisfy.camping.Util.CampingIdentifier;
 import net.satisfy.camping.Util.CampingUtil;
 import net.satisfy.camping.block.*;
-import net.satisfy.camping.block.satpack.BackpackBlock;
-import net.satisfy.camping.block.satpack.BackpackItem;
+import net.satisfy.camping.block.BackpackBlock;
+import net.satisfy.camping.item.BackpackItem;
 import net.satisfy.camping.item.MultitoolItem;
-import net.satisfy.camping.item.backpack.EnderBackpackItem;
 
 import java.util.HashMap;
 import java.util.Map;

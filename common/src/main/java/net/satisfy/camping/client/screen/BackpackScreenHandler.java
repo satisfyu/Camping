@@ -1,4 +1,4 @@
-package net.satisfy.camping.block.satpack;
+package net.satisfy.camping.client.screen;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -8,14 +8,15 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.registry.ScreenhandlerTypeRegistry;
+import net.satisfy.camping.registry.TagRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class BackpackScreenHandler extends AbstractContainerMenu {
-    private static final int CONTAINER_SIZE = 27;
+    private static final int CONTAINER_SIZE = 24;
     private final Container container;
 
-    public BackpackScreenHandler(int i, Inventory inventory) {
-        this(i, inventory, new SimpleContainer(CONTAINER_SIZE));
+    public BackpackScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(CONTAINER_SIZE));
     }
 
     public BackpackScreenHandler(int syncId, Inventory playerInventory, Container container) {
@@ -25,19 +26,26 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
         container.startOpen(playerInventory.player);
 
         for (int j = 0; j < 3; ++j) {
-            for (int k = 0; k < 9; ++k) {
-                this.addSlot(new BackpackSlot(container, k + j * 9, 8 + k * 18, 18 + j * 18));
+            for (int k = 0; k < 8; ++k) {
+                this.addSlot(new Slot(container, k + j * 8, 17 + k * 18, 12 + j * 18) {
+                    @Override
+                    public boolean mayPlace(ItemStack stack) {
+                        return !stack.is(TagRegistry.BACKPACK_BLACKLIST);
+                    }
+                });
             }
         }
 
+        int playerInventoryYOffset = 1;
+
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
-                this.addSlot(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 85 + j * 18 + 6));
+                this.addSlot(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 85 + j * 18 + playerInventoryYOffset));
             }
         }
 
         for (int j = 0; j < 9; ++j) {
-            this.addSlot(new Slot(playerInventory, j, 8 + j * 18, 143 + 6));
+            this.addSlot(new Slot(playerInventory, j, 8 + j * 18, 143 + playerInventoryYOffset));
         }
     }
 
@@ -75,6 +83,7 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
         return ItemStack.EMPTY;
     }
 
+    @Override
     public void removed(Player player) {
         super.removed(player);
         this.container.stopOpen(player);
@@ -84,5 +93,4 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         return this.container.stillValid(player);
     }
-
 }

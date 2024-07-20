@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.Util.CampingIdentifier;
 import net.satisfy.camping.block.entity.GrillBlockEntity;
-import net.satisfy.camping.block.satpack.BackpackBlockEntity;
+import net.satisfy.camping.block.entity.BackpackBlockEntity;
 
 import java.util.function.Supplier;
 

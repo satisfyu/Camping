@@ -9,7 +9,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Block;
-import net.satisfy.camping.block.satpack.BackpackScreen;
+import net.satisfy.camping.client.screen.BackpackScreen;
 import net.satisfy.camping.client.renderer.GrillRenderer;
 import net.satisfy.camping.registry.EntityTypeRegistry;
 import net.satisfy.camping.registry.ScreenhandlerTypeRegistry;

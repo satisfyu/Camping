@@ -1,7 +1,7 @@
 package net.satisfy.camping;
 
 import com.google.common.reflect.Reflection;
-import net.satisfy.camping.block.satpack.OpenBackpackPacket;
+import net.satisfy.camping.network.OpenBackpackPacket;
 import net.satisfy.camping.registry.*;
 
 public class Camping {

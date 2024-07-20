@@ -1,4 +1,4 @@
-package net.satisfy.camping.block.satpack;
+package net.satisfy.camping.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,8 +15,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,6 +30,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.camping.Util.CampingUtil;
+import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.registry.EntityTypeRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -125,12 +124,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
             }
         }
 
-    }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? createTickerHelper(blockEntityType, EntityTypeRegistry.BACKPACK_BLOCK_ENTITY.get(), BackpackBlockEntity::lidAnimateTick) : null;
     }
 
     public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {

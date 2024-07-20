@@ -1,4 +1,4 @@
-package net.satisfy.camping.block.satpack;
+package net.satisfy.camping.network;
 
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
@@ -13,14 +13,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.Camping;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.satisfy.camping.client.screen.BackpackScreenHandler;
+import net.satisfy.camping.item.BackpackItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 public class OpenBackpackPacket {
-    private static final Logger LOGGER = LogManager.getLogger();
     public static final ResourceLocation ID = new ResourceLocation(Camping.MODID, "open_backpack");
     private final BlockPos pos;
 
@@ -40,9 +39,6 @@ public class OpenBackpackPacket {
         NetworkManager.PacketContext context = contextSupplier.get();
         ServerPlayer player = (ServerPlayer) context.getPlayer();
         context.queue(() -> {
-            LOGGER.info("Handling OpenBackpackPacket on server for player: {}", player.getName().getString());
-            LOGGER.info("Player position: {}", pos);
-
             ItemStack backpackItem = player.getInventory().items.stream()
                     .filter(itemStack -> itemStack.getItem() instanceof BackpackItem)
                     .findFirst()
@@ -54,7 +50,7 @@ public class OpenBackpackPacket {
                 MenuProvider provider = new MenuProvider() {
                     @Override
                     public @NotNull Component getDisplayName() {
-                        return Component.translatable("container.backpack");
+                        return Component.translatable("container.camping.backpack");
                     }
 
                     @Override
@@ -64,14 +60,9 @@ public class OpenBackpackPacket {
                 };
 
                 player.openMenu(provider);
-                LOGGER.info("Opened BackpackScreenHandler for player: {}", player.getName().getString());
-            } else {
-                LOGGER.warn("No BackpackItem found in player's inventory.");
             }
         });
     }
-
-
 
     public static void register() {
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, ID, (buf, contextSupplier) -> {

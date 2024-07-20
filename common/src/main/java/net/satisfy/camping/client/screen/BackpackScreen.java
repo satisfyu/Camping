@@ -1,4 +1,4 @@
-package net.satisfy.camping.block.satpack;
+package net.satisfy.camping.client.screen;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -18,7 +18,8 @@ public class BackpackScreen extends AbstractContainerScreen<BackpackScreenHandle
     protected void init() {
         super.init();
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
-        this.inventoryLabelY += 9;
+        this.titleLabelY = -8;
+        this.inventoryLabelY = this.imageHeight - 90;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class BackpackScreen extends AbstractContainerScreen<BackpackScreenHandle
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float f, int i, int j) {
         int k = (this.width - this.imageWidth) / 2;
-        int l = (this.height - this.imageHeight) / 2;
-        guiGraphics.blit(CONTAINER_LOCATION, k, l, 0, 0, this.imageWidth, this.imageHeight + 6);
+        int l = (this.height - this.imageHeight) / 2 - 20;
+        guiGraphics.blit(CONTAINER_LOCATION, k, l, 0, -5, this.imageWidth, this.imageHeight + 25);
     }
 }
