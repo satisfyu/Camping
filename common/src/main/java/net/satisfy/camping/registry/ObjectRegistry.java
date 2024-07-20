@@ -60,10 +60,10 @@ public class ObjectRegistry {
             DyeColor dyeColor = DyeColor.valueOf(color.toUpperCase());
 
             SLEEPING_BAGS.put(color, registerWithItem("sleeping_bag_" + color, () -> new SleepingBagBlock(dyeColor, BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak().mapColor(DyeColor.WHITE))));
-            TENT_MAIN.put(color, registerWithItem("tent_" + color, () -> new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE), dyeColor)));
-            TENT_MAIN_HEAD.put(color, registerWithoutItem("tent_head_" + color, () -> new TentMainHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
-            TENT_RIGHT.put(color, registerWithoutItem("tent_right_" + color, () -> new TentRightBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
-            TENT_HEAD_RIGHT.put(color, registerWithoutItem("tent_head_right_" + color, () -> new TentRightHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE))));
+            TENT_MAIN.put(color, registerWithItem("tent_" + color, () -> new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor)));
+            TENT_MAIN_HEAD.put(color, registerWithoutItem("tent_head_" + color, () -> new TentMainHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak())));
+            TENT_RIGHT.put(color, registerWithoutItem("tent_right_" + color, () -> new TentRightBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak())));
+            TENT_HEAD_RIGHT.put(color, registerWithoutItem("tent_head_right_" + color, () -> new TentRightHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak())));
         }
 
         //registerItem("ender_backpack", () -> new EnderBackpackItem(ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, new Item.Properties()));

@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-//TODO: Maybe add open/close for the curtains?
 
 @SuppressWarnings("deprecation")
 public class TentRightBlock extends TentBlock {

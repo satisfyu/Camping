@@ -2,7 +2,7 @@ package net.satisfy.camping.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -46,7 +46,7 @@ public class TentBlock extends HorizontalDirectionalBlock {
 
     @SuppressWarnings("deprecation")
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
-        if (entity instanceof Ravager && level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+        if (entity instanceof Monster && level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             level.destroyBlock(blockPos, true, entity);
         }
         super.entityInside(blockState, level, blockPos, entity);

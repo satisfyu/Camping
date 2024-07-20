@@ -1,0 +1,6 @@
+{
+  "parent": "camping:block/template_tent_right_lower",
+  "textures": {
+    "particle": "camping:block/tent_magenta"
+  }
+}

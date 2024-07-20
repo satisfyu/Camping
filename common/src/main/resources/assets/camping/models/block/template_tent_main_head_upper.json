@@ -1,0 +1,107 @@
+{
+	"credit": "Made by Satisfy",
+	"texture_size": [32, 32],
+	"textures": {
+		"particle": "camping:block/tent_blue"
+	},
+	"elements": [
+		{
+			"name": "pole",
+			"from": [0, 0, 13],
+			"to": [3, 13, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 13]},
+			"faces": {
+				"north": {"uv": [14.5, 9, 16, 15.5], "texture": "#particle"},
+				"east": {"uv": [14.5, 9, 16, 15.5], "texture": "#particle"},
+				"south": {"uv": [14.5, 9, 16, 15.5], "texture": "#particle"},
+				"west": {"uv": [14.5, 9, 16, 15.5], "texture": "#particle"}
+			}
+		},
+		{
+			"name": "tent",
+			"from": [2, 0, 1],
+			"to": [2, 13, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 0, 1]},
+			"faces": {
+				"east": {"uv": [8, 0, 2, 6.5], "texture": "#particle"},
+				"west": {"uv": [2, 0, 8, 6.5], "texture": "#particle"}
+			}
+		},
+		{
+			"name": "tent",
+			"from": [3, 0, 14],
+			"to": [16, 13, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, 0, 14]},
+			"faces": {
+				"north": {"uv": [6.5, 0, 0, 6.5], "texture": "#particle"},
+				"south": {"uv": [0, 0, 6.5, 6.5], "texture": "#particle"}
+			}
+		},
+		{
+			"name": "top_pole",
+			"from": [0, 13, 13],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 13, 13]},
+			"faces": {
+				"north": {"uv": [13, 14.5, 5, 16], "texture": "#particle"},
+				"south": {"uv": [5, 14.5, 13, 16], "texture": "#particle"},
+				"west": {"uv": [5, 14.5, 6.5, 16], "texture": "#particle"},
+				"up": {"uv": [5, 14.5, 13, 16], "texture": "#particle"},
+				"down": {"uv": [5, 14.5, 13, 16], "texture": "#particle"}
+			}
+		},
+		{
+			"name": "side_pole",
+			"from": [0, 13, 0],
+			"to": [3, 16, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 13, 0]},
+			"faces": {
+				"east": {"uv": [6.5, 14.5, 13, 16], "texture": "#particle"},
+				"west": {"uv": [6.5, 14.5, 13, 16], "texture": "#particle"},
+				"up": {"uv": [6.5, 14.5, 13, 16], "rotation": 90, "texture": "#particle"},
+				"down": {"uv": [6.5, 14.5, 13, 16], "rotation": 90, "texture": "#particle"}
+			}
+		},
+		{
+			"name": "middle_pole_top",
+			"from": [1, 0, 0],
+			"to": [2, 13, 1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, 0, 0]},
+			"faces": {
+				"north": {"uv": [8, 14.5, 14.5, 15], "rotation": 90, "texture": "#particle"},
+				"east": {"uv": [8, 14.5, 14.5, 15], "rotation": 90, "texture": "#particle"},
+				"south": {"uv": [8, 14.5, 14.5, 15], "rotation": 90, "texture": "#particle"},
+				"west": {"uv": [8, 14.5, 14.5, 15], "rotation": 90, "texture": "#particle"}
+			}
+		},
+		{
+			"name": "support_pole",
+			"from": [14, 13, 0],
+			"to": [16, 15, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [14, 13, 0]},
+			"faces": {
+				"west": {"uv": [16, 15, 15, 8.5], "rotation": 90, "texture": "#particle"},
+				"up": {"uv": [16, 8.5, 15, 15], "texture": "#particle"},
+				"down": {"uv": [16, 8.5, 15, 15], "texture": "#particle"}
+			}
+		},
+		{
+			"name": "tent_top",
+			"from": [3, 14, 0],
+			"to": [14, 14, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, 14, 0]},
+			"faces": {
+				"up": {"uv": [0, 0, 5.5, 6.5], "texture": "#particle"},
+				"down": {"uv": [0, 0, 5.5, 6.5], "texture": "#particle"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "back_right_top",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6, 7]
+		}
+	]
+}

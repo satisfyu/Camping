@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BAB",
+    "A A",
+    "B B"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:stick"
+    },
+    "B": {
+      "item": "minecraft:light_blue_wool"
+    }
+  },
+  "result": {
+    "item": "camping:tent_light_blue"
+  }
+}
