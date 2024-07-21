@@ -3,13 +3,16 @@ package net.satisfy.camping.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -113,6 +116,10 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         return SHAPES.get(backpackType).get(state.getValue(FACING));
     }
 
+    public BackpackType getBackpackType() {
+        return this.backpackType;
+    }
+
     public enum BackpackType {
         WANDERER_BACKPACK, ENDERPACK, LARGE_BACKPACK, SMALL_BACKPACK
     }
@@ -121,10 +128,19 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
-        } else {
+        }
+        else {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity instanceof BackpackBlockEntity) {
-                player.openMenu((BackpackBlockEntity) blockEntity);
+
+                if (this.backpackType != BackpackType.ENDERPACK) {
+                    player.openMenu((BackpackBlockEntity) blockEntity);
+                } else {
+                    player.openMenu(new SimpleMenuProvider((containerID, inventory, contextualPlayer) -> {
+                        return ChestMenu.threeRows(containerID, inventory, contextualPlayer.getEnderChestInventory());
+                    }, Component.translatable("container.camping.ender_backpack")));
+                }
+
             }
             return InteractionResult.CONSUME;
         }

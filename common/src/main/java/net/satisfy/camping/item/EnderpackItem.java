@@ -14,6 +14,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -108,7 +109,7 @@ public class EnderpackItem extends BlockItem implements Equipable {
             if (!level.isClientSide) {
                 if (block instanceof EnderChestBlock) {
                     player.openMenu(new SimpleMenuProvider((id, playerInventory, playerEntity) -> {
-                        return new GenericContainerMenu(MenuType.GENERIC_9x3, id, playerInventory, player.getEnderChestInventory(), 3);
+                        return new ChestMenu(MenuType.GENERIC_9x3, id, playerInventory, player.getEnderChestInventory(), 3);
                     }, Component.translatable("container.enderchest")));
                 }
             }

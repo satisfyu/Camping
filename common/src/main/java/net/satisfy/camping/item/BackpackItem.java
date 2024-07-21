@@ -12,6 +12,7 @@ import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
+import net.satisfy.camping.block.BackpackBlock;
 import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,8 +25,12 @@ public class BackpackItem extends BlockItem implements Equipable {
     protected final ArmorItem.Type type;
     private final ResourceLocation backpackTexture;
 
+    public final BackpackBlock.BackpackType backpackType;
+
     public BackpackItem(Block block, Properties settings, ArmorMaterial material, ArmorItem.Type type, ResourceLocation backpackTexture) {
         super(block, settings.stacksTo(1));
+
+        this.backpackType = ((BackpackBlock) block).getBackpackType();
         this.material = material;
         this.type = type;
         this.backpackTexture = backpackTexture;
