@@ -4,6 +4,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,11 +22,13 @@ import java.util.stream.Stream;
 public class BackpackItem extends BlockItem implements Equipable {
     protected final ArmorMaterial material;
     protected final ArmorItem.Type type;
+    private final ResourceLocation backpackTexture;
 
-    public BackpackItem(Block block, Properties settings, ArmorMaterial material, ArmorItem.Type type) {
+    public BackpackItem(Block block, Properties settings, ArmorMaterial material, ArmorItem.Type type, ResourceLocation backpackTexture) {
         super(block, settings.stacksTo(1));
         this.material = material;
         this.type = type;
+        this.backpackTexture = backpackTexture;
     }
 
     private static Stream<ItemStack> getContents(ItemStack itemStack) {
@@ -67,6 +70,10 @@ public class BackpackItem extends BlockItem implements Equipable {
         return container;
     }
 
+    public ResourceLocation getBackpackTexture() {
+        return backpackTexture;
+    }
+
     @Override
     public @NotNull EquipmentSlot getEquipmentSlot() {
         return this.type.getSlot();
@@ -76,4 +83,5 @@ public class BackpackItem extends BlockItem implements Equipable {
     public @NotNull SoundEvent getEquipSound() {
         return this.material.getEquipSound();
     }
+    
 }
