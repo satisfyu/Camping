@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.Util.CampingIdentifier;
 import net.satisfy.camping.client.model.EnderpackModel;
 import net.satisfy.camping.forge.client.CampingClientForge;
@@ -25,20 +24,17 @@ public class EnderpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> 
 
     @Override
     public void render(@NotNull PoseStack poseStack, @NotNull MultiBufferSource multiBufferSource, int i, @NotNull T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        boolean shouldRender = false;
+        if (entity instanceof Player) {
+            boolean hasEnderpack = ((Player) entity).getInventory().armor.stream()
+                    .anyMatch(stack -> stack.getItem().getDescriptionId().toLowerCase().contains("enderpack"));
 
-        for (ItemStack stack : ((Player) entity).getInventory().armor) {
-            if (stack.getItem().getDescriptionId().toLowerCase().contains("enderpack")) {
-                shouldRender = true;
+            if (hasEnderpack) {
+                this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+                poseStack.pushPose();
+                poseStack.translate(0F, -1F, 0.025F);
+                renderColoredCutoutModel(this.model, getTextureLocation(entity), poseStack, multiBufferSource, i, entity, 1.0f, 1.0f, 1.0f);
+                poseStack.popPose();
             }
-        }
-
-        if (shouldRender) {
-            this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            poseStack.pushPose();
-            poseStack.translate(0F, -1F, 0.025F);
-            renderColoredCutoutModel(this.model, getTextureLocation(entity), poseStack, multiBufferSource, i, entity, 1.0f, 1.0f, 1.0f);
-            poseStack.popPose();
         }
     }
 

@@ -1,0 +1,129 @@
+package net.satisfy.camping.block;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.satisfy.camping.Util.CampingUtil;
+import net.satisfy.camping.block.entity.EnderPackBlockEntity;
+import net.satisfy.camping.registry.EntityTypeRegistry;
+import net.satisfy.camping.registry.ObjectRegistry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
+@SuppressWarnings("deprecation")
+public class EnderpackBlock extends BaseEntityBlock {
+  public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+
+  public EnderpackBlock(Properties properties) {
+    super(properties);
+    this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+  }
+
+  @Override
+  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    builder.add(FACING);
+  }
+
+  @Override
+  public BlockState getStateForPlacement(BlockPlaceContext context) {
+    return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+  }
+
+  @Override
+  public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+    return new ItemStack(ObjectRegistry.ENDERPACK.get());
+  }
+
+  @Override
+  public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    if (player.isCrouching()) {
+      level.destroyBlock(pos, false);
+      level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ObjectRegistry.ENDERPACK.get())));
+    } else {
+      player.openMenu(new SimpleMenuProvider((id, inventory, playerEntity) -> ChestMenu.threeRows(id, inventory, player.getEnderChestInventory()), ObjectRegistry.ENDERPACK.get().getName()));
+      return InteractionResult.SUCCESS;
+    }
+    return InteractionResult.PASS;
+  }
+
+  @Override
+  public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+    for(int i = 0; i < 3; ++i) {
+      int posMultiplier = random.nextInt(2) * 2 - 1;
+      int speedMultiplier = random.nextInt(2) * 2 - 1;
+      double xPos = (double)pos.getX() + 0.5 + 0.25 * (double)posMultiplier;
+      double yPos = (float)pos.getY() + random.nextFloat();
+      double zPos = (double)pos.getZ() + 0.5 + 0.25 * (double)speedMultiplier;
+      double xSpeed = random.nextFloat() * (float)posMultiplier;
+      double ySpeed = ((double)random.nextFloat() - 0.5) * 0.125;
+      double zSpeed = random.nextFloat() * (float)speedMultiplier;
+      level.addParticle(ParticleTypes.PORTAL, xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
+    }
+  }
+
+  private static final Supplier<VoxelShape> voxelShapeSupplier = () -> {
+    VoxelShape shape = Shapes.empty();
+    shape = Shapes.join(shape, Shapes.box(0.1875, 0, 0.3125, 0.8125, 0.625, 0.6875), BooleanOp.OR);
+    shape = Shapes.join(shape, Shapes.box(0.3125, 0.125, 0.25, 0.6875, 0.5, 0.3125), BooleanOp.OR);
+    return shape;
+  };
+
+  public static final Map<Direction, VoxelShape> SHAPE = net.minecraft.Util.make(new HashMap<>(), map -> {
+    for (Direction direction : Direction.Plane.HORIZONTAL.stream().toList()) {
+      map.put(direction, CampingUtil.rotateShape(Direction.NORTH, direction, voxelShapeSupplier.get()));
+    }
+  });
+
+  @Override
+  public @NotNull VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    return SHAPE.get(state.getValue(FACING));
+  }
+
+  @Override
+  public @NotNull RenderShape getRenderShape(BlockState state) {
+    return RenderShape.MODEL;
+  }
+
+  @Nullable
+  @Override
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new EnderPackBlockEntity(pos, state);
+  }
+
+  @Nullable
+  @Override
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    return createTickerHelper(type, EntityTypeRegistry.ENDERPACK_BLOCK_ENTITY.get(),
+            (world, pos, state1, blockEntity) -> blockEntity.tick(world, pos, state1, blockEntity));
+  }
+}

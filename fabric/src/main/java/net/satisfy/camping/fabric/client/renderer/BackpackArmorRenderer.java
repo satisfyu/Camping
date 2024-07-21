@@ -1,4 +1,4 @@
-package net.satisfy.camping.fabric.client.client;
+package net.satisfy.camping.fabric.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;

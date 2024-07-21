@@ -1,14 +1,14 @@
 {
-  "parent": "camping:main/get_a_bundle",
+  "parent": "camping:main/root",
   "display": {
     "icon": {
-      "item": "camping:small_backpack"
+      "item": "minecraft:bundle"
     },
     "title": {
-      "translate": "advancement.camping.get_a_small_backpack.title"
+      "translate": "advancement.camping.get_a_bundle.title"
     },
     "description": {
-      "translate": "advancement.camping.get_a_small_backpack.desc"
+      "translate": "advancement.camping.get_a_bundle.desc"
     },
     "frame": "task",
     "show_toast": true,
@@ -16,13 +16,13 @@
     "hidden": false
   },
   "criteria": {
-    "small_backpack": {
+    "bundle": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "camping:small_backpack"
+              "minecraft:bundle"
             ]
           }
         ]
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "small_backpack"
+      "bundle"
     ]
   ]
 }

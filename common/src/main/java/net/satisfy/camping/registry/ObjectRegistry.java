@@ -19,6 +19,7 @@ import net.satisfy.camping.Util.CampingUtil;
 import net.satisfy.camping.block.*;
 import net.satisfy.camping.block.BackpackBlock;
 import net.satisfy.camping.item.BackpackItem;
+import net.satisfy.camping.item.EnderPackItem;
 import net.satisfy.camping.item.MultitoolItem;
 
 import java.util.HashMap;
@@ -40,8 +41,8 @@ public class ObjectRegistry {
     public static final RegistrySupplier<Item> LARGE_BACKPACK_ITEM = registerItem("large_backpack", () -> new BackpackItem(LARGE_BACKPACK.get(), new Item.Properties(), ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, new CampingIdentifier("textures/model/large_backpack.png")));
     public static final RegistrySupplier<Block> WANDERER_BACKPACK = registerWithoutItem("wanderer_backpack", () -> new BackpackBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion().noParticlesOnBreak().instabreak(), BackpackBlock.BackpackType.WANDERER_BACKPACK));
     public static final RegistrySupplier<Item> WANDERER_BACKPACK_ITEM = registerItem("wanderer_backpack", () -> new BackpackItem(WANDERER_BACKPACK.get(), new Item.Properties(), ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, new CampingIdentifier("textures/model/wanderer_pack.png")));
-    public static final RegistrySupplier<Block> ENDERPACK = registerWithoutItem("enderpack", () -> new BackpackBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion().noParticlesOnBreak().instabreak(), BackpackBlock.BackpackType.ENDERPACK));
-    public static final RegistrySupplier<Item> ENDERPACK_ITEM = registerItem("enderpack", () -> new BackpackItem(ENDERPACK.get(), new Item.Properties(), ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, new CampingIdentifier("textures/model/enderpack.png")));
+    public static final RegistrySupplier<Block> ENDERPACK = registerWithoutItem("enderpack", () -> new EnderpackBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion().noParticlesOnBreak().instabreak() /*BackpackBlock.BackpackType.ENDERPACK*/));
+    public static final RegistrySupplier<Item> ENDERPACK_ITEM = registerItem("enderpack", () -> new EnderPackItem(ENDERPACK.get(), ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, new CampingIdentifier("textures/model/enderpack.png"), new Item.Properties()));
 
     public static final String[] COLORS = {
             "white", "light_gray", "gray", "black", "red", "orange", "yellow", "lime", "green", "cyan", "light_blue", "blue", "purple", "magenta", "pink", "brown"

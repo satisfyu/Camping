@@ -26,4 +26,5 @@ public class PlatformHelper {
     public static ItemStack getEquippedBackpack(Player player) {
         throw new AssertionError();
     }
+
 }
