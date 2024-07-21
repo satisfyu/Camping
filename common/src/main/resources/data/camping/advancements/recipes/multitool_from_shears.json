@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "camping:multitool"
+    ]
+  },
+  "criteria": {
+    "has_shears": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:shears"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "camping:multitool"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_shears",
+      "has_the_recipe"
+    ]
+  ]
+}

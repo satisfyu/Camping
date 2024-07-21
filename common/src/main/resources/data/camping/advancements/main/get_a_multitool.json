@@ -1,0 +1,37 @@
+{
+  "parent": "camping:main/root",
+  "display": {
+    "icon": {
+      "item": "camping:multitool"
+    },
+    "title": {
+      "translate": "advancement.camping.get_a_multitool.title"
+    },
+    "description": {
+      "translate": "advancement.camping.get_a_multitool.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "multitool": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:multitool"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "multitool"
+    ]
+  ]
+}

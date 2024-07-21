@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "camping:block/large_backpack"
+    },
+    "facing=south": {
+      "model": "camping:block/large_backpack",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "camping:block/large_backpack",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "camping:block/large_backpack",
+      "y": 90
+    }
+  }
+}

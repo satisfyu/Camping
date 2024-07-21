@@ -1,0 +1,37 @@
+{
+  "parent": "camping:main/root",
+  "display": {
+    "icon": {
+      "item": "camping:small_backpack"
+    },
+    "title": {
+      "translate": "advancement.camping.get_a_small_backpack.title"
+    },
+    "description": {
+      "translate": "advancement.camping.get_a_small_backpack.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "small_backpack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:small_backpack"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "small_backpack"
+    ]
+  ]
+}

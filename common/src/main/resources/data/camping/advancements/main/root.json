@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "camping:sleeping_bag_red"
+    },
+    "title": {
+      "translate": "advancement.camping.root.title"
+    },
+    "description": {
+      "translate": "advancement.camping.root.desc"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/white_wool.png"
+  },
+  "criteria": {
+    "bags": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "bags"
+    ]
+  ]
+}

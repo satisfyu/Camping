@@ -1,0 +1,37 @@
+{
+  "parent": "camping:main/get_a_small_backpack",
+  "display": {
+    "icon": {
+      "item": "camping:enderpack"
+    },
+    "title": {
+      "translate": "advancement.camping.get_a_enderpack.title"
+    },
+    "description": {
+      "translate": "advancement.camping.get_a_enderpack.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "enderpack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:enderpack"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "enderpack"
+    ]
+  ]
+}

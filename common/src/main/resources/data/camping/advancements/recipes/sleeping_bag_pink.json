@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "camping:sleeping_bag_pink"
+    ]
+  },
+  "criteria": {
+    "has_pink_wool": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:pink_wool"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "camping:sleeping_bag_pink"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_pink_wool",
+      "has_the_recipe"
+    ]
+  ]
+}

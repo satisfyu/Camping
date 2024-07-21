@@ -1,6 +1,7 @@
 package net.satisfy.camping;
 
 import com.google.common.reflect.Reflection;
+import net.satisfy.camping.event.CommonEvents;
 import net.satisfy.camping.network.OpenBackpackPacket;
 import net.satisfy.camping.registry.*;
 
@@ -28,9 +29,11 @@ public class Camping {
                 TabRegistry.class,
                 TagRegistry.class,
                 ScreenhandlerTypeRegistry.class,
-                KeyHandlerRegistry.class
+                KeyHandlerRegistry.class,
+                CommonEvents.class
         );
         OpenBackpackPacket.register();
+        CommonEvents.registerEvents();
     }
 
 

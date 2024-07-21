@@ -22,9 +22,9 @@ public class TabRegistry {
                 };
                 out.accept(Items.BUNDLE);
                 out.accept(ObjectRegistry.SMALL_BACKPACK_ITEM.get());
-                out.accept(ObjectRegistry.LARGE_BACKPACK.get());
-                out.accept(ObjectRegistry.WANDERER_BACKPACK.get());
-                out.accept(ObjectRegistry.ENDER_BACKPACK.get());
+                out.accept(ObjectRegistry.LARGE_BACKPACK_ITEM.get());
+                out.accept(ObjectRegistry.WANDERER_BACKPACK_ITEM.get());
+                out.accept(ObjectRegistry.ENDERPACK_ITEM.get());
                 out.accept(ObjectRegistry.MULTITOOL.get());
                 out.accept(ObjectRegistry.GRILL.get());
                 for (String color : colorOrder) {

@@ -1,0 +1,51 @@
+{
+  "parent": "camping:main/root",
+  "criteria": {
+    "use_beef_on_grill": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": [
+                  "camping:grill"
+                ]
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": [
+                "minecraft:beef"
+              ]
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.camping.use_beef_on_grill.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "camping:grill"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.camping.use_beef_on_grill.title"
+    }
+  },
+  "requirements": [
+    [
+      "use_beef_on_grill"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

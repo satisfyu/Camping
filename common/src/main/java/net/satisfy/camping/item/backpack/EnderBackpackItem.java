@@ -70,7 +70,7 @@ public class EnderBackpackItem extends Item implements Equipable {
         Player player = pContext.getPlayer();
         Level level = pContext.getLevel();
         BlockPos pos = pContext.getClickedPos();
-        BlockState state = ObjectRegistry.ENDER_BACKPACK_BLOCK.get().defaultBlockState();
+        BlockState state = ObjectRegistry.ENDERPACK.get().defaultBlockState();
         BlockPos relativePos = pos.relative(pContext.getClickedFace());
 
         // only place if crouching, otherwise we always open the menu

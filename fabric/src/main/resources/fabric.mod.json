@@ -2,17 +2,17 @@
   "schemaVersion": 1,
   "id": "camping",
   "version": "${version}",
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "[Let's Do] Camping",
+  "description": "Let's sleep outside today! Grab your backpack, pack your tent, the grill, and the sleeping bag, and let's go!",
   "authors": [
-    "Me!"
+    "satisfy, jason13"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://modrinth.com/mod/lets-do-camping",
+    "sources": "https://github.com/satisfyu/Camping"
   },
-  "license": "Insert License Here",
-  "icon": "assets/camping/icon.png",
+  "license": "Custom",
+  "icon": "assets/camping/pack.png",
   "environment": "*",
   "entrypoints": {
     "main": [

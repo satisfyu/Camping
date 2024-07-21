@@ -1,0 +1,45 @@
+{
+	"credit": "Made by Satisfy",
+	"textures": {
+		"1": "camping:block/enderpack_front",
+		"2": "camping:block/enderpack_back",
+		"particle": "camping:block/enderpack_front"
+	},
+	"elements": [
+		{
+			"name": "pack",
+			"from": [3, 0, 5],
+			"to": [13, 10, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, 0, 11]},
+			"faces": {
+				"north": {"uv": [6, 0, 16, 10], "texture": "#1"},
+				"east": {"uv": [10, 0, 16, 10], "texture": "#2"},
+				"south": {"uv": [0, 0, 10, 10], "texture": "#2"},
+				"west": {"uv": [10, 0, 16, 10], "texture": "#2"},
+				"up": {"uv": [10, 16, 0, 10], "texture": "#1"},
+				"down": {"uv": [10, 10, 0, 16], "texture": "#2"}
+			}
+		},
+		{
+			"name": "ender_eye",
+			"from": [5, 2, 4],
+			"to": [11, 8, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 2, 4.75]},
+			"faces": {
+				"north": {"uv": [10, 10, 16, 16], "texture": "#2"},
+				"east": {"uv": [10, 10, 11, 16], "texture": "#1"},
+				"west": {"uv": [10, 10, 11, 16], "texture": "#1"},
+				"up": {"uv": [16, 11, 10, 10], "texture": "#1"},
+				"down": {"uv": [16, 11, 10, 10], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "ender_pack",
+			"origin": [8, 8, 4.75],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

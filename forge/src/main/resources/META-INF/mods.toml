@@ -1,17 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[47,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+license = "Custom"
 
 [[mods]]
 modId = "camping"
 version = "${version}"
-displayName = "Example Mod"
-authors = "Me!"
+displayName = "[Let's Do] Camping"
+authors = "satisfy, jason13"
 description = '''
-This is an example description! Tell everyone what your mod is about!
-'''
-#logoFile = ""
+Let's sleep outside today! Grab your backpack, pack your tent, the grill, and the sleeping bag, and let's go!'''
+logoFile = "pack.png"
 
 [[dependencies.camping]]
 modId = "forge"
