@@ -27,6 +27,9 @@ public class SmallBackpackModel<T extends Entity> extends EntityModel<T> impleme
                 .texOffs(0, 0).addBox(-7.0F, -10.0F, -1.0F, 8.0F, 10.0F, 5.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 18).addBox(-6.0F, -5.0F, 4.0F, 6.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 24.0F, -7.0F));
 
+
+
+
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
 

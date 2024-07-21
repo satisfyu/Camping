@@ -1,6 +1,5 @@
 package net.satisfy.camping.client;
 
-
 import dev.architectury.registry.client.level.entity.EntityModelLayerRegistry;
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
@@ -23,14 +22,14 @@ import java.util.stream.Stream;
 
 import static net.satisfy.camping.registry.ObjectRegistry.*;
 
-
 @Environment(EnvType.CLIENT)
 public class CampingClient {
 
     public static void onInitializeClient() {
         RenderTypeRegistry.register(RenderType.cutout(), GRILL.get());
         for (RegistrySupplier<Block> block : Stream.concat(TENT_MAIN.values().stream(), Stream.concat(TENT_MAIN_HEAD.values().stream(), Stream.concat(TENT_RIGHT.values().stream(), TENT_HEAD_RIGHT.values().stream()))).toList()) {
-            RenderTypeRegistry.register(RenderType.cutout(), block.get());}
+            RenderTypeRegistry.register(RenderType.cutout(), block.get());
+        }
 
         MenuRegistry.registerScreenFactory(ScreenhandlerTypeRegistry.BACKPACK_SCREENHANDLER.get(), BackpackScreen::new);
 
@@ -43,7 +42,6 @@ public class CampingClient {
     }
 
     public static void registerEntityRenderers() {
-
     }
 
     public static void registerEntityModelLayer() {
@@ -51,6 +49,5 @@ public class CampingClient {
         EntityModelLayerRegistry.register(LargeBackpackModel.LAYER_LOCATION, LargeBackpackModel::createBodyLayer);
         EntityModelLayerRegistry.register(WandererBackpackModel.LAYER_LOCATION, WandererBackpackModel::createBodyLayer);
         EntityModelLayerRegistry.register(EnderpackModel.LAYER_LOCATION, EnderpackModel::createBodyLayer);
-
     }
 }
