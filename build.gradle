@@ -36,6 +36,12 @@ allprojects {
         exclusiveContent {
             forRepository {
                 maven {
+                    url "https://maven.theillusivec4.top/"
+                    content {
+                        includeGroupByRegex "top.theillusivec4.*"
+                    }
+                }
+                maven {
                     name = "Modrinth"
                     url = "https://api.modrinth.com/maven"
                 }
