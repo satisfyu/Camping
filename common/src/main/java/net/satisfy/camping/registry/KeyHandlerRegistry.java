@@ -12,8 +12,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.item.BackpackItem;
-import net.satisfy.camping.network.PacketHandler;
+import net.satisfy.camping.item.EnderpackItem;
 import net.satisfy.camping.network.OpenBackpackPacket;
+import net.satisfy.camping.network.PacketHandler;
 import net.satisfy.camping.platform.PlatformHelper;
 
 @Environment(EnvType.CLIENT)
@@ -35,10 +36,15 @@ public class KeyHandlerRegistry {
                 if (player != null) {
                     if (PlatformHelper.isBackpackEquipped(player)) {
                         ItemStack backpackItem = PlatformHelper.getEquippedBackpack(player);
-                        if (!backpackItem.isEmpty() && backpackItem.getItem() instanceof BackpackItem) {
-                            FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-                            new OpenBackpackPacket(backpackItem).toBytes(buf);
-                            NetworkManager.sendToServer(OpenBackpackPacket.ID, buf);
+                        if (!backpackItem.isEmpty()) {
+                            if (backpackItem.getItem() instanceof BackpackItem) {
+                                FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+                                new OpenBackpackPacket(backpackItem).toBytes(buf);
+                                NetworkManager.sendToServer(OpenBackpackPacket.ID, buf);
+                            } else if (backpackItem.getItem() instanceof EnderpackItem) {
+                                FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+                                NetworkManager.sendToServer(PacketHandler.OPEN_ENDER_CHEST_PACKET_ID, buf);
+                            }
                         }
                     } else {
                         NetworkManager.sendToServer(PacketHandler.OPEN_ENDER_CHEST_PACKET_ID, new FriendlyByteBuf(Unpooled.buffer()));

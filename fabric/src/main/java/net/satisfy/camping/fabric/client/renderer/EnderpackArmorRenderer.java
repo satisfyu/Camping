@@ -9,13 +9,13 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.item.EnderPackItem;
+import net.satisfy.camping.item.EnderpackItem;
 import net.satisfy.camping.registry.BackpackRegistry;
 
 public class EnderpackArmorRenderer implements ArmorRenderer {
     @Override
     public void render(PoseStack matrices, MultiBufferSource vertexConsumers, ItemStack stack, LivingEntity entity, EquipmentSlot slot, int light, HumanoidModel<LivingEntity> contextModel) {
-        EnderPackItem enderpack = (EnderPackItem) stack.getItem();
+        EnderpackItem enderpack = (EnderpackItem) stack.getItem();
 
         Model model = BackpackRegistry.getBodyModel(enderpack, contextModel.body);
 

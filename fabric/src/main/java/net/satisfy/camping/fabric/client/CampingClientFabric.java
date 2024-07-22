@@ -12,6 +12,7 @@ import net.satisfy.camping.client.CampingClient;
 import net.satisfy.camping.fabric.client.renderer.BackpackArmorRenderer;
 import net.satisfy.camping.fabric.client.renderer.BackpackTrinketRenderer;
 import net.satisfy.camping.fabric.client.renderer.EnderpackArmorRenderer;
+import net.satisfy.camping.fabric.client.renderer.EnderpackTrinketRenderer;
 import net.satisfy.camping.registry.ObjectRegistry;
 
 import java.util.List;
@@ -25,12 +26,13 @@ public class CampingClientFabric implements ClientModInitializer {
         ItemTooltipCallback.EVENT.register(this::onItemTooltip);
 
         ArmorRenderer.register(new BackpackArmorRenderer(), ObjectRegistry.SMALL_BACKPACK_ITEM.get(), ObjectRegistry.LARGE_BACKPACK_ITEM.get(), ObjectRegistry.WANDERER_BACKPACK_ITEM.get());
-        ArmorRenderer.register(new EnderpackArmorRenderer(), ObjectRegistry.ENDERPACK_ITEM.get());
+        ArmorRenderer.register(new EnderpackArmorRenderer(), ObjectRegistry.ENDERPACK_ITEM.get(), ObjectRegistry.ENDERBAG_ITEM.get());
 
         TrinketRendererRegistry.registerRenderer(ObjectRegistry.SMALL_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(ObjectRegistry.LARGE_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(ObjectRegistry.WANDERER_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
-        TrinketRendererRegistry.registerRenderer(ObjectRegistry.ENDERPACK_ITEM.get(), new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(ObjectRegistry.ENDERPACK_ITEM.get(), new EnderpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(ObjectRegistry.ENDERBAG_ITEM.get(), new EnderpackTrinketRenderer());
     }
 
     private void onItemTooltip(ItemStack itemStack, TooltipFlag context, List<Component> tooltip) {

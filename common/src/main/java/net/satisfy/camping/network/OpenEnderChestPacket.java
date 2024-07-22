@@ -20,7 +20,9 @@ public class OpenEnderChestPacket {
 			ServerPlayer player = (ServerPlayer) context.getPlayer();
 			MinecraftServer server = player.getServer();
 
-			if (server != null && player.getInventory().contains(ObjectRegistry.ENDERPACK_ITEM.get().getDefaultInstance())) {
+			if (server != null &&
+					(player.getInventory().contains(ObjectRegistry.ENDERPACK_ITEM.get().getDefaultInstance()) ||
+							player.getInventory().contains(ObjectRegistry.ENDERBAG_ITEM.get().getDefaultInstance()))) {
 				player.openMenu(new SimpleMenuProvider((containerId, inventory, playerEntity) ->
 						ChestMenu.threeRows(containerId, inventory, player.getEnderChestInventory()),
 						Component.translatable("container.camping.enderpack")

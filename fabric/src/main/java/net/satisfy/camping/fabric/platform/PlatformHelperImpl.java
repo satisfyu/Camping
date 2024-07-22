@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.satisfy.camping.Util.CampingUtil;
 import net.satisfy.camping.fabric.config.ConfigFabric;
 import net.satisfy.camping.item.BackpackItem;
+import net.satisfy.camping.item.EnderpackItem;
 import net.satisfy.camping.registry.ObjectRegistry;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class PlatformHelperImpl {
 
     public static boolean isBackpackEquipped(Player player) {
         ItemStack chestSlotItem = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chestSlotItem.getItem() instanceof BackpackItem) {
+        if (chestSlotItem.getItem() instanceof BackpackItem || chestSlotItem.getItem() instanceof EnderpackItem) {
             return true;
         }
         Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
@@ -41,14 +42,16 @@ public class PlatformHelperImpl {
             return trinketComponent.isEquipped(ObjectRegistry.SMALL_BACKPACK_ITEM.get()) ||
                     trinketComponent.isEquipped(ObjectRegistry.LARGE_BACKPACK_ITEM.get()) ||
                     trinketComponent.isEquipped(ObjectRegistry.WANDERER_BACKPACK_ITEM.get()) ||
-                    trinketComponent.isEquipped(ObjectRegistry.ENDERPACK_ITEM.get());
+                    trinketComponent.isEquipped(ObjectRegistry.ENDERPACK_ITEM.get()) ||
+                    trinketComponent.isEquipped(ObjectRegistry.ENDERBAG_ITEM.get());
+
         }
         return false;
     }
 
     public static ItemStack getEquippedBackpack(Player player) {
         ItemStack chestSlotItem = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chestSlotItem.getItem() instanceof BackpackItem) {
+        if (chestSlotItem.getItem() instanceof BackpackItem || chestSlotItem.getItem() instanceof EnderpackItem) {
             return chestSlotItem;
         }
         Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
@@ -72,6 +75,11 @@ public class PlatformHelperImpl {
             }
 
             equippedItems = trinketComponent.getEquipped(ObjectRegistry.ENDERPACK_ITEM.get());
+            if (!equippedItems.isEmpty()) {
+                return equippedItems.get(0).getB();
+            }
+
+            equippedItems = trinketComponent.getEquipped(ObjectRegistry.ENDERBAG_ITEM.get());
             if (!equippedItems.isEmpty()) {
                 return equippedItems.get(0).getB();
             }

@@ -14,14 +14,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegisterEvent;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.client.CampingClient;
-import net.satisfy.camping.client.model.EnderpackModel;
-import net.satisfy.camping.client.model.LargeBackpackModel;
-import net.satisfy.camping.client.model.SmallBackpackModel;
-import net.satisfy.camping.client.model.WandererBackpackModel;
-import net.satisfy.camping.forge.client.renderer.player.layers.EnderpackLayer;
-import net.satisfy.camping.forge.client.renderer.player.layers.LargeBackpackLayer;
-import net.satisfy.camping.forge.client.renderer.player.layers.SmallBackpackLayer;
-import net.satisfy.camping.forge.client.renderer.player.layers.WandererBackpackLayer;
+import net.satisfy.camping.client.model.*;
+import net.satisfy.camping.forge.client.renderer.player.layers.*;
 
 import java.util.function.Function;
 
@@ -31,6 +25,7 @@ public class CampingClientForge {
     public static final ModelLayerLocation LARGE_BACKPACK_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "large_backpack"), "main");
     public static final ModelLayerLocation WANDERER_BACKPACK_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "wanderer_backpack"), "main");
     public static final ModelLayerLocation ENDERPACK_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "enderpack"), "main");
+    public static final ModelLayerLocation ENDERBAG_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "enderbag"), "main");
 
     @SubscribeEvent
     public static void beforeClientSetup(RegisterEvent event) {
@@ -48,6 +43,7 @@ public class CampingClientForge {
         event.registerLayerDefinition(LARGE_BACKPACK_LAYER, LargeBackpackModel::createBodyLayer);
         event.registerLayerDefinition(WANDERER_BACKPACK_LAYER, WandererBackpackModel::createBodyLayer);
         event.registerLayerDefinition(ENDERPACK_LAYER, EnderpackModel::createBodyLayer);
+        event.registerLayerDefinition(ENDERBAG_LAYER, EnderbagModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -60,6 +56,8 @@ public class CampingClientForge {
         addLayerToPlayerSkin(event, "slim", WandererBackpackLayer::new);
         addLayerToPlayerSkin(event, "default", EnderpackLayer::new);
         addLayerToPlayerSkin(event, "slim", EnderpackLayer::new);
+        addLayerToPlayerSkin(event, "default", EnderbagLayer::new);
+        addLayerToPlayerSkin(event, "slim", EnderbagLayer::new);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

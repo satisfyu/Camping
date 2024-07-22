@@ -23,7 +23,9 @@ public class BackpackTrinket extends TrinketItem {
             return isEquipped(trinketComponent, SMALL_BACKPACK_ITEM.get()) ||
                     isEquipped(trinketComponent, LARGE_BACKPACK_ITEM.get()) ||
                     isEquipped(trinketComponent, WANDERER_BACKPACK_ITEM.get()) ||
-                    isEquipped(trinketComponent, ENDERPACK_ITEM.get());
+                    isEquipped(trinketComponent, ENDERPACK_ITEM.get()) ||
+                    isEquipped(trinketComponent, ENDERBAG_ITEM.get());
+
         }
         return false;
     }

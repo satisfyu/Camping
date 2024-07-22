@@ -78,13 +78,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         return shape;
     };
 
-    private static final Supplier<VoxelShape> ENDERPACK = () -> {
-        VoxelShape shape = Shapes.empty();
-        shape = Shapes.join(shape, Shapes.box(0.1875, 0, 0.3125, 0.8125, 0.625, 0.6875), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.3125, 0.125, 0.25, 0.6875, 0.5, 0.3125), BooleanOp.OR);
-        return shape;
-    };
-
     private static final Supplier<VoxelShape> WANDERER_BACKPACK = () -> {
         VoxelShape shape = Shapes.empty();
         shape = Shapes.join(shape, Shapes.box(0.125, 0.5, 0.4375, 0.875, 0.6875, 0.625), BooleanOp.OR);
@@ -96,7 +89,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     public static final Map<BackpackType, Map<Direction, VoxelShape>> SHAPES = net.minecraft.Util.make(new HashMap<>(), map -> {
         map.put(BackpackType.SMALL_BACKPACK, generateShapes(SMALL_BACKPACK));
         map.put(BackpackType.LARGE_BACKPACK, generateShapes(LARGE_BACKPACK));
-        map.put(BackpackType.ENDERPACK, generateShapes(ENDERPACK));
         map.put(BackpackType.WANDERER_BACKPACK, generateShapes(WANDERER_BACKPACK));
     });
 
@@ -114,7 +106,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     public enum BackpackType {
-        WANDERER_BACKPACK, ENDERPACK, LARGE_BACKPACK, SMALL_BACKPACK
+        WANDERER_BACKPACK, LARGE_BACKPACK, SMALL_BACKPACK
     }
 
     @Override

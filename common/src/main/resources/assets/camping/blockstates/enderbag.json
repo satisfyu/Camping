@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "camping:block/enderbag"
+    },
+    "facing=south": {
+      "model": "camping:block/enderbag",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "camping:block/enderbag",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "camping:block/enderbag",
+      "y": 90
+    }
+  }
+}

@@ -24,6 +24,8 @@ public class BackpackRegistry {
                 return new WandererBackpackModel<>(modelSet.bakeLayer(WandererBackpackModel.LAYER_LOCATION));
             } else if (key == ObjectRegistry.ENDERPACK_ITEM.get()) {
                 return new EnderpackModel<>(modelSet.bakeLayer(EnderpackModel.LAYER_LOCATION));
+            } else if (key == ObjectRegistry.ENDERBAG_ITEM.get()) {
+                return new EnderbagModel<>(modelSet.bakeLayer(EnderbagModel.LAYER_LOCATION));
             } else {
                 return null;
             }
