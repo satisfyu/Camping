@@ -13,14 +13,12 @@ import net.satisfy.camping.block.entity.BackpackBlockEntity;
 
 import java.util.function.Supplier;
 
-import static net.satisfy.camping.registry.ObjectRegistry.GRILL;
-
 public final class EntityTypeRegistry {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Camping.MODID, Registries.ENTITY_TYPE);
     private static final Registrar<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Camping.MODID, Registries.BLOCK_ENTITY_TYPE).getRegistrar();
 
-    public static final RegistrySupplier<BlockEntityType<GrillBlockEntity>> GRILL_BLOCK_ENTITY = registerBlockEntity("grill", () -> BlockEntityType.Builder.of(GrillBlockEntity::new, GRILL.get()).build(null));
-    public static final RegistrySupplier<BlockEntityType<BackpackBlockEntity>> BACKPACK_BLOCK_ENTITY = registerBlockEntity("backpack", () -> BlockEntityType.Builder.of(BackpackBlockEntity::new, GRILL.get()).build(null));
+    public static final RegistrySupplier<BlockEntityType<GrillBlockEntity>> GRILL_BLOCK_ENTITY = registerBlockEntity("grill", () -> BlockEntityType.Builder.of(GrillBlockEntity::new, ObjectRegistry.GRILL.get()).build(null));
+    public static final RegistrySupplier<BlockEntityType<BackpackBlockEntity>> BACKPACK_BLOCK_ENTITY = registerBlockEntity("backpack", () -> BlockEntityType.Builder.of(BackpackBlockEntity::new, ObjectRegistry.SMALL_BACKPACK.get()).build(null));
 
 
     private static <T extends BlockEntityType<?>> RegistrySupplier<T> registerBlockEntity(final String path, final Supplier<T> type) {
