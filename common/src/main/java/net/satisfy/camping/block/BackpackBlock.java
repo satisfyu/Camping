@@ -89,10 +89,20 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         return shape;
     };
 
+    private static final Supplier<VoxelShape> WANDERER_BAG = () -> {
+        VoxelShape shape = Shapes.empty();
+        shape = Shapes.join(shape, Shapes.box(0.25, 0, 0.3125, 0.75, 0.625, 0.6875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.125, 0, 0.375, 0.25, 0.25, 0.625), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.75, 0, 0.375, 0.875, 0.25, 0.625), BooleanOp.OR);
+        return shape;
+    };
+
     public static final Map<BackpackType, Map<Direction, VoxelShape>> SHAPES = net.minecraft.Util.make(new HashMap<>(), map -> {
         map.put(BackpackType.SMALL_BACKPACK, generateShapes(SMALL_BACKPACK));
         map.put(BackpackType.LARGE_BACKPACK, generateShapes(LARGE_BACKPACK));
         map.put(BackpackType.WANDERER_BACKPACK, generateShapes(WANDERER_BACKPACK));
+        map.put(BackpackType.WANDERER_BAG, generateShapes(WANDERER_BAG));
+
     });
 
     private static Map<Direction, VoxelShape> generateShapes(Supplier<VoxelShape> shapeSupplier) {
@@ -113,9 +123,9 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     public enum BackpackType {
-        WANDERER_BACKPACK, LARGE_BACKPACK, SMALL_BACKPACK
+        WANDERER_BACKPACK, LARGE_BACKPACK, SMALL_BACKPACK, WANDERER_BAG
     }
-
+/*
     @Override
     public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         if (level.isClientSide) {
@@ -137,7 +147,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
             return InteractionResult.CONSUME;
         }
     }
-
+*/
     @Override
     public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         if (!level.isClientSide) {

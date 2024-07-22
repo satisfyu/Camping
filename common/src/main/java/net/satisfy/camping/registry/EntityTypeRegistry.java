@@ -21,7 +21,7 @@ public final class EntityTypeRegistry {
     private static final Registrar<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Camping.MODID, Registries.BLOCK_ENTITY_TYPE).getRegistrar();
 
     public static final RegistrySupplier<BlockEntityType<GrillBlockEntity>> GRILL_BLOCK_ENTITY = registerBlockEntity("grill", () -> BlockEntityType.Builder.of(GrillBlockEntity::new, GRILL.get()).build(null));
-    public static final RegistrySupplier<BlockEntityType<BackpackBlockEntity>> BACKPACK_BLOCK_ENTITY = registerBlockEntity("backpack", () -> BlockEntityType.Builder.of(BackpackBlockEntity::new, SMALL_BACKPACK.get(), LARGE_BACKPACK.get(), WANDERER_BACKPACK.get()).build(null));
+    public static final RegistrySupplier<BlockEntityType<BackpackBlockEntity>> BACKPACK_BLOCK_ENTITY = registerBlockEntity("backpack", () -> BlockEntityType.Builder.of(BackpackBlockEntity::new, SMALL_BACKPACK.get(), LARGE_BACKPACK.get(), WANDERER_BACKPACK.get(), WANDERER_BAG.get()).build(null));
     public static final RegistrySupplier<BlockEntityType<EnderpackBlockEntity>> ENDERPACK_BLOCK_ENTITY = registerBlockEntity("enderpack", () -> BlockEntityType.Builder.of(EnderpackBlockEntity::new, ENDERPACK.get(), ENDERBAG.get()).build(null));
 
 

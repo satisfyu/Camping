@@ -45,6 +45,7 @@ public class CampingClient {
         EntityModelLayerRegistry.register(SmallBackpackModel.LAYER_LOCATION, SmallBackpackModel::createBodyLayer);
         EntityModelLayerRegistry.register(LargeBackpackModel.LAYER_LOCATION, LargeBackpackModel::createBodyLayer);
         EntityModelLayerRegistry.register(WandererBackpackModel.LAYER_LOCATION, WandererBackpackModel::createBodyLayer);
+        EntityModelLayerRegistry.register(WandererBagModel.LAYER_LOCATION, WandererBagModel::createBodyLayer);
         EntityModelLayerRegistry.register(EnderpackModel.LAYER_LOCATION, EnderpackModel::createBodyLayer);
         EntityModelLayerRegistry.register(EnderbagModel.LAYER_LOCATION, EnderbagModel::createBodyLayer);
 

@@ -25,12 +25,13 @@ public class CampingClientFabric implements ClientModInitializer {
 
         ItemTooltipCallback.EVENT.register(this::onItemTooltip);
 
-        ArmorRenderer.register(new BackpackArmorRenderer(), ObjectRegistry.SMALL_BACKPACK_ITEM.get(), ObjectRegistry.LARGE_BACKPACK_ITEM.get(), ObjectRegistry.WANDERER_BACKPACK_ITEM.get());
+        ArmorRenderer.register(new BackpackArmorRenderer(), ObjectRegistry.SMALL_BACKPACK_ITEM.get(), ObjectRegistry.LARGE_BACKPACK_ITEM.get(), ObjectRegistry.WANDERER_BACKPACK_ITEM.get(), ObjectRegistry.WANDERER_BAG_ITEM.get());
         ArmorRenderer.register(new EnderpackArmorRenderer(), ObjectRegistry.ENDERPACK_ITEM.get(), ObjectRegistry.ENDERBAG_ITEM.get());
 
         TrinketRendererRegistry.registerRenderer(ObjectRegistry.SMALL_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(ObjectRegistry.LARGE_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(ObjectRegistry.WANDERER_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(ObjectRegistry.WANDERER_BAG_ITEM.get(), new BackpackTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(ObjectRegistry.ENDERPACK_ITEM.get(), new EnderpackTrinketRenderer());
         TrinketRendererRegistry.registerRenderer(ObjectRegistry.ENDERBAG_ITEM.get(), new EnderpackTrinketRenderer());
     }
