@@ -1,0 +1,133 @@
+{
+  "parent": "camping:main/get_a_enderpack",
+  "display": {
+    "icon": {
+      "item": "camping:goodybag"
+    },
+    "title": {
+      "translate": "advancement.camping.get_all_backpacks.title"
+    },
+    "description": {
+      "translate": "advancement.camping.get_all_backpacks.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 500,
+    "loot": [
+      "camping:advancements/goodybag"
+    ]
+  },
+  "criteria": {
+    "camping:small_backpack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:small_backpack"
+            ]
+          }
+        ]
+      }
+    },
+    "camping:large_backpack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:large_backpack"
+            ]
+          }
+        ]
+      }
+    },
+    "camping:wanderer_backpack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:wanderer_backpack"
+            ]
+          }
+        ]
+      }
+    },
+    "camping:wanderer_bag": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:wanderer_bag"
+            ]
+          }
+        ]
+      }
+    },
+    "camping:sheepbag": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:sheepbag"
+            ]
+          }
+        ]
+      }
+    },
+    "camping:enderpack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:enderpack"
+            ]
+          }
+        ]
+      }
+    },
+    "camping:enderbag": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:enderbag"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "camping:small_backpack"
+    ],
+    [
+      "camping:large_backpack"
+    ],
+    [
+      "camping:wanderer_backpack"
+    ],
+    [
+      "camping:wanderer_bag"
+    ],
+    [
+      "camping:sheepbag"
+    ],
+    [
+      "camping:enderpack"
+    ],
+    [
+      "camping:enderbag"
+    ]
+  ]
+}

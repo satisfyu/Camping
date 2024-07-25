@@ -9,6 +9,10 @@ import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.satisfy.camping.Camping;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class CommonEvents {
 
     public static void registerEvents() {
@@ -26,16 +30,15 @@ public class CommonEvents {
 
             if (name.startsWith(prefix)) {
                 String file = name.substring(name.indexOf(prefix) + prefix.length());
-                if (file.equals("end_city_treasure")) {
+                Set<String> validFiles = new HashSet<>(Arrays.asList("end_city_treasure", "stronghold_corridor", "stronghold_crossing", "stronghold_library", "spawn_bonus_chest"));
+                if (validFiles.contains(file)) {
                     context.addPool(getPool(file));
                 }
             }
         }
-
         public static LootPool getPool(String entryName) {
             return LootPool.lootPool().add(getPoolEntry(entryName)).build();
         }
-
         @SuppressWarnings("rawtypes")
         private static LootPoolEntryContainer.Builder getPoolEntry(String name) {
             ResourceLocation table = new ResourceLocation(Camping.MODID, "chests/" + name);

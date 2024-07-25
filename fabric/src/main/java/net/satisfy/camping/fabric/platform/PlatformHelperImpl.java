@@ -43,6 +43,8 @@ public class PlatformHelperImpl {
                     trinketComponent.isEquipped(ObjectRegistry.LARGE_BACKPACK_ITEM.get()) ||
                     trinketComponent.isEquipped(ObjectRegistry.WANDERER_BACKPACK_ITEM.get()) ||
                     trinketComponent.isEquipped(ObjectRegistry.WANDERER_BAG_ITEM.get()) ||
+                    trinketComponent.isEquipped(ObjectRegistry.SHEEPBAG_ITEM.get()) ||
+                    trinketComponent.isEquipped(ObjectRegistry.GOODYBAG_ITEM.get()) ||
                     trinketComponent.isEquipped(ObjectRegistry.ENDERPACK_ITEM.get()) ||
                     trinketComponent.isEquipped(ObjectRegistry.ENDERBAG_ITEM.get());
 
@@ -80,6 +82,15 @@ public class PlatformHelperImpl {
                 return equippedItems.get(0).getB();
             }
 
+            equippedItems = trinketComponent.getEquipped(ObjectRegistry.SHEEPBAG_ITEM.get());
+            if (!equippedItems.isEmpty()) {
+                return equippedItems.get(0).getB();
+            }
+
+            equippedItems = trinketComponent.getEquipped(ObjectRegistry.GOODYBAG_ITEM.get());
+            if (!equippedItems.isEmpty()) {
+                return equippedItems.get(0).getB();
+            }
 
             equippedItems = trinketComponent.getEquipped(ObjectRegistry.ENDERPACK_ITEM.get());
             if (!equippedItems.isEmpty()) {

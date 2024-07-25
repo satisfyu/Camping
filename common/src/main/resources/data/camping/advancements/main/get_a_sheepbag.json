@@ -1,0 +1,37 @@
+{
+  "parent": "camping:main/get_a_small_backpack",
+  "display": {
+    "icon": {
+      "item": "camping:sheepbag"
+    },
+    "title": {
+      "translate": "advancement.camping.get_a_sheepbag.title"
+    },
+    "description": {
+      "translate": "advancement.camping.get_a_sheepbag.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sheepbag": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "camping:sheepbag"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sheepbag"
+    ]
+  ]
+}

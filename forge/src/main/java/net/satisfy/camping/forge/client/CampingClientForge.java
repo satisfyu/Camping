@@ -24,6 +24,8 @@ public class CampingClientForge {
     public static final ModelLayerLocation SMALL_BACKPACK_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "small_backpack"), "main");
     public static final ModelLayerLocation LARGE_BACKPACK_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "large_backpack"), "main");
     public static final ModelLayerLocation WANDERER_BACKPACK_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "wanderer_backpack"), "main");
+    public static final ModelLayerLocation SHEEPBAG_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "sheepbag"), "main");
+    public static final ModelLayerLocation GOODYBAG_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "goodybag"), "main");
     public static final ModelLayerLocation ENDERPACK_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "enderpack"), "main");
     public static final ModelLayerLocation ENDERBAG_LAYER = new ModelLayerLocation(new ResourceLocation(Camping.MODID, "enderbag"), "main");
 
@@ -42,6 +44,8 @@ public class CampingClientForge {
         event.registerLayerDefinition(SMALL_BACKPACK_LAYER, SmallBackpackModel::createBodyLayer);
         event.registerLayerDefinition(LARGE_BACKPACK_LAYER, LargeBackpackModel::createBodyLayer);
         event.registerLayerDefinition(WANDERER_BACKPACK_LAYER, WandererBackpackModel::createBodyLayer);
+        event.registerLayerDefinition(SHEEPBAG_LAYER, SheepbagModel::createBodyLayer);
+        event.registerLayerDefinition(GOODYBAG_LAYER, GoodybagModel::createBodyLayer);
         event.registerLayerDefinition(ENDERPACK_LAYER, EnderpackModel::createBodyLayer);
         event.registerLayerDefinition(ENDERBAG_LAYER, EnderbagModel::createBodyLayer);
     }
@@ -54,6 +58,10 @@ public class CampingClientForge {
         addLayerToPlayerSkin(event, "slim", LargeBackpackLayer::new);
         addLayerToPlayerSkin(event, "default", WandererBackpackLayer::new);
         addLayerToPlayerSkin(event, "slim", WandererBackpackLayer::new);
+        addLayerToPlayerSkin(event, "default", SheepbagLayer::new);
+        addLayerToPlayerSkin(event, "slim", SheepbagLayer::new);
+        addLayerToPlayerSkin(event, "default", GoodybagLayer::new);
+        addLayerToPlayerSkin(event, "slim", GoodybagLayer::new);
         addLayerToPlayerSkin(event, "default", EnderpackLayer::new);
         addLayerToPlayerSkin(event, "slim", EnderpackLayer::new);
         addLayerToPlayerSkin(event, "default", EnderbagLayer::new);

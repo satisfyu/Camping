@@ -23,7 +23,11 @@ public class BackpackRegistry {
             } else if (key == ObjectRegistry.WANDERER_BACKPACK_ITEM.get()) {
                 return new WandererBackpackModel<>(modelSet.bakeLayer(WandererBackpackModel.LAYER_LOCATION));
             } else if (key == ObjectRegistry.WANDERER_BAG_ITEM.get()) {
-                return new WandererBagModel<>(modelSet.bakeLayer(WandererBagModel.LAYER_LOCATION));
+                return new WandererBackpackModel<>(modelSet.bakeLayer(WandererBackpackModel.LAYER_LOCATION));
+            } else if (key == ObjectRegistry.GOODYBAG_ITEM.get()) {
+                return new GoodybagModel<>(modelSet.bakeLayer(GoodybagModel.LAYER_LOCATION));
+            } else if (key == ObjectRegistry.SHEEPBAG_ITEM.get()) {
+                return new SheepbagModel<>(modelSet.bakeLayer(SheepbagModel.LAYER_LOCATION));
             } else if (key == ObjectRegistry.ENDERPACK_ITEM.get()) {
                 return new EnderpackModel<>(modelSet.bakeLayer(EnderpackModel.LAYER_LOCATION));
             } else if (key == ObjectRegistry.ENDERBAG_ITEM.get()) {

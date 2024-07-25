@@ -25,6 +25,8 @@ public class TabRegistry {
                 out.accept(ObjectRegistry.LARGE_BACKPACK_ITEM.get());
                 out.accept(ObjectRegistry.WANDERER_BACKPACK_ITEM.get());
                 out.accept(ObjectRegistry.WANDERER_BAG_ITEM.get());
+                out.accept(ObjectRegistry.SHEEPBAG_ITEM.get());
+                out.accept(ObjectRegistry.GOODYBAG_ITEM.get());
                 out.accept(ObjectRegistry.ENDERPACK_ITEM.get());
                 out.accept(ObjectRegistry.ENDERBAG_ITEM.get());
                 out.accept(ObjectRegistry.MULTITOOL.get());

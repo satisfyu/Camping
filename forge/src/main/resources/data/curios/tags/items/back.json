@@ -4,6 +4,8 @@
     "camping:small_backpack",
     "camping:large_backpack",
     "camping:wanderer_backpack",
-    "camping:enderpack"
+    "camping:sheepbag",
+    "camping:enderpack",
+    "camping:enderbag"
   ]
 }

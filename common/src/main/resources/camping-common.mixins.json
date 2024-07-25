@@ -6,6 +6,7 @@
   "client": [
   ],
   "mixins": [
+    "VillagerTradesMixin",
     "WanderingTraderMixin"
   ],
   "injectors": {

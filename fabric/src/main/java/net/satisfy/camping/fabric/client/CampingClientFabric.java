@@ -13,9 +13,10 @@ import net.satisfy.camping.fabric.client.renderer.BackpackArmorRenderer;
 import net.satisfy.camping.fabric.client.renderer.BackpackTrinketRenderer;
 import net.satisfy.camping.fabric.client.renderer.EnderpackArmorRenderer;
 import net.satisfy.camping.fabric.client.renderer.EnderpackTrinketRenderer;
-import net.satisfy.camping.registry.ObjectRegistry;
 
 import java.util.List;
+
+import static net.satisfy.camping.registry.ObjectRegistry.*;
 
 public class CampingClientFabric implements ClientModInitializer {
     @Override
@@ -25,15 +26,17 @@ public class CampingClientFabric implements ClientModInitializer {
 
         ItemTooltipCallback.EVENT.register(this::onItemTooltip);
 
-        ArmorRenderer.register(new BackpackArmorRenderer(), ObjectRegistry.SMALL_BACKPACK_ITEM.get(), ObjectRegistry.LARGE_BACKPACK_ITEM.get(), ObjectRegistry.WANDERER_BACKPACK_ITEM.get(), ObjectRegistry.WANDERER_BAG_ITEM.get());
-        ArmorRenderer.register(new EnderpackArmorRenderer(), ObjectRegistry.ENDERPACK_ITEM.get(), ObjectRegistry.ENDERBAG_ITEM.get());
+        ArmorRenderer.register(new BackpackArmorRenderer(), SMALL_BACKPACK_ITEM.get(), LARGE_BACKPACK_ITEM.get(), WANDERER_BACKPACK_ITEM.get(), WANDERER_BAG_ITEM.get(), SHEEPBAG_ITEM.get(), GOODYBAG_ITEM.get());
+        ArmorRenderer.register(new EnderpackArmorRenderer(), ENDERPACK_ITEM.get(), ENDERBAG_ITEM.get());
 
-        TrinketRendererRegistry.registerRenderer(ObjectRegistry.SMALL_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
-        TrinketRendererRegistry.registerRenderer(ObjectRegistry.LARGE_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
-        TrinketRendererRegistry.registerRenderer(ObjectRegistry.WANDERER_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
-        TrinketRendererRegistry.registerRenderer(ObjectRegistry.WANDERER_BAG_ITEM.get(), new BackpackTrinketRenderer());
-        TrinketRendererRegistry.registerRenderer(ObjectRegistry.ENDERPACK_ITEM.get(), new EnderpackTrinketRenderer());
-        TrinketRendererRegistry.registerRenderer(ObjectRegistry.ENDERBAG_ITEM.get(), new EnderpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(SMALL_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(LARGE_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(WANDERER_BACKPACK_ITEM.get(), new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(WANDERER_BAG_ITEM.get(), new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(SHEEPBAG_ITEM.get(), new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(GOODYBAG_ITEM.get(), new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(ENDERPACK_ITEM.get(), new EnderpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(ENDERBAG_ITEM.get(), new EnderpackTrinketRenderer());
     }
 
     private void onItemTooltip(ItemStack itemStack, TooltipFlag context, List<Component> tooltip) {

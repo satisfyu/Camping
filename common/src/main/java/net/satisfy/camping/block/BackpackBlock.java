@@ -3,16 +3,11 @@ package net.satisfy.camping.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -29,7 +24,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -97,12 +91,38 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         return shape;
     };
 
+    private static final Supplier<VoxelShape> SHEEPBAG = () -> {
+        VoxelShape shape = Shapes.empty();
+        shape = Shapes.join(shape, Shapes.box(0.34375, 0.4375, 0.40625, 0.65625, 0.75, 0.71875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.28125, 0, 0.46875, 0.71875, 0.4375, 0.71875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.28125, 0, 0.34375, 0.40625, 0.125, 0.46875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.59375, 0, 0.34375, 0.71875, 0.125, 0.46875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.28125, 0.3125, 0.34375, 0.40625, 0.4375, 0.46875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.59375, 0.3125, 0.34375, 0.71875, 0.4375, 0.46875), BooleanOp.OR);
+        return shape;
+    };
+
+    private static final Supplier<VoxelShape> GOODYBAG = () -> {
+        VoxelShape shape = Shapes.empty();
+        shape = Shapes.join(shape, Shapes.box(0.125, 0, 0.25, 0.75, 0.625, 0.625), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.75, 0, 0.25, 0.9375, 0.3125, 0.625), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0, 0, 0.25, 0.125, 0.3125, 0.625), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.1875, 0, 0.125, 0.6875, 0.3125, 0.25), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.1875, 0, 0.625, 0.5, 0.75, 0.9375), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.125, 0.4375, 0.25, 0.75, 0.625, 0.625), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.375, 0.375, 0.1875, 0.5, 0.5, 0.25), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.003125, 0.125, 0.3125, 0.128125, 0.5, 0.4375), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.003125, 0.125, 0.4375, 0.128125, 0.75, 0.5625), BooleanOp.OR);
+        return shape;
+    };
+
     public static final Map<BackpackType, Map<Direction, VoxelShape>> SHAPES = net.minecraft.Util.make(new HashMap<>(), map -> {
         map.put(BackpackType.SMALL_BACKPACK, generateShapes(SMALL_BACKPACK));
         map.put(BackpackType.LARGE_BACKPACK, generateShapes(LARGE_BACKPACK));
         map.put(BackpackType.WANDERER_BACKPACK, generateShapes(WANDERER_BACKPACK));
         map.put(BackpackType.WANDERER_BAG, generateShapes(WANDERER_BAG));
-
+        map.put(BackpackType.GOODYBAG, generateShapes(GOODYBAG));
+        map.put(BackpackType.SHEEPBAG, generateShapes(SHEEPBAG));
     });
 
     private static Map<Direction, VoxelShape> generateShapes(Supplier<VoxelShape> shapeSupplier) {
@@ -123,7 +143,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     public enum BackpackType {
-        WANDERER_BACKPACK, LARGE_BACKPACK, SMALL_BACKPACK, WANDERER_BAG
+        WANDERER_BACKPACK, LARGE_BACKPACK, SMALL_BACKPACK, WANDERER_BAG, SHEEPBAG, GOODYBAG
     }
 /*
     @Override
