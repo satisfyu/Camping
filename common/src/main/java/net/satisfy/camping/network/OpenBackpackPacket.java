@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.Camping;
+import net.satisfy.camping.block.BackpackContainer;
 import net.satisfy.camping.client.screen.BackpackScreenHandler;
 import net.satisfy.camping.item.BackpackItem;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,7 @@ public class OpenBackpackPacket {
         ServerPlayer player = (ServerPlayer) context.getPlayer();
         context.queue(() -> {
             if (backpackItem.getItem() instanceof BackpackItem) {
-                SimpleContainer backpackContainer = BackpackItem.getContainer(backpackItem);
+                BackpackContainer backpackContainer = BackpackItem.getContainer(backpackItem);
 
                 MenuProvider provider = new MenuProvider() {
                     @Override

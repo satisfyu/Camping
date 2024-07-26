@@ -5,7 +5,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.satisfy.camping.Util.CampingIdentifier;
+import net.satisfy.camping.util.CampingIdentifier;
 
 public class BackpackScreen extends AbstractContainerScreen<BackpackScreenHandler> {
     private static final ResourceLocation CONTAINER_LOCATION = new CampingIdentifier("textures/gui/backpack.png");

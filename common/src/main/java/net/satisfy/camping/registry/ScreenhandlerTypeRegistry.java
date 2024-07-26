@@ -8,7 +8,7 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.satisfy.camping.Camping;
-import net.satisfy.camping.Util.CampingIdentifier;
+import net.satisfy.camping.util.CampingIdentifier;
 import net.satisfy.camping.client.screen.BackpackScreenHandler;
 
 import java.util.function.Supplier;

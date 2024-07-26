@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.satisfy.camping.Util.CampingUtil;
+import net.satisfy.camping.util.CampingUtil;
 import net.satisfy.camping.client.CampingClient;
 import net.satisfy.camping.fabric.client.renderer.BackpackArmorRenderer;
 import net.satisfy.camping.fabric.client.renderer.BackpackTrinketRenderer;

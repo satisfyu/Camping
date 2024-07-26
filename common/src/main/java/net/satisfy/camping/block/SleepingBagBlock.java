@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.satisfy.camping.Util.CampingUtil.rotateShape;
+import static net.satisfy.camping.util.CampingUtil.rotateShape;
 
 @SuppressWarnings("deprecation")
 public class SleepingBagBlock extends BedBlock {

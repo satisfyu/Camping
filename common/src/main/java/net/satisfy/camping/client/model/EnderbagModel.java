@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
-import net.satisfy.camping.Util.CampingIdentifier;
+import net.satisfy.camping.util.CampingIdentifier;
 
 public class EnderbagModel<T extends Entity> extends EntityModel<T> implements BackpackModel {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new CampingIdentifier("enderbag"), "main");

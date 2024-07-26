@@ -9,7 +9,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.satisfy.camping.Util.CampingUtil;
+import net.satisfy.camping.util.CampingUtil;
 import net.satisfy.camping.fabric.config.ConfigFabric;
 import net.satisfy.camping.item.BackpackItem;
 import net.satisfy.camping.item.EnderpackItem;

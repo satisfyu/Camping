@@ -1,4 +1,4 @@
-package net.satisfy.camping.Util;
+package net.satisfy.camping.util;
 
 import net.minecraft.resources.ResourceLocation;
 import net.satisfy.camping.Camping;

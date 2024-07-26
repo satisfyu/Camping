@@ -13,6 +13,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.satisfy.camping.block.BackpackBlock;
+import net.satisfy.camping.block.BackpackContainer;
 import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,16 +37,16 @@ public class BackpackItem extends BlockItem implements Equipable {
         this.backpackTexture = backpackTexture;
     }
 
-    private static Stream<ItemStack> getContents(ItemStack itemStack) {
+    public static Stream<ItemStack> getContents(ItemStack itemStack) {
         CompoundTag compoundTag = itemStack.getTag();
         if (compoundTag == null) {
             return Stream.empty();
         } else {
             CompoundTag compoundTag2 = compoundTag.getCompound("BlockEntityTag");
             ListTag listTag = compoundTag2.getList("Items", 10);
-            Stream<Tag> var10000 = listTag.stream();
+            Stream<Tag> items = listTag.stream();
             Objects.requireNonNull(CompoundTag.class);
-            return var10000.map(CompoundTag.class::cast).map(ItemStack::of);
+            return items.map(CompoundTag.class::cast).map(ItemStack::of);
         }
     }
 
@@ -59,8 +60,8 @@ public class BackpackItem extends BlockItem implements Equipable {
         return Optional.of(new BundleTooltip(nonNullList, 64));
     }
 
-    public static SimpleContainer getContainer(ItemStack stack) {
-        SimpleContainer container = new SimpleContainer(BackpackBlockEntity.CONTAINER_SIZE);
+    public static BackpackContainer getContainer(ItemStack stack) {
+        BackpackContainer container = new BackpackContainer(stack);
         NonNullList<ItemStack> items = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
 
         int index = 0;
