@@ -1,5 +1,6 @@
 package net.satisfy.camping.client.screen;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -8,19 +9,20 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.block.entity.BackpackBlockEntity;
+import net.satisfy.camping.inventory.BackpackContainer;
 import net.satisfy.camping.item.BackpackItem;
 import net.satisfy.camping.registry.ScreenhandlerTypeRegistry;
 import net.satisfy.camping.registry.TagRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class BackpackScreenHandler extends AbstractContainerMenu {
-    private final Container container;
+    private final BackpackContainer container;
 
     public BackpackScreenHandler(int syncId, Inventory playerInventory) {
-        this(syncId, playerInventory, new SimpleContainer(BackpackBlockEntity.CONTAINER_SIZE));
+        this(syncId, playerInventory, new BackpackContainer(NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY)));
     }
 
-    public BackpackScreenHandler(int syncId, Inventory playerInventory, Container container) {
+    public BackpackScreenHandler(int syncId, Inventory playerInventory, BackpackContainer container) {
         super(ScreenhandlerTypeRegistry.BACKPACK_SCREENHANDLER.get(), syncId);
         checkContainerSize(container, BackpackBlockEntity.CONTAINER_SIZE);
         this.container = container;
@@ -87,8 +89,8 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        if (this.container instanceof BackpackBlockEntity) {
-            ((BackpackBlockEntity) this.container).setChanged();
+        if (this.container instanceof BackpackContainer) {
+            ((BackpackContainer) this.container).setChanged();
         }
     }
 
@@ -96,8 +98,8 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     public void removed(Player player) {
         super.removed(player);
         this.container.stopOpen(player);
-        if (this.container instanceof BackpackBlockEntity) {
-            ((BackpackBlockEntity) this.container).setChanged();
+        if (this.container instanceof BackpackContainer) {
+            ((BackpackContainer) this.container).setChanged();
         }
     }
 
