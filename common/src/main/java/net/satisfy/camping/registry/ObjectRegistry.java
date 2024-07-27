@@ -33,11 +33,9 @@ public class ObjectRegistry {
     public static final Registrar<Block> BLOCK_REGISTRAR = BLOCKS.getRegistrar();
 
     public static final Map<String, RegistrySupplier<Block>> SLEEPING_BAGS = new HashMap<>();
-    public static final RegistrySupplier<Block> GRILL = registerWithItem("grill", () -> new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON), 1));
+    public static final RegistrySupplier<Block> GRILL = registerWithItem("grill", () -> new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON).lightLevel((state) -> state.getValue(GrillBlock.LIT) ? 10 : 0), 1));
     public static final RegistrySupplier<Item> MULTITOOL = registerItem("multitool", () -> new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant()));
-    
     public static final BlockBehaviour.Properties BACKPACK_BEHAVIOUR = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion().noParticlesOnBreak().instabreak();
-    
     public static final RegistrySupplier<Block> SMALL_BACKPACK = registerWithoutItem("small_backpack", () -> new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackType.SMALL_BACKPACK));
     public static final RegistrySupplier<Item> SMALL_BACKPACK_ITEM = registerItem("small_backpack", () -> new BackpackItem(SMALL_BACKPACK.get(), new CampingIdentifier("textures/model/small_backpack.png")));
     public static final RegistrySupplier<Block> LARGE_BACKPACK = registerWithoutItem("large_backpack", () -> new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackType.LARGE_BACKPACK));
@@ -50,7 +48,6 @@ public class ObjectRegistry {
     public static final RegistrySupplier<Item> GOODYBAG_ITEM = registerItem("goodybag", () -> new BackpackItem(GOODYBAG.get(), new CampingIdentifier("textures/model/goodybag.png")));
     public static final RegistrySupplier<Block> SHEEPBAG = registerWithoutItem("sheepbag", () -> new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackType.SHEEPBAG));
     public static final RegistrySupplier<Item> SHEEPBAG_ITEM = registerItem("sheepbag", () -> new BackpackItem(SHEEPBAG.get(), new CampingIdentifier("textures/model/sheepbag.png")));
-
     public static final RegistrySupplier<Block> ENDERPACK = registerWithoutItem("enderpack", () -> new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackBlock.BackpackType.ENDERPACK));
     public static final RegistrySupplier<Item> ENDERPACK_ITEM = registerItem("enderpack", () -> new EnderpackItem(ENDERPACK.get(), ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, new CampingIdentifier("textures/model/enderpack.png"), new Item.Properties()));
     public static final RegistrySupplier<Block> ENDERBAG = registerWithoutItem("enderbag", () -> new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackBlock.BackpackType.ENDERBAG));
