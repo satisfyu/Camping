@@ -25,7 +25,6 @@ public class Camping {
                 TabRegistry.class,
                 TagRegistry.class,
                 ScreenhandlerTypeRegistry.class,
-                KeyHandlerRegistry.class,
                 CommonEvents.class
         );
         OpenBackpackPacket.register();

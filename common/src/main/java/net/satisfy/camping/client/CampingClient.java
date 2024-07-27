@@ -13,6 +13,7 @@ import net.satisfy.camping.client.model.*;
 import net.satisfy.camping.client.screen.BackpackScreen;
 import net.satisfy.camping.client.renderer.GrillRenderer;
 import net.satisfy.camping.registry.EntityTypeRegistry;
+import net.satisfy.camping.registry.KeyHandlerRegistry;
 import net.satisfy.camping.registry.ScreenhandlerTypeRegistry;
 
 import java.util.stream.Stream;
@@ -26,8 +27,10 @@ public class CampingClient {
         RenderTypeRegistry.register(RenderType.cutout(), GRILL.get());
         for (RegistrySupplier<Block> block : Stream.concat(TENT_MAIN.values().stream(), Stream.concat(TENT_MAIN_HEAD.values().stream(), Stream.concat(TENT_RIGHT.values().stream(), TENT_HEAD_RIGHT.values().stream()))).toList()) {
             RenderTypeRegistry.register(RenderType.cutout(), block.get());
+
         }
 
+        KeyHandlerRegistry.init();
         MenuRegistry.registerScreenFactory(ScreenhandlerTypeRegistry.BACKPACK_SCREENHANDLER.get(), BackpackScreen::new);
 
         BlockEntityRendererRegistry.register(EntityTypeRegistry.GRILL_BLOCK_ENTITY.get(), GrillRenderer::new);

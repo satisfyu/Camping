@@ -24,7 +24,7 @@ public class KeyHandlerRegistry {
 
     private static final KeyMapping open_key = new KeyMapping(OPEN_KEY, InputConstants.Type.KEYSYM, InputConstants.KEY_B, CATEGORY);
 
-    static {
+    public static void init() {
         KeyMappingRegistry.register(open_key);
         registerKeyHandler();
     }
