@@ -36,12 +36,9 @@ public class CuriosSmallBackpackRenderer implements ICurioRenderer {
 
             // this works as expected, and detects when the player is wearing a registered curio item
 
-            System.out.println("found a curio registered to item stack " + stack.getDisplayName().getString());
-
             if (curio instanceof CuriosBackpack shulkerBoxAccessory) {
 
                 // @satisfy this is currently failing ^^
-                System.out.println("attempted to render CuriosBackpack");
 
                 LivingEntity livingEntity = slotContext.entity();
 //                ICurioRenderer.translateIfSneaking(matrixStack, livingEntity);

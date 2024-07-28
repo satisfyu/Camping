@@ -81,6 +81,29 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
 
                 if (player.isShiftKeyDown()) {
                     level.destroyBlock(blockPos, true);
+
+                    ItemStack itemStack;
+
+                    switch (this.getBackpackType()) {
+                        case WANDERER_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.WANDERER_BACKPACK_ITEM.get());
+                        case LARGE_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.LARGE_BACKPACK_ITEM.get());
+                        case SMALL_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.SMALL_BACKPACK_ITEM.get());
+                        case WANDERER_BAG -> itemStack = new ItemStack(ObjectRegistry.WANDERER_BAG_ITEM.get());
+                        case SHEEPBAG -> itemStack = new ItemStack(ObjectRegistry.SHEEPBAG_ITEM.get());
+                        case GOODYBAG -> itemStack = new ItemStack(ObjectRegistry.GOODYBAG_ITEM.get());
+                        default -> itemStack = new ItemStack(Items.BUNDLE);
+                    }
+
+
+                    blockEntity.saveToItem(itemStack);
+                    if (backpackBlockEntity.hasCustomName()) {
+                        itemStack.setHoverName(backpackBlockEntity.getCustomName());
+                    }
+
+                    ItemEntity itemEntity = new ItemEntity(level, (double)blockPos.getX() + 0.5, (double)blockPos.getY() + 0.5, (double)blockPos.getZ() + 0.5, itemStack);
+                    itemEntity.setDefaultPickUpDelay();
+                    level.addFreshEntity(itemEntity);
+
                     return InteractionResult.CONSUME;
                 }
 
@@ -99,10 +122,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     @Override
     public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
 
-        System.out.println("called playerWillDestroy");
-
-        System.out.println(this.backpackType);
-
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
             if (!level.isClientSide && !player.isCreative()) {
@@ -119,7 +138,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
                     default -> itemStack = new ItemStack(Items.BUNDLE);
                 }
 
-                System.out.println(itemStack.getDisplayName());
 
                 blockEntity.saveToItem(itemStack);
                 if (backpackBlockEntity.hasCustomName()) {
@@ -138,8 +156,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     @Override
     public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack pItemStack) {
 
-        System.out.println("called playerDestroy");
-
         if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
             if (!level.isClientSide && player.isCreative() && !backpackBlockEntity.isEmpty()) {
 
@@ -153,8 +169,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
                     case SHEEPBAG -> itemStack = new ItemStack(ObjectRegistry.SHEEPBAG_ITEM.get());
                     case GOODYBAG -> itemStack = new ItemStack(ObjectRegistry.GOODYBAG_ITEM.get());
                 }
-
-                System.out.println(itemStack.getDisplayName());
 
                 blockEntity.saveToItem(itemStack);
                 if (backpackBlockEntity.hasCustomName()) {

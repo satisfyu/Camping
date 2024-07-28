@@ -12,6 +12,7 @@ import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.block.entity.BackpackBlockEntity;
+import net.satisfy.camping.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,13 +92,27 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
     @Override @SuppressWarnings("all")
     public void setChanged() {
 
+        System.out.println("setChanged called");
+
         if (this.player == null) {
+
+            System.out.println("player was null");
             return;
         }
 
         NonNullList<ItemStack> itemStacks = NonNullList.withSize(24, ItemStack.EMPTY);
 
-        CompoundTag blockEntityTag = BlockItem.getBlockEntityData(this.player.getMainHandItem());
+        CompoundTag blockEntityTag = BlockItem.getBlockEntityData(PlatformHelper.getEquippedBackpack(this.player));
+
+        if (blockEntityTag == null) {
+
+            CompoundTag compoundTag = new CompoundTag();
+            ContainerHelper.saveAllItems(compoundTag, NonNullList.withSize(24, ItemStack.EMPTY));
+            ItemStack itemStack1 = PlatformHelper.getEquippedBackpack(this.player);
+            itemStack1.addTagElement("BlockEntityTag", compoundTag);
+            blockEntityTag = BlockItem.getBlockEntityData(itemStack1);
+        }
+
         ContainerHelper.loadAllItems(blockEntityTag, itemStacks);
 
         List<ItemStack> itemStacks1 = this.stacks;
@@ -113,7 +128,8 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
 
             ContainerHelper.saveAllItems(compoundTag, this.stacks);
 
-            this.player.getMainHandItem().addTagElement("BlockEntityTag", compoundTag);
+//            this.player.getMainHandItem().addTagElement("BlockEntityTag", compoundTag);
+            PlatformHelper.getEquippedBackpack(this.player).addTagElement("BlockEntityTag", compoundTag);
         }
 
     }

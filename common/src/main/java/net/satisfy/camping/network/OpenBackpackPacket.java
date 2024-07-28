@@ -20,6 +20,7 @@ import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.client.screen.BackpackScreenHandler;
 import net.satisfy.camping.inventory.BackpackContainer;
 import net.satisfy.camping.item.BackpackItem;
+import net.satisfy.camping.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
@@ -40,12 +41,16 @@ public class OpenBackpackPacket {
         buf.writeItem(backpackItem);
     }
 
+
+
+    @SuppressWarnings("all")
     public void handle(Supplier<NetworkManager.PacketContext> contextSupplier) {
 
         Player player = contextSupplier.get().getPlayer();
         Level level = contextSupplier.get().getPlayer().level();
 
-        ItemStack itemStack = player.getMainHandItem();
+//        ItemStack itemStack = player.getMainHandItem();
+        ItemStack itemStack = PlatformHelper.getEquippedBackpack(player);
 
         if (level.isClientSide()) {
             return;
@@ -70,7 +75,6 @@ public class OpenBackpackPacket {
             }
         }
         else {
-            // todo: move most of this logic to networking as intended
 
             CompoundTag compoundTag = new CompoundTag();
 
