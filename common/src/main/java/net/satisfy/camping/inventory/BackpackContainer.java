@@ -23,8 +23,6 @@ import java.util.function.Predicate;
 
 
 public class BackpackContainer implements Container, StackedContentsCompatible {
-
-//    private ItemStack packStack;
     private NonNullList<ItemStack> stacks = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
 
     @Nullable
@@ -122,13 +120,10 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
             return;
         }
         else {
-
-            // save this.stacks onto itemstack
             CompoundTag compoundTag = new CompoundTag();
 
             ContainerHelper.saveAllItems(compoundTag, this.stacks);
 
-//            this.player.getMainHandItem().addTagElement("BlockEntityTag", compoundTag);
             PlatformHelper.getEquippedBackpack(this.player).addTagElement("BlockEntityTag", compoundTag);
         }
 

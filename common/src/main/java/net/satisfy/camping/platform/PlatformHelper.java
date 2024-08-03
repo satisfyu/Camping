@@ -2,7 +2,6 @@ package net.satisfy.camping.platform;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 

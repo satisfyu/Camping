@@ -7,10 +7,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.satisfy.camping.Camping;
-import net.satisfy.camping.util.CampingIdentifier;
+import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.block.entity.EnderpackBlockEntity;
 import net.satisfy.camping.block.entity.GrillBlockEntity;
-import net.satisfy.camping.block.entity.BackpackBlockEntity;
+import net.satisfy.camping.util.CampingIdentifier;
 
 import java.util.function.Supplier;
 

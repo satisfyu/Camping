@@ -1,7 +1,6 @@
 package net.satisfy.camping.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -9,38 +8,24 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.satisfy.camping.block.BackpackBlock;
-import net.satisfy.camping.inventory.BackpackContainer;
 import net.satisfy.camping.client.screen.BackpackScreenHandler;
+import net.satisfy.camping.inventory.BackpackContainer;
+import net.satisfy.camping.registry.EntityTypeRegistry;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.stream.IntStream;
 
 public class BackpackBlockEntity extends BaseContainerBlockEntity {
-    public static final int COLUMNS = 8;
-    public static final int ROWS = 3;
     public static final int CONTAINER_SIZE = 24;
     public static final String ITEMS_TAG = "Items";
-    private static final int[] SLOTS = IntStream.range(0, CONTAINER_SIZE).toArray();
     private NonNullList<ItemStack> itemStacks;
 
-    public BackpackBlockEntity(@Nullable DyeColor dyeColor, BlockPos blockPos, BlockState blockState) {
-        super(BlockEntityType.SHULKER_BOX, blockPos, blockState);
+    public BackpackBlockEntity(BlockPos blockPos, BlockState blockState) {
+        super(EntityTypeRegistry.BACKPACK_BLOCK_ENTITY.get(), blockPos, blockState);
         this.itemStacks = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
     }
 
-    public BackpackBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(BlockEntityType.SHULKER_BOX, blockPos, blockState);
-        this.itemStacks = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
-    }
 
     public int getContainerSize() {
         return this.itemStacks.size();
@@ -53,7 +38,7 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     public @NotNull ItemStack getItem(int i) {
-        return (ItemStack)this.getItems().get(i);
+        return this.getItems().get(i);
     }
 
     @Override
@@ -86,10 +71,6 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
         return false;
     }
 
-    private static void doNeighborUpdates(Level level, BlockPos blockPos, BlockState blockState) {
-        blockState.updateNeighbourShapes(level, blockPos, Block.UPDATE_ALL);
-    }
-
     @Override
     protected @NotNull Component getDefaultName() {
         return Component.translatable("container.camping.backpack");
@@ -116,25 +97,8 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
         return this.itemStacks;
     }
 
-    protected void setItems(NonNullList<ItemStack> nonNullList) {
-        this.itemStacks = nonNullList;
-    }
-
-    public int[] getSlotsForFace(Direction direction) {
-        return SLOTS;
-    }
-
-    public boolean canPlaceItemThroughFace(int i, ItemStack itemStack, @Nullable Direction direction) {
-        return !(Block.byItem(itemStack.getItem()) instanceof BackpackBlock);
-    }
-
-    public boolean canTakeItemThroughFace(int i, ItemStack itemStack, Direction direction) {
-        return true;
-    }
-
-
     @Override
-    protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
+    protected @NotNull AbstractContainerMenu createMenu(int i, Inventory inventory) {
         return new BackpackScreenHandler(i, inventory, new BackpackContainer(this.itemStacks));
     }
 

@@ -1,8 +1,8 @@
 package net.satisfy.camping.network;
 
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.resources.ResourceLocation;
 import net.satisfy.camping.Camping;
-import dev.architectury.networking.NetworkManager;
 
 public class PacketHandler {
 

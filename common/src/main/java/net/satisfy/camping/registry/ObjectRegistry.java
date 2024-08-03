@@ -12,15 +12,13 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.item.DyeColor;
 import net.satisfy.camping.Camping;
-import net.satisfy.camping.util.CampingIdentifier;
-import net.satisfy.camping.util.CampingUtil;
 import net.satisfy.camping.block.*;
-import net.satisfy.camping.block.BackpackBlock;
 import net.satisfy.camping.item.BackpackItem;
 import net.satisfy.camping.item.EnderpackItem;
 import net.satisfy.camping.item.MultitoolItem;
+import net.satisfy.camping.util.CampingIdentifier;
+import net.satisfy.camping.util.CampingUtil;
 
 import java.util.HashMap;
 import java.util.Map;

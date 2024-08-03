@@ -6,8 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.*;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -19,7 +19,6 @@ import net.satisfy.camping.Camping;
 import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.client.screen.BackpackScreenHandler;
 import net.satisfy.camping.inventory.BackpackContainer;
-import net.satisfy.camping.item.BackpackItem;
 import net.satisfy.camping.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,14 +41,11 @@ public class OpenBackpackPacket {
     }
 
 
-
     @SuppressWarnings("all")
     public void handle(Supplier<NetworkManager.PacketContext> contextSupplier) {
 
         Player player = contextSupplier.get().getPlayer();
         Level level = contextSupplier.get().getPlayer().level();
-
-//        ItemStack itemStack = player.getMainHandItem();
         ItemStack itemStack = PlatformHelper.getEquippedBackpack(player);
 
         if (level.isClientSide()) {
@@ -73,8 +69,7 @@ public class OpenBackpackPacket {
                     }
                 }, Component.translatable("container.camping.backpack")));
             }
-        }
-        else {
+        } else {
 
             CompoundTag compoundTag = new CompoundTag();
 
@@ -96,28 +91,6 @@ public class OpenBackpackPacket {
             }, Component.translatable("container.camping.backpack")));
 
         }
-
-//        NetworkManager.PacketContext context = contextSupplier.get();
-//        ServerPlayer player = (ServerPlayer) context.getPlayer();
-//        context.queue(() -> {
-//            if (backpackItem.getItem() instanceof BackpackItem) {
-//                BackpackContainer backpackContainer = BackpackItem.getContainer(backpackItem);
-//
-//                MenuProvider provider = new MenuProvider() {
-//                    @Override
-//                    public @NotNull Component getDisplayName() {
-//                        return Component.translatable("container.camping.backpack");
-//                    }
-//
-//                    @Override
-//                    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
-//                        return new BackpackScreenHandler(syncId, playerInventory, backpackContainer);
-//                    }
-//                };
-//
-//                player.openMenu(provider);
-//            }
-//        });
     }
 
     public static void register() {

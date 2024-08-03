@@ -2,48 +2,36 @@ package net.satisfy.camping.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.satisfy.camping.Camping;
+import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.registry.ObjectRegistry;
 import net.satisfy.camping.util.CampingUtil;
-import net.satisfy.camping.block.entity.BackpackBlockEntity;
-import net.satisfy.camping.registry.EntityTypeRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,16 +40,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static net.minecraft.world.level.Level.OVERWORLD;
-
 @SuppressWarnings("deprecation")
 public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
-
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private final BackpackType backpackType;
 
-    // shulker-related
     public static final ResourceLocation CONTENTS = new ResourceLocation("contents");
 
     public BackpackBlock(Properties properties, BackpackType backpackType) {
@@ -70,7 +54,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
 
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+    public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else if (player.isSpectator()) {
@@ -78,38 +62,14 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         } else {
             BlockEntity blockEntity = level.getBlockEntity(blockPos);
             if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
-
                 if (player.isShiftKeyDown()) {
                     level.destroyBlock(blockPos, true);
-
-                    ItemStack itemStack;
-
-                    switch (this.getBackpackType()) {
-                        case WANDERER_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.WANDERER_BACKPACK_ITEM.get());
-                        case LARGE_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.LARGE_BACKPACK_ITEM.get());
-                        case SMALL_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.SMALL_BACKPACK_ITEM.get());
-                        case WANDERER_BAG -> itemStack = new ItemStack(ObjectRegistry.WANDERER_BAG_ITEM.get());
-                        case SHEEPBAG -> itemStack = new ItemStack(ObjectRegistry.SHEEPBAG_ITEM.get());
-                        case GOODYBAG -> itemStack = new ItemStack(ObjectRegistry.GOODYBAG_ITEM.get());
-                        default -> itemStack = new ItemStack(Items.BUNDLE);
-                    }
-
-
-                    blockEntity.saveToItem(itemStack);
-                    if (backpackBlockEntity.hasCustomName()) {
-                        itemStack.setHoverName(backpackBlockEntity.getCustomName());
-                    }
-
-                    ItemEntity itemEntity = new ItemEntity(level, (double)blockPos.getX() + 0.5, (double)blockPos.getY() + 0.5, (double)blockPos.getZ() + 0.5, itemStack);
-                    itemEntity.setDefaultPickUpDelay();
-                    level.addFreshEntity(itemEntity);
-
+                    dropBlockWithContents(level, blockPos, backpackBlockEntity);
                     return InteractionResult.CONSUME;
                 }
 
                 player.openMenu(backpackBlockEntity);
                 player.awardStat(Stats.OPEN_SHULKER_BOX);
-                PiglinAi.angerNearbyPiglins(player, true);
                 return InteractionResult.CONSUME;
             } else {
                 return InteractionResult.PASS;
@@ -117,118 +77,52 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         }
     }
 
-    /* BlockEntity */
+    private void dropBlockWithContents(Level level, BlockPos blockPos, BackpackBlockEntity backpackBlockEntity) {
+        ItemStack itemStack = new ItemStack(getBackpackItem());
+        backpackBlockEntity.saveToItem(itemStack);
+        if (backpackBlockEntity.hasCustomName()) {
+            itemStack.setHoverName(backpackBlockEntity.getCustomName());
+        }
+        ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, itemStack);
+        itemEntity.setDefaultPickUpDelay();
+        level.addFreshEntity(itemEntity);
+    }
+
+    private Item getBackpackItem() {
+        return switch (this.getBackpackType()) {
+            case WANDERER_BACKPACK -> ObjectRegistry.WANDERER_BACKPACK_ITEM.get();
+            case LARGE_BACKPACK -> ObjectRegistry.LARGE_BACKPACK_ITEM.get();
+            case SMALL_BACKPACK -> ObjectRegistry.SMALL_BACKPACK_ITEM.get();
+            case WANDERER_BAG -> ObjectRegistry.WANDERER_BAG_ITEM.get();
+            case SHEEPBAG -> ObjectRegistry.SHEEPBAG_ITEM.get();
+            case GOODYBAG -> ObjectRegistry.GOODYBAG_ITEM.get();
+        };
+    }
 
     @Override
     public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
-
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
-            if (!level.isClientSide && !player.isCreative()) {
-
-                ItemStack itemStack;
-
-                switch (this.getBackpackType()) {
-                    case WANDERER_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.WANDERER_BACKPACK_ITEM.get());
-                    case LARGE_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.LARGE_BACKPACK_ITEM.get());
-                    case SMALL_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.SMALL_BACKPACK_ITEM.get());
-                    case WANDERER_BAG -> itemStack = new ItemStack(ObjectRegistry.WANDERER_BAG_ITEM.get());
-                    case SHEEPBAG -> itemStack = new ItemStack(ObjectRegistry.SHEEPBAG_ITEM.get());
-                    case GOODYBAG -> itemStack = new ItemStack(ObjectRegistry.GOODYBAG_ITEM.get());
-                    default -> itemStack = new ItemStack(Items.BUNDLE);
-                }
-
-
-                blockEntity.saveToItem(itemStack);
-                if (backpackBlockEntity.hasCustomName()) {
-                    itemStack.setHoverName(backpackBlockEntity.getCustomName());
-                }
-
-                ItemEntity itemEntity = new ItemEntity(level, (double)blockPos.getX() + 0.5, (double)blockPos.getY() + 0.5, (double)blockPos.getZ() + 0.5, itemStack);
-                itemEntity.setDefaultPickUpDelay();
-                level.addFreshEntity(itemEntity);
-            }
+            dropBlockWithContents(level, blockPos, backpackBlockEntity);
         }
-
         super.playerWillDestroy(level, blockPos, blockState, player);
     }
 
     @Override
     public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack pItemStack) {
-
-        if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
-            if (!level.isClientSide && player.isCreative() && !backpackBlockEntity.isEmpty()) {
-
-                ItemStack itemStack = ItemStack.EMPTY;
-
-                switch (this.getBackpackType()) {
-                    case WANDERER_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.WANDERER_BACKPACK_ITEM.get());
-                    case LARGE_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.LARGE_BACKPACK_ITEM.get());
-                    case SMALL_BACKPACK -> itemStack = new ItemStack(ObjectRegistry.SMALL_BACKPACK_ITEM.get());
-                    case WANDERER_BAG -> itemStack = new ItemStack(ObjectRegistry.WANDERER_BAG_ITEM.get());
-                    case SHEEPBAG -> itemStack = new ItemStack(ObjectRegistry.SHEEPBAG_ITEM.get());
-                    case GOODYBAG -> itemStack = new ItemStack(ObjectRegistry.GOODYBAG_ITEM.get());
-                }
-
-                blockEntity.saveToItem(itemStack);
-                if (backpackBlockEntity.hasCustomName()) {
-                    itemStack.setHoverName(backpackBlockEntity.getCustomName());
-                }
-
-                ItemEntity itemEntity = new ItemEntity(level, (double)blockPos.getX() + 0.5, (double)blockPos.getY() + 0.5, (double)blockPos.getZ() + 0.5, itemStack);
-                itemEntity.setDefaultPickUpDelay();
-                level.addFreshEntity(itemEntity);
-            }
-        }
-
         super.playerDestroy(level, player, blockPos, blockState, blockEntity, pItemStack);
     }
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
-        ItemStack itemStack = super.getCloneItemStack(blockGetter, blockPos, blockState);
-        blockGetter.getBlockEntity(blockPos, EntityTypeRegistry.BACKPACK_BLOCK_ENTITY.get()).ifPresent((backpack) -> {
-            backpack.saveToItem(itemStack);
-        });
-        return itemStack;
-    }
-
-    @Override
-    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
-        if (!blockState.is(blockState2.getBlock())) {
-            BlockEntity blockEntity = level.getBlockEntity(blockPos);
-            if (blockEntity instanceof BackpackBlockEntity) {
-                level.updateNeighbourForOutputSignal(blockPos, blockState.getBlock());
-            }
-
-            super.onRemove(blockState, level, blockPos, blockState2, bl);
-        }
-    }
-
-    @Override
-    public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, LivingEntity livingEntity, ItemStack itemStack) {
-        if (itemStack.hasCustomHoverName()) {
-            BlockEntity blockEntity = level.getBlockEntity(blockPos);
-            if (blockEntity instanceof BackpackBlockEntity) {
-                ((BackpackBlockEntity)blockEntity).setCustomName(itemStack.getHoverName());
-            }
-        }
-    }
-
-    @Override
     public @NotNull List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
-
-        BlockEntity blockEntity = (BlockEntity)builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-
+        BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
-            builder = builder.withDynamicDrop(CONTENTS, (consumer) -> {
-                for(int i = 0; i < backpackBlockEntity.getContainerSize(); ++i) {
+            builder = builder.withDynamicDrop(CONTENTS, consumer -> {
+                for (int i = 0; i < backpackBlockEntity.getContainerSize(); ++i) {
                     consumer.accept(backpackBlockEntity.getItem(i));
                 }
-
             });
         }
-
         return super.getDrops(blockState, builder);
     }
 
@@ -236,14 +130,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new BackpackBlockEntity(blockPos, blockState);
     }
-
-    // Unused as we are not animating
-//    @Override
-//    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-//        return createTickerHelper(blockEntityType, BlockEntityType.SHULKER_BOX, ShulkerBoxBlockEntity::tick);
-//    }
-
-    /* BlockState */
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -284,8 +170,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
         return false;
     }
-
-    /* VoxelShape */
 
     public static final Map<BackpackType, Map<Direction, VoxelShape>> SHAPES = net.minecraft.Util.make(new HashMap<>(), map -> {
         map.put(BackpackType.SMALL_BACKPACK, generateShapes(BackpackBlockShapes.SMALL_BACKPACK));

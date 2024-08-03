@@ -1,8 +1,6 @@
 package net.satisfy.camping.client.screen;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -10,7 +8,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.inventory.BackpackContainer;
-import net.satisfy.camping.item.BackpackItem;
 import net.satisfy.camping.registry.ScreenhandlerTypeRegistry;
 import net.satisfy.camping.registry.TagRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -90,7 +87,7 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     public void broadcastChanges() {
         super.broadcastChanges();
         if (this.container instanceof BackpackContainer) {
-            ((BackpackContainer) this.container).setChanged();
+            this.container.setChanged();
         }
     }
 
@@ -99,7 +96,7 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
         super.removed(player);
         this.container.stopOpen(player);
         if (this.container instanceof BackpackContainer) {
-            ((BackpackContainer) this.container).setChanged();
+            this.container.setChanged();
         }
     }
 
@@ -108,9 +105,4 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
         return this.container.stillValid(player);
     }
 
-    public ItemStack getBackpackStack(Inventory playerInventory) {
-        return playerInventory.items.stream()
-                .filter(stack -> stack.getItem() instanceof BackpackItem)
-                .findFirst().orElse(ItemStack.EMPTY);
-    }
 }

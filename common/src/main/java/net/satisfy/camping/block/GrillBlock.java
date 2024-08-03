@@ -1,10 +1,5 @@
 package net.satisfy.camping.block;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
@@ -40,11 +35,16 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.satisfy.camping.util.CampingUtil;
+import net.satisfy.camping.block.entity.GrillBlockEntity;
 import net.satisfy.camping.registry.EntityTypeRegistry;
+import net.satisfy.camping.util.CampingUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import net.satisfy.camping.block.entity.GrillBlockEntity;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 @SuppressWarnings("deprecation")
 public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
