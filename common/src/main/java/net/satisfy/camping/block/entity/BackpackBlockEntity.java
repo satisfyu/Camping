@@ -77,13 +77,13 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
     }
 
     public void load(CompoundTag compoundTag) {
-        super.load(compoundTag);
         this.loadFromTag(compoundTag);
+        super.load(compoundTag);
     }
 
     protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
         ContainerHelper.saveAllItems(compoundTag, this.itemStacks, false);
+        super.saveAdditional(compoundTag);
     }
 
     public void loadFromTag(CompoundTag compoundTag) {
