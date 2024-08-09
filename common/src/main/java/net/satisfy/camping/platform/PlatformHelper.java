@@ -22,6 +22,11 @@ public class PlatformHelper {
     }
 
     @ExpectPlatform
+    public static boolean isEnderpackEquipped(Player player) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
     public static ItemStack getEquippedBackpack(Player player) {
         throw new AssertionError();
     }

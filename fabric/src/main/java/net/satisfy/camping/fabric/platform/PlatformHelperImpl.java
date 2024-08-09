@@ -52,6 +52,21 @@ public class PlatformHelperImpl {
         return false;
     }
 
+    public static boolean isEnderpackEquipped(Player player) {
+        ItemStack chestSlotItem = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (chestSlotItem.getItem() instanceof EnderpackItem) {
+            return true;
+        }
+        Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
+        if (component.isPresent()) {
+            TrinketComponent trinketComponent = component.get();
+            return trinketComponent.isEquipped(ObjectRegistry.ENDERPACK_ITEM.get()) ||
+                    trinketComponent.isEquipped(ObjectRegistry.ENDERBAG_ITEM.get());
+
+        }
+        return false;
+    }
+
     public static ItemStack getEquippedBackpack(Player player) {
         ItemStack chestSlotItem = player.getItemBySlot(EquipmentSlot.CHEST);
         if (chestSlotItem.getItem() instanceof BackpackItem || chestSlotItem.getItem() instanceof EnderpackItem) {
