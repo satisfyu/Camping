@@ -6,6 +6,8 @@
     "camping:wanderer_backpack",
     "camping:sheepbag",
     "camping:enderpack",
-    "camping:enderbag"
+    "camping:enderbag",
+    "camping:wanderer_bag",
+    "camping:goodybag"
   ]
 }
