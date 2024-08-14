@@ -26,7 +26,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.gameevent.GameEvent.Context;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -87,7 +86,7 @@ public class MultitoolItem extends Item {
                 level.playSound(player, pos, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
                 BlockState blockstate1 = growingplantheadblock.getMaxAgeState(blockstate);
                 level.setBlockAndUpdate(pos, blockstate1);
-                level.gameEvent(GameEvent.BLOCK_CHANGE, pos, Context.of(player, blockstate1));
+                level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate1));
                 if (player != null) {
                     itemstack.hurtAndBreak(1, player, (arg2) -> arg2.broadcastBreakEvent(context.getHand()));
                 }
@@ -101,9 +100,21 @@ public class MultitoolItem extends Item {
                 itemstack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(hand));
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
+        } else if (blockstate.is(BlockTags.TALL_FLOWERS)) {
+            if (!level.isClientSide) {
+                level.destroyBlock(pos, true, player);
+                BlockPos posAbove = pos.above();
+                if (level.getBlockState(posAbove).is(blockstate.getBlock())) {
+                    level.destroyBlock(posAbove, true, player);
+                }
+                assert player != null;
+                itemstack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(hand));
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return InteractionResult.PASS;
     }
+
 
     private InteractionResult useAsSaw(UseOnContext context) {
         Level level = context.getLevel();

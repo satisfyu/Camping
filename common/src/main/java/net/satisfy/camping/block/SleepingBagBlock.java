@@ -75,16 +75,7 @@ public class SleepingBagBlock extends BedBlock {
                 }
             }
 
-            if (!canSetSpawn(level)) {
-                level.removeBlock(pos, false);
-                BlockPos oppositePos = pos.relative((state.getValue(FACING)).getOpposite());
-
-                if (level.getBlockState(oppositePos).is(this)) {
-                    level.removeBlock(oppositePos, false);
-                }
-
-                return InteractionResult.SUCCESS;
-            } else if (state.getValue(OCCUPIED)) {
+            if (state.getValue(OCCUPIED)) {
                 if (!this.kickVillagerOutOfBed(level, pos)) {
                     player.displayClientMessage(Component.translatable("block.minecraft.bed.occupied"), true);
                 }
@@ -100,6 +91,7 @@ public class SleepingBagBlock extends BedBlock {
             }
         }
     }
+
 
     private boolean kickVillagerOutOfBed(Level level, BlockPos pos) {
         List<Villager> villagers = level.getEntitiesOfClass(Villager.class, new AABB(pos), LivingEntity::isSleeping);

@@ -33,6 +33,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("deprecation")
 public class TentMainBlock extends TentBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF;
+    private final DyeColor color;
     private static final Supplier<VoxelShape> bottomVoxelShapeSupplier = () -> {
         VoxelShape shape = Shapes.empty();
         shape = Shapes.join(shape, Shapes.box(0.8125, 0, 0, 1, 1, 0.1875), BooleanOp.OR);
@@ -65,8 +66,6 @@ public class TentMainBlock extends TentBlock {
     static {
         HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     }
-
-    private final DyeColor color;
 
     public TentMainBlock(Properties properties, DyeColor color) {
         super(properties);

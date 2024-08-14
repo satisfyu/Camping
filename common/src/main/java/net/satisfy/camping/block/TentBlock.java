@@ -3,6 +3,7 @@ package net.satisfy.camping.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -33,8 +34,9 @@ public class TentBlock extends HorizontalDirectionalBlock {
 
     @Override
     public @NotNull ItemStack getCloneItemStack(BlockGetter getter, BlockPos pos, BlockState state) {
-        if (!(this instanceof TentMainBlock)) {
-            return ObjectRegistry.TENT_MAIN.get("red").get().getCloneItemStack(getter, pos, state);
+        if (this instanceof TentMainBlock tentMainBlock) {
+            DyeColor color = tentMainBlock.getColor();
+            return new ItemStack(ObjectRegistry.TENT_MAIN.get(color.getName()).get());
         }
         return super.getCloneItemStack(getter, pos, state);
     }

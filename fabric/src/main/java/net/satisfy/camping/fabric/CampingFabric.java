@@ -4,24 +4,12 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.block.SleepingBagBlock;
-import net.satisfy.camping.fabric.compat.trinkets.BackpackTrinket;
 import net.satisfy.camping.fabric.compat.trinkets.TrinketsCompatibility;
 import net.satisfy.camping.fabric.config.ConfigFabric;
-import net.satisfy.camping.item.BackpackItem;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CampingFabric implements ModInitializer {
 
@@ -33,9 +21,10 @@ public class CampingFabric implements ModInitializer {
         Camping.init();
 
         CampingFabric.trinketsLoaded = FabricLoader.getInstance().isModLoaded("trinkets");
+        
 
         if (trinketsLoaded) {
-            TrinketsCompatibility.load();
+           TrinketsCompatibility.load();
         }
 
         EntitySleepEvents.ALLOW_SETTING_SPAWN.register((player, sleepingPos) -> {

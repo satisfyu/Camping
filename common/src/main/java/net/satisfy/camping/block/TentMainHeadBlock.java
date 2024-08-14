@@ -3,6 +3,7 @@ package net.satisfy.camping.block;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -27,6 +28,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("deprecation")
 public class TentMainHeadBlock extends TentBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF;
+    private final DyeColor color;
     private static final Supplier<VoxelShape> bottomVoxelShapeSupplier = () -> {
         VoxelShape shape = Shapes.empty();
         shape = Shapes.join(shape, Shapes.box(0.8125, 0, 0.8125, 1, 1, 1), BooleanOp.OR);
@@ -62,8 +64,13 @@ public class TentMainHeadBlock extends TentBlock {
         HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     }
 
-    public TentMainHeadBlock(Properties properties) {
+    public DyeColor getColor() {
+        return this.color;
+    }
+
+    public TentMainHeadBlock(Properties properties, DyeColor color) {
         super(properties);
+        this.color = color;
         this.registerDefaultState(this.defaultBlockState().setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
