@@ -1,16 +1,18 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "minecraft:shears"
-    },
-    {
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  I",
+    " R ",
+    "I  "
+  ],
+  "key": {
+    "I": {
       "item": "minecraft:iron_nugget"
     },
-    {
-      "item": "minecraft:flint_and_steel"
+    "R": {
+      "item": "minecraft:red_dye"
     }
-  ],
+  },
   "result": {
     "item": "camping:multitool"
   }

@@ -6,7 +6,6 @@ import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.item.BackpackItem;
@@ -35,24 +34,13 @@ public class BackpackTrinket implements Trinket {
 
     @Override
     public void tick(ItemStack stack, SlotReference slot, LivingEntity entity) {
-        Player player = (Player) entity;
+        if (!(entity instanceof Player player)) {
+            return;
+        }
 
         if (alreadyEquippedBackpack(player)) {
-            dropChestplateItemStack(player);
-        }
-    }
-
-    private static void dropChestplateItemStack(Player player) {
-        ItemStack chestplateItemStack = player.getItemBySlot(EquipmentSlot.CHEST).copy();
-
-        if (!chestplateItemStack.isEmpty()) {
-            player.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
-            player.getInventory().setItem(EquipmentSlot.CHEST.getIndex(), ItemStack.EMPTY);
-
-            if (!player.level().isClientSide) {
-                ItemEntity itemEntity = new ItemEntity(player.level(), player.getX(), player.getY() + 1, player.getZ(), chestplateItemStack);
-                player.level().addFreshEntity(itemEntity);
-            }
+            ItemStack chestItemStack = player.getItemBySlot(EquipmentSlot.CHEST);
+            chestItemStack.isEmpty();
         }
     }
 

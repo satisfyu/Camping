@@ -119,9 +119,6 @@
   "container.camping.small_backpack": "Small Backpack",
   "container.camping.wanderer_backpack": "Wanderer Backpack",
   "item.camping.multitool": "Multitool",
-  "item.camping.multitool.mode.flint_and_steel": "Current Tool: Flint and Steel",
-  "item.camping.multitool.mode.saw": "Current Tool: Saw",
-  "item.camping.multitool.mode.shears": "Current Tool: Shears",
   "itemGroup.camping.camping_tab": "[Let's Do] Camping",
   "key.camping.category": "[Let's Do] Camping",
   "key.camping.open": "Open Backpack",
@@ -133,5 +130,6 @@
   "text.autoconfig.camping.title": "Camping Config (Experimental)",
   "tooltip.camping.grilled": "This item has been flame grilled:",
   "tooltip.camping.grilled.nutrition": "+25% Nutrition",
-  "tooltip.camping.grilled.saturationModifier": "+25% Saturation"
+  "tooltip.camping.grilled.saturationModifier": "+25% Saturation",
+  "tooltip.camping.multitool": "Right-Click to rotate Blocks"
 }

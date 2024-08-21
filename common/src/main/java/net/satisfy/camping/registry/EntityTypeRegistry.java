@@ -24,17 +24,11 @@ public final class EntityTypeRegistry {
     public static final RegistrySupplier<BlockEntityType<BackpackBlockEntity>> BACKPACK_BLOCK_ENTITY = registerBlockEntity("backpack", () -> BlockEntityType.Builder.of(BackpackBlockEntity::new, SMALL_BACKPACK.get(), LARGE_BACKPACK.get(), WANDERER_BACKPACK.get(), WANDERER_BAG.get(), SHEEPBAG.get(), GOODYBAG.get()).build(null));
     public static final RegistrySupplier<BlockEntityType<EnderpackBlockEntity>> ENDERPACK_BLOCK_ENTITY = registerBlockEntity("enderpack", () -> BlockEntityType.Builder.of(EnderpackBlockEntity::new, ENDERPACK.get(), ENDERBAG.get()).build(null));
 
-
-
     private static <T extends BlockEntityType<?>> RegistrySupplier<T> registerBlockEntity(final String path, final Supplier<T> type) {
         return BLOCK_ENTITY_TYPES.register(new CampingIdentifier(path), type);
     }
 
-    public static void registerAttributes() {
-    }
-
     static {
         ENTITY_TYPES.register();
-        registerAttributes();
     }
 }

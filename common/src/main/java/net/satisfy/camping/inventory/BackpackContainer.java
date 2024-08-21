@@ -2,7 +2,6 @@ package net.satisfy.camping.inventory;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.ContainerListener;
@@ -16,12 +15,10 @@ import net.satisfy.camping.platform.PlatformHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
-
+@SuppressWarnings("all")
 public class BackpackContainer implements Container, StackedContentsCompatible {
     private NonNullList<ItemStack> stacks = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
 
@@ -45,7 +42,9 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
     }
 
     @Override
-    public boolean isEmpty() { return this.stacks.stream().allMatch(Predicate.isEqual(ItemStack.EMPTY)); }
+    public boolean isEmpty() {
+        return this.stacks.stream().allMatch(Predicate.isEqual(ItemStack.EMPTY));
+    }
 
     @Override
     public @NotNull ItemStack getItem(int i) {
@@ -87,14 +86,11 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
         this.setChanged();
     }
 
-    @Override @SuppressWarnings("all")
+    @Override
     public void setChanged() {
-
-        System.out.println("setChanged called");
 
         if (this.player == null) {
 
-            System.out.println("player was null");
             return;
         }
 
@@ -118,8 +114,7 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
 
         if (itemStacks1.equals(itemStacks2)) {
             return;
-        }
-        else {
+        } else {
             CompoundTag compoundTag = new CompoundTag();
 
             ContainerHelper.saveAllItems(compoundTag, this.stacks);

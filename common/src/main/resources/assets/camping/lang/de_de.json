@@ -119,9 +119,6 @@
   "container.camping.small_backpack": "Kleiner Rucksack",
   "container.camping.wanderer_backpack": "Wanderer Rucksack",
   "item.camping.multitool": "Multifunktionswerkzeug",
-  "item.camping.multitool.mode.flint_and_steel": "Aktuelles Werkzeug: Feuerstein und Stahl",
-  "item.camping.multitool.mode.saw": "Aktuelles Werkzeug: Säge",
-  "item.camping.multitool.mode.shears": "Aktuelles Werkzeug: Schere",
   "itemGroup.camping.camping_tab": "[Let's Do] Camping",
   "key.camping.category": "[Let's Do] Camping",
   "key.camping.open": "Rucksack öffnen",
@@ -133,5 +130,6 @@
   "text.autoconfig.camping.title": "Camping Konfiguration (Experimentell)",
   "tooltip.camping.grilled": "Dieses Item wurde grilliert:",
   "tooltip.camping.grilled.nutrition": "+25% Nahrung",
-  "tooltip.camping.grilled.saturationModifier": "+25% Sättigung"
+  "tooltip.camping.grilled.saturationModifier": "+25% Sättigung",
+  "tooltip.camping.multitool": "Rechts-Klick um Blöcke zu rotieren"
 }
