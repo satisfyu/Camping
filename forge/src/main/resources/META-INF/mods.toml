@@ -31,3 +31,10 @@ mandatory = true
 versionRange = "[9.1.12,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.camping]]
+modId = "curios"
+mandatory = true
+versionRange = "[5.10.0,)"
+ordering = "AFTER"
+side = "BOTH"
