@@ -15,7 +15,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.block.SleepingBagBlock;
 import net.satisfy.camping.forge.integration.CuriosBackpack;
-import net.satisfy.camping.forge.integration.CuriosSmallBackpackRenderer;
+import net.satisfy.camping.forge.integration.CuriosBackpackRenderer;
 import net.satisfy.camping.registry.ObjectRegistry;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
@@ -34,6 +34,7 @@ public class CampingForge {
 
     }
 
+    @SuppressWarnings("all")
     private void enqueueIMC(final InterModEnqueueEvent event) {
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BACK.getMessageBuilder().build());
     }
@@ -43,7 +44,38 @@ public class CampingForge {
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-        CuriosRendererRegistry.register(ObjectRegistry.SMALL_BACKPACK_ITEM.get(), CuriosSmallBackpackRenderer::new);
+        CuriosRendererRegistry.register(
+                ObjectRegistry.SMALL_BACKPACK_ITEM.get(),
+                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.SMALL_BACKPACK)
+        );
+        CuriosRendererRegistry.register(
+                ObjectRegistry.ENDERPACK_ITEM.get(),
+                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.ENDERPACK)
+        );
+        CuriosRendererRegistry.register(
+                ObjectRegistry.ENDERBAG_ITEM.get(),
+                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.ENDERBAG)
+        );
+        CuriosRendererRegistry.register(
+                ObjectRegistry.GOODYBAG_ITEM.get(),
+                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.GOODYBAG)
+        );
+        CuriosRendererRegistry.register(
+                ObjectRegistry.LARGE_BACKPACK_ITEM.get(),
+                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.LARGE_BACKPACK)
+        );
+        CuriosRendererRegistry.register(
+                ObjectRegistry.SHEEPBAG_ITEM.get(),
+                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.SHEEPBAG)
+        );
+        CuriosRendererRegistry.register(
+                ObjectRegistry.WANDERER_BACKPACK_ITEM.get(),
+                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.WANDERER_BACKPACK)
+        );
+        CuriosRendererRegistry.register(
+                ObjectRegistry.WANDERER_BAG_ITEM.get(),
+                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.WANDERER_BAG)
+        );
     }
 
     @Mod.EventBusSubscriber(modid = Camping.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)

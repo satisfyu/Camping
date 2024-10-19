@@ -9,19 +9,20 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.satisfy.camping.client.model.EnderbagModel;
 import net.satisfy.camping.client.model.SmallBackpackModel;
 import net.satisfy.camping.forge.client.CampingClientForge;
 import net.satisfy.camping.util.CampingIdentifier;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 
-public class CuriosSmallBackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
+public class CuriosEnderbagLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
 
-    private final SmallBackpackModel<T> model;
+    private final EnderbagModel<T> model;
 
-    public CuriosSmallBackpackLayer(RenderLayerParent<T, M> renderLayerParent) {
+    public CuriosEnderbagLayer(RenderLayerParent<T, M> renderLayerParent) {
         super(renderLayerParent);
-        this.model = new SmallBackpackModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(CampingClientForge.SMALL_BACKPACK_LAYER));
+        this.model = new EnderbagModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(CampingClientForge.ENDERBAG_LAYER));
     }
 
     @Override
@@ -33,7 +34,7 @@ public class CuriosSmallBackpackLayer<T extends LivingEntity, M extends Humanoid
         boolean shouldRender = false;
 
         for (ItemStack stack : player.getInventory().armor) {
-            if (stack.getItem().getDescriptionId().toLowerCase().contains("small_backpack")) {
+            if (stack.getItem().getDescriptionId().toLowerCase().contains("enderbag")) {
                 shouldRender = true;
                 break;
             }
@@ -43,7 +44,7 @@ public class CuriosSmallBackpackLayer<T extends LivingEntity, M extends Humanoid
             shouldRender = CuriosApi.getCuriosHelper().getEquippedCurios(player).map(handler -> {
                 for (int slot = 0; slot < handler.getSlots(); slot++) {
                     ItemStack stack = handler.getStackInSlot(slot);
-                    if (stack.getItem().getDescriptionId().toLowerCase().contains("small_backpack")) {
+                    if (stack.getItem().getDescriptionId().toLowerCase().contains("enderbag")) {
                         return true;
                     }
                 }
@@ -54,14 +55,15 @@ public class CuriosSmallBackpackLayer<T extends LivingEntity, M extends Humanoid
         if (shouldRender) {
             this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             poseStack.pushPose();
-            poseStack.translate(-0.2F, -1.5F, 0.425F);
+            poseStack.translate(0F, -1.5F, 0.025F);
             renderColoredCutoutModel(this.model, getTextureLocation(entity), poseStack, multiBufferSource, light, entity, 1.0f, 1.0f, 1.0f);
+            
             poseStack.popPose();
         }
     }
 
     @Override
     protected @NotNull CampingIdentifier getTextureLocation(@NotNull T entity) {
-        return new CampingIdentifier("textures/model/small_backpack.png");
+        return new CampingIdentifier("textures/model/enderbag.png");
     }
 }
