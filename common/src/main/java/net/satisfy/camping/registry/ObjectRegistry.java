@@ -21,6 +21,7 @@ import net.satisfy.camping.util.CampingIdentifier;
 import net.satisfy.camping.util.CampingUtil;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -62,7 +63,7 @@ public class ObjectRegistry {
 
     static {
         for (String color : COLORS) {
-            DyeColor dyeColor = DyeColor.valueOf(color.toUpperCase());
+            DyeColor dyeColor = DyeColor.valueOf(color.toUpperCase(Locale.ENGLISH));
             SLEEPING_BAGS.put(color, registerWithItem("sleeping_bag_" + color, () -> new SleepingBagBlock(dyeColor, BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak().mapColor(DyeColor.WHITE))));
             TENT_MAIN.put(color, registerWithItem("tent_" + color, () -> new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor)));
             TENT_MAIN_HEAD.put(color, registerWithoutItem("tent_head_" + color, () -> new TentMainHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor)));
