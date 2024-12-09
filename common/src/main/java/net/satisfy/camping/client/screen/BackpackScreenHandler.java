@@ -1,5 +1,6 @@
 package net.satisfy.camping.client.screen;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,15 +15,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class BackpackScreenHandler extends AbstractContainerMenu {
     private final BackpackContainer container;
+    private final Player player;
+    private final BlockPos blockPos;
 
-    public BackpackScreenHandler(int syncId, Inventory playerInventory) {
-        this(syncId, playerInventory, new BackpackContainer(NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY)));
-    }
-
-    public BackpackScreenHandler(int syncId, Inventory playerInventory, BackpackContainer container) {
+    public BackpackScreenHandler(int syncId, Inventory playerInventory, BackpackContainer container, BlockPos blockPos) {
         super(ScreenhandlerTypeRegistry.BACKPACK_SCREENHANDLER.get(), syncId);
         checkContainerSize(container, BackpackBlockEntity.CONTAINER_SIZE);
         this.container = container;
+        this.player = playerInventory.player;
+        this.blockPos = blockPos;
         container.startOpen(playerInventory.player);
 
         for (int j = 0; j < 3; ++j) {
@@ -47,6 +48,10 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
         for (int j = 0; j < 9; ++j) {
             this.addSlot(new Slot(playerInventory, j, 8 + j * 18, 143 + playerInventoryYOffset));
         }
+    }
+
+    public BackpackScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new BackpackContainer(NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY)), BlockPos.ZERO);
     }
 
     @Override
@@ -89,6 +94,9 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
         if (this.container instanceof BackpackContainer) {
             this.container.setChanged();
         }
+        if (!this.player.isAlive() || this.player.distanceToSqr(this.blockPos.getX() + 0.5, this.blockPos.getY() + 0.5, this.blockPos.getZ() + 0.5) > 64.0) {
+            this.player.closeContainer();
+        }
     }
 
     @Override
@@ -104,5 +112,4 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         return this.container.stillValid(player);
     }
-
 }

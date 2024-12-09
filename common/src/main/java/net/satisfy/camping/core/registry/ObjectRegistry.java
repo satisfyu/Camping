@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.satisfy.camping.Camping;
-import net.satisfy.camping.block.*;
 import net.satisfy.camping.core.block.*;
 import net.satisfy.camping.core.item.BackpackItem;
 import net.satisfy.camping.core.item.EnderpackItem;

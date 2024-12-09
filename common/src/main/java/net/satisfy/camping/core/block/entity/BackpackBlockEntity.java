@@ -26,7 +26,6 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
         this.itemStacks = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
     }
 
-
     public int getContainerSize() {
         return this.itemStacks.size();
     }
@@ -72,7 +71,11 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
         if (this.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
-            return player.distanceToSqr((double) this.worldPosition.getX() + 0.5, (double) this.worldPosition.getY() + 0.5, (double) this.worldPosition.getZ() + 0.5) <= 64.0;
+            return player.distanceToSqr(
+                    (double) this.worldPosition.getX() + 0.5,
+                    (double) this.worldPosition.getY() + 0.5,
+                    (double) this.worldPosition.getZ() + 0.5
+            ) <= 64.0;
         }
     }
 
@@ -104,7 +107,7 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     protected @NotNull AbstractContainerMenu createMenu(int i, Inventory inventory) {
-        return new BackpackScreenHandler(i, inventory, new BackpackContainer(this.itemStacks));
+        return new BackpackScreenHandler(i, inventory, new BackpackContainer(this.itemStacks), this.worldPosition);
     }
 
     @Override
