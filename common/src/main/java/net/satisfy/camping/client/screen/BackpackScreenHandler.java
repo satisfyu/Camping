@@ -6,10 +6,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.block.entity.BackpackBlockEntity;
-import net.satisfy.camping.inventory.BackpackContainer;
-import net.satisfy.camping.registry.ScreenhandlerTypeRegistry;
-import net.satisfy.camping.registry.TagRegistry;
+import net.satisfy.camping.core.block.entity.BackpackBlockEntity;
+import net.satisfy.camping.core.inventory.BackpackContainer;
+import net.satisfy.camping.core.registry.ScreenhandlerTypeRegistry;
+import net.satisfy.camping.core.registry.TagRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class BackpackScreenHandler extends AbstractContainerMenu {

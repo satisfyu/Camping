@@ -1,12 +1,12 @@
-package net.satisfy.camping.platform.forge;
+package net.satisfy.camping.core.platform.forge;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.item.BackpackItem;
-import net.satisfy.camping.item.EnderpackItem;
-import net.satisfy.camping.util.CampingUtil;
+import net.satisfy.camping.core.item.BackpackItem;
+import net.satisfy.camping.core.item.EnderpackItem;
+import net.satisfy.camping.core.util.CampingUtil;
 
 public class PlatformHelperImpl {
 

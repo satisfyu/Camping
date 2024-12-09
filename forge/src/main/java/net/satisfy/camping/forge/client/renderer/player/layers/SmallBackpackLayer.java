@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.util.CampingIdentifier;
+import net.satisfy.camping.core.util.CampingIdentifier;
 import net.satisfy.camping.client.model.SmallBackpackModel;
 import net.satisfy.camping.forge.client.CampingClientForge;
 import org.jetbrains.annotations.NotNull;

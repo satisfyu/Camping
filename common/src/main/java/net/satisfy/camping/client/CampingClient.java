@@ -12,13 +12,13 @@ import net.minecraft.world.level.block.Block;
 import net.satisfy.camping.client.model.*;
 import net.satisfy.camping.client.renderer.GrillRenderer;
 import net.satisfy.camping.client.screen.BackpackScreen;
-import net.satisfy.camping.registry.EntityTypeRegistry;
-import net.satisfy.camping.registry.KeyHandlerRegistry;
-import net.satisfy.camping.registry.ScreenhandlerTypeRegistry;
+import net.satisfy.camping.core.registry.EntityTypeRegistry;
+import net.satisfy.camping.core.registry.KeyHandlerRegistry;
+import net.satisfy.camping.core.registry.ScreenhandlerTypeRegistry;
 
 import java.util.stream.Stream;
 
-import static net.satisfy.camping.registry.ObjectRegistry.*;
+import static net.satisfy.camping.core.registry.ObjectRegistry.*;
 
 @Environment(EnvType.CLIENT)
 public class CampingClient {

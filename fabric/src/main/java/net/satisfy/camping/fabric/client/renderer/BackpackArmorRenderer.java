@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.item.BackpackItem;
-import net.satisfy.camping.registry.BackpackRegistry;
+import net.satisfy.camping.core.item.BackpackItem;
+import net.satisfy.camping.core.registry.BackpackRegistry;
 
 public class BackpackArmorRenderer implements ArmorRenderer {
     @Override
@@ -18,7 +18,14 @@ public class BackpackArmorRenderer implements ArmorRenderer {
         BackpackItem backpack = (BackpackItem) stack.getItem();
 
         Model model = BackpackRegistry.getBodyModel(backpack, contextModel.body);
+        matrices.pushPose();
+
+        if (entity.isCrouching()) {
+            matrices.translate(0.0D, 0.2D, 0.1D);
+        }
 
         model.renderToBuffer(matrices, vertexConsumers.getBuffer(model.renderType(backpack.getBackpackTexture())), light, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+
+        matrices.popPose();
     }
 }

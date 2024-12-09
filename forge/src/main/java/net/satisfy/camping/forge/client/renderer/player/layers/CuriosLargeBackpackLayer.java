@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.client.model.LargeBackpackModel;
 import net.satisfy.camping.forge.client.CampingClientForge;
-import net.satisfy.camping.util.CampingIdentifier;
+import net.satisfy.camping.core.util.CampingIdentifier;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 

@@ -1,7 +1,7 @@
 package net.satisfy.camping.fabric.compat.trinkets;
 
 import dev.emi.trinkets.api.TrinketsApi;
-import net.satisfy.camping.registry.ObjectRegistry;
+import net.satisfy.camping.core.registry.ObjectRegistry;
 
 public class TrinketsCompatibility {
 

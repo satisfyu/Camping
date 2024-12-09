@@ -1,4 +1,4 @@
-package net.satisfy.camping.platform.fabric;
+package net.satisfy.camping.core.platform.fabric;
 
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
@@ -9,11 +9,11 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.satisfy.camping.util.CampingUtil;
+import net.satisfy.camping.core.util.CampingUtil;
 import net.satisfy.camping.fabric.config.ConfigFabric;
-import net.satisfy.camping.item.BackpackItem;
-import net.satisfy.camping.item.EnderpackItem;
-import net.satisfy.camping.registry.ObjectRegistry;
+import net.satisfy.camping.core.item.BackpackItem;
+import net.satisfy.camping.core.item.EnderpackItem;
+import net.satisfy.camping.core.registry.ObjectRegistry;
 
 import java.util.List;
 import java.util.Optional;

@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.item.EnderpackItem;
-import net.satisfy.camping.registry.BackpackRegistry;
+import net.satisfy.camping.core.item.EnderpackItem;
+import net.satisfy.camping.core.registry.BackpackRegistry;
 
 public class EnderpackArmorRenderer implements ArmorRenderer {
     @Override

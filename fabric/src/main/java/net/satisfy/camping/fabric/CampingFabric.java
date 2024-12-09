@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.camping.Camping;
-import net.satisfy.camping.block.SleepingBagBlock;
+import net.satisfy.camping.core.block.SleepingBagBlock;
 import net.satisfy.camping.fabric.compat.trinkets.TrinketsCompatibility;
 import net.satisfy.camping.fabric.config.ConfigFabric;
 

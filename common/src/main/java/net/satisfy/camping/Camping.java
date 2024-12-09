@@ -1,11 +1,11 @@
 package net.satisfy.camping;
 
 import com.google.common.reflect.Reflection;
-import net.satisfy.camping.event.CommonEvents;
-import net.satisfy.camping.network.OpenBackpackPacket;
-import net.satisfy.camping.network.OpenEnderChestPacket;
-import net.satisfy.camping.network.PacketHandler;
-import net.satisfy.camping.registry.*;
+import net.satisfy.camping.core.event.CommonEvents;
+import net.satisfy.camping.core.network.OpenBackpackPacket;
+import net.satisfy.camping.core.network.OpenEnderChestPacket;
+import net.satisfy.camping.core.network.PacketHandler;
+import net.satisfy.camping.core.registry.*;
 
 public class Camping {
     public static final String MODID = "camping";

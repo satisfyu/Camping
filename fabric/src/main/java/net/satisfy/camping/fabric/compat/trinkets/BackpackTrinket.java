@@ -7,8 +7,8 @@ import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.item.BackpackItem;
-import net.satisfy.camping.item.EnderpackItem;
+import net.satisfy.camping.core.item.BackpackItem;
+import net.satisfy.camping.core.item.EnderpackItem;
 
 import java.util.Map;
 import java.util.Optional;

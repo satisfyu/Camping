@@ -10,8 +10,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.item.BackpackItem;
-import net.satisfy.camping.registry.BackpackRegistry;
+import net.satisfy.camping.core.item.BackpackItem;
+import net.satisfy.camping.core.registry.BackpackRegistry;
 
 public class BackpackTrinketRenderer implements TrinketRenderer {
     @Override
