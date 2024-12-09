@@ -68,7 +68,12 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     public boolean stillValid(Player player) {
-        return false;
+        assert this.level != null;
+        if (this.level.getBlockEntity(this.worldPosition) != this) {
+            return false;
+        } else {
+            return player.distanceToSqr((double) this.worldPosition.getX() + 0.5, (double) this.worldPosition.getY() + 0.5, (double) this.worldPosition.getZ() + 0.5) <= 64.0;
+        }
     }
 
     @Override

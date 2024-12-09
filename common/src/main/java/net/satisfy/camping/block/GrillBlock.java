@@ -84,12 +84,12 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
         }
     }
 
-    public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
-        if (blockState.getValue(LIT) && entity instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity)entity)) {
-            entity.hurt(level.damageSources().inFire(), (float)this.fireDamage);
+    @Override
+    public void stepOn(Level world, BlockPos pos, BlockState state, Entity entity) {
+        if (state.getValue(LIT) && entity instanceof LivingEntity livingEntity && !EnchantmentHelper.hasFrostWalker(livingEntity)) {
+            entity.hurt(world.damageSources().hotFloor(), (float) this.fireDamage);
         }
-
-        super.entityInside(blockState, level, blockPos, entity);
+        super.stepOn(world, pos, state, entity);
     }
 
     @Nullable
