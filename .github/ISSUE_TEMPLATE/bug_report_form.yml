@@ -10,6 +10,7 @@ body:
       label: Title
       description: Provide a short summary of the issue.
       placeholder: Issue title
+    validations:
       required: true
   - type: input
     id: minecraft-version
@@ -17,6 +18,7 @@ body:
       label: Minecraft Version
       description: Specify the Minecraft version.
       placeholder: e.g. 1.20.1
+    validations:
       required: true
   - type: input
     id: mod-version
@@ -24,6 +26,7 @@ body:
       label: Mod Version
       description: Specify the mod version.
       placeholder: e.g. 1.0.0
+    validations:
       required: true
   - type: textarea
     id: description
@@ -31,6 +34,7 @@ body:
       label: Description
       description: Please describe your issue.
       placeholder: Describe the problem in detail.
+    validations:
       required: true
   - type: checkboxes
     id: using-latest
@@ -38,7 +42,8 @@ body:
       label: Are you using the latest version?
       options:
         - label: "Yes, I'm using the latest version."
-          required: true
+    validations:
+      required: true
   - type: textarea
     id: logs
     attributes:
@@ -51,11 +56,13 @@ body:
       label: Have you checked for similar issues?
       options:
         - label: "Yes, I have checked for similar issues."
-          required: true
+    validations:
+      required: true
   - type: checkboxes
     id: minimal-instance
     attributes:
       label: Have you tested on a minimal instance?
       options:
         - label: "Yes, I've tested on a minimal instance."
-          required: true
+    validations:
+      required: true
