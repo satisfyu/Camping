@@ -1,0 +1,61 @@
+name: Bug Report
+description: Report bugs for the mod.
+title: "[BUG] - "
+labels:
+  - bug
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: Provide a short summary of the issue.
+      placeholder: Issue title
+      required: true
+  - type: input
+    id: minecraft-version
+    attributes:
+      label: Minecraft Version
+      description: Specify the Minecraft version.
+      placeholder: e.g. 1.20.1
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod Version
+      description: Specify the mod version.
+      placeholder: e.g. 1.0.0
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please describe your issue.
+      placeholder: Describe the problem in detail.
+      required: true
+  - type: checkboxes
+    id: using-latest
+    attributes:
+      label: Are you using the latest version?
+      options:
+        - label: "Yes, I'm using the latest version."
+          required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Please attach your latest log - use https://mclo.gs/ to share logs.
+      placeholder: Paste your logs here
+  - type: checkboxes
+    id: similar-issues
+    attributes:
+      label: Have you checked for similar issues?
+      options:
+        - label: "Yes, I have checked for similar issues."
+          required: true
+  - type: checkboxes
+    id: minimal-instance
+    attributes:
+      label: Have you tested on a minimal instance?
+      options:
+        - label: "Yes, I've tested on a minimal instance."
+          required: true
