@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.client.model.SmallBackpackModel;
@@ -18,10 +19,13 @@ import net.satisfy.camping.client.model.LargeBackpackModel;
 import net.satisfy.camping.client.model.SheepbagModel;
 import net.satisfy.camping.client.model.WandererBackpackModel;
 import net.satisfy.camping.client.model.WandererBagModel;
+import net.satisfy.camping.core.block.BackpackType;
+import net.satisfy.camping.core.block.EnderpackBlock;
 import net.satisfy.camping.forge.client.CampingClientForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
@@ -31,7 +35,12 @@ public class CuriosBackpackRenderer implements ICurioRenderer {
     private final EntityModel<LivingEntity> model;
     private final ResourceLocation texture;
 
+    private final BackpackType type;
+
     public CuriosBackpackRenderer(BackpackType type) {
+
+        this.type = type;
+
         switch (type) {
             case ENDERPACK -> {
                 this.model = new EnderpackModel<>(
@@ -107,27 +116,59 @@ public class CuriosBackpackRenderer implements ICurioRenderer {
         model.setupAnim(livingEntity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
         matrixStack.pushPose();
-        if (model instanceof EnderpackModel) {
-            matrixStack.translate(0F, -1F, 0.025F);
-        } else if (model instanceof EnderbagModel) {
-            matrixStack.translate(0F, -1.5F, 0.025F);
-        } else if (model instanceof GoodybagModel) {
-            matrixStack.translate(0.38F, -1.45F, 0.36F);
-        } else if (model instanceof LargeBackpackModel) {
-            matrixStack.translate(0F, -1.4F, 0.025F);
-        } else if (model instanceof SheepbagModel) {
-            matrixStack.translate(0.175F, -1.5F, 0.43F);
-        } else if (model instanceof WandererBackpackModel) {
-            matrixStack.translate(0F, -1.5F, 0F);
-        } else if (model instanceof WandererBagModel) {
-            matrixStack.translate(0.3F, -1.5F, 0.4F);
-        } else {
-            matrixStack.translate(-0.2F, -1.5F, 0.425F);
-        }
+//        if (model instanceof EnderpackModel) {
+//            matrixStack.translate(0F, -1F, 0.025F);
+//        }
+//        else if (model instanceof EnderbagModel) {
+//            matrixStack.translate(0F, -1.5F, 0.025F);
+//        }
+//        else if (model instanceof GoodybagModel) {
+//            matrixStack.translate(0.38F, -1.45F, 0.36F);
+//        }
+//        else if (model instanceof LargeBackpackModel) {
+//            matrixStack.translate(0F, -1.4F, 0.025F);
+//        }
+//        else if (model instanceof SheepbagModel) {
+//            matrixStack.translate(0.175F, -1.5F, 0.43F);
+//        }
+//        else if (model instanceof WandererBackpackModel) {
+//            matrixStack.translate(0F, -1.5F, 0F);
+//        }
+//        else if (model instanceof WandererBagModel) {
+//            matrixStack.translate(0.3F, -1.5F, 0.4F);
+//        }
+//        else {
+//            matrixStack.translate(-0.2F, -1.5F, 0.425F);
+//        }
 
         renderColoredCutoutModel(model, texture, matrixStack, renderTypeBuffer, light, livingEntity, 1.0f, 1.0f, 1.0f);
 
         matrixStack.popPose();
+    }
+
+    public static void performTranslations(PoseStack poseStack, net.satisfy.camping.core.block.BackpackType type, boolean isCrouching) {
+
+        final float PIXEL = 0.0625f; // equal to 1.0f divided by 16.0f, or 1/16th of a block
+
+        switch (type) {
+            case SMALL_BACKPACK -> poseStack.translate(PIXEL * 3.0f, PIXEL * 10.0f, PIXEL * 3.0f);
+            case LARGE_BACKPACK -> poseStack.translate(0, PIXEL * 12.0f, PIXEL * 10.0f);
+            case WANDERER_BACKPACK -> poseStack.translate(0, PIXEL * 8.0f, PIXEL * 10.5f);
+            case WANDERER_BAG -> poseStack.translate(PIXEL * -5.0f, PIXEL * 10.0f, PIXEL * 4.0f);
+            case SHEEPBAG -> poseStack.translate(PIXEL * -3.0f, PIXEL * 12.0f, PIXEL * 3.0f);
+            case GOODYBAG -> poseStack.translate(PIXEL * -6.0f, PIXEL * 10.0f, PIXEL * 4.0f);
+        }
+
+        if (isCrouching) {
+            switch (type) {
+                case SMALL_BACKPACK -> poseStack.translate(0, PIXEL * 1.0f, PIXEL * 5.0f);
+                case LARGE_BACKPACK -> poseStack.translate(0, PIXEL * -3.5f, PIXEL * 3.5f);
+                case WANDERER_BACKPACK -> poseStack.translate(0, PIXEL * -2.5f, PIXEL * 1.0f);
+                case WANDERER_BAG -> poseStack.translate(0, 0, PIXEL * 4.5f);
+                case SHEEPBAG -> poseStack.translate(0, PIXEL * 1.0f, PIXEL * 5.0f);
+                case GOODYBAG -> poseStack.translate(0, PIXEL * 1, PIXEL * 4.0f);
+            }
+        }
     }
 
     private <T extends LivingEntity, M extends EntityModel<T>> void renderColoredCutoutModel(@NotNull M model,
@@ -137,7 +178,37 @@ public class CuriosBackpackRenderer implements ICurioRenderer {
                                                                                              int light,
                                                                                              @NotNull T entity,
                                                                                              float red, float green, float blue) {
+
+        poseStack.pushPose();
+
+//        poseStack.translate(0, 1.0f, 0);
+//
+//        poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
+//        if (entity.isCrouching()) {
+//            poseStack.mulPoseMatrix(new Matrix4f().setRotationXYZ(30.0f * (Mth.PI/180.0f), 0, 0));
+//            poseStack.translate(0, 0.0625f * 2, (-0.0625f));
+//        }
+
+        net.satisfy.camping.core.block.BackpackType FIXED_TYPE = switch (this.type) {
+            case SMALL_BACKPACK -> net.satisfy.camping.core.block.BackpackType.SMALL_BACKPACK;
+            case GOODYBAG -> net.satisfy.camping.core.block.BackpackType.GOODYBAG;
+            case LARGE_BACKPACK -> net.satisfy.camping.core.block.BackpackType.LARGE_BACKPACK;
+            case SHEEPBAG -> net.satisfy.camping.core.block.BackpackType.SHEEPBAG;
+            case WANDERER_BACKPACK -> net.satisfy.camping.core.block.BackpackType.WANDERER_BACKPACK;
+            case WANDERER_BAG -> net.satisfy.camping.core.block.BackpackType.WANDERER_BAG;
+            default -> null;
+        };
+
+        if (FIXED_TYPE != null) performTranslations(poseStack, FIXED_TYPE, entity.isCrouching());
+        else {
+            if (this.model instanceof EnderbagModel<LivingEntity>) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
+            if (this.model instanceof EnderpackModel<LivingEntity>) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
+
+            if (entity.isCrouching()) poseStack.translate(0, 0.0625f * 3.0f, 0.0625f * -1.0f);
+        }
+
         model.renderToBuffer(poseStack, buffer.getBuffer(RenderType.entityCutoutNoCull(texture)), light, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0f);
+        poseStack.popPose();
     }
 
     public enum BackpackType {

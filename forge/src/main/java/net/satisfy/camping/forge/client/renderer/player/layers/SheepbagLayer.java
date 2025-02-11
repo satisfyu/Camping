@@ -36,7 +36,11 @@ public class SheepbagLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
         if (shouldRender) {
             this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             poseStack.pushPose();
-            poseStack.translate(0.175F, -1.5F, 0.43F);
+            // poseStack.translate(0.175F, -1.5F, 0.43F);
+
+            poseStack.translate(0.0625f * -3.0f, 0.0625f * 12.0f, 0.0625f * 3.0f);
+            if (entity.isCrouching()) poseStack.translate(0, 0, 0.0625f * 5.0f);
+
             renderColoredCutoutModel(this.model, getTextureLocation(entity), poseStack, multiBufferSource, i, entity, 1.0f, 1.0f, 1.0f);
             poseStack.popPose();
         }

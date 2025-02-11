@@ -36,7 +36,11 @@ public class WandererBagLayer<T extends LivingEntity, M extends HumanoidModel<T>
         if (shouldRender) {
             this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             poseStack.pushPose();
-            poseStack.translate(0.3F, -1.5F, 0.4F);
+            // poseStack.translate(0.3F, -1.5F, 0.4F);
+
+            poseStack.translate(0.0625f * -5.0f, 0.0625f * 10.0f, 0.0625f * 4.0f);
+            if (entity.isCrouching()) poseStack.translate(0, 0.0625f * -1.0f, 0.0625f * 4.5f);
+
             renderColoredCutoutModel(this.model, getTextureLocation(entity), poseStack, multiBufferSource, i, entity, 1.0f, 1.0f, 1.0f);
             poseStack.popPose();
         }

@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.satisfy.camping.core.util.CampingIdentifier;
 
@@ -29,7 +30,8 @@ public class GoodybagModel<T extends Entity> extends EntityModel<T> implements B
                 .texOffs(0, 10).addBox(1.0F, -10.0F, -2.0F, 10.0F, 10.0F, 6.0F, new CubeDeformation(0.0F))
                 .texOffs(32, 10).addBox(1.0F, -10.0F, -2.0F, 10.0F, 3.0F, 6.0F, new CubeDeformation(0.2F))
                 .texOffs(16, 27).addBox(-2.0F, -5.0F, -2.0F, 3.0F, 5.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(34, 27).addBox(11.0F, -5.0F, -2.0F, 2.0F, 5.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, 24.0F, -6.0F));
+                .texOffs(34, 27).addBox(11.0F, -5.0F, -2.0F, 2.0F, 5.0F, 6.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0, 0, 0));
 
         PartDefinition goods = goodybag.addOrReplaceChild("goods", CubeListBuilder.create().texOffs(8, 33).addBox(11.0F, -12.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(-0.1F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -44,15 +46,13 @@ public class GoodybagModel<T extends Entity> extends EntityModel<T> implements B
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.pushPose();
-        poseStack.scale(1F, 1F, 1F);
-        poseStack.translate(-0.375F, 0.5F, 0.2675);
         goodybag.render(poseStack, buffer, packedLight, packedOverlay);
         poseStack.popPose();
     }
 
     @Override
     public void setupAnim(T entity, float f, float g, float h, float i, float j) {
-
+        goodybag.xRot = entity.isCrouching() ? 30.0f * (Mth.PI/180.0f) : 0;
     }
 
     @Override

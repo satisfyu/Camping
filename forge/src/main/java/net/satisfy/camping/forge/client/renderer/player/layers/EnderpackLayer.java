@@ -31,7 +31,11 @@ public class EnderpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> 
             if (hasEnderpack) {
                 this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
                 poseStack.pushPose();
-                poseStack.translate(0F, -1F, 0.025F);
+                // poseStack.translate(0F, -1F, 0.025F);
+
+                poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2.0f);
+                if (entity.isCrouching()) poseStack.translate(0, 0.0625f * 2.0f, -0.0625f);
+
                 renderColoredCutoutModel(this.model, getTextureLocation(entity), poseStack, multiBufferSource, i, entity, 1.0f, 1.0f, 1.0f);
                 poseStack.popPose();
             }

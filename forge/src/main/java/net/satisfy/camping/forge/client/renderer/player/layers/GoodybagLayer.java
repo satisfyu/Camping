@@ -36,7 +36,11 @@ public class GoodybagLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
         if (shouldRender) {
             this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             poseStack.pushPose();
-            poseStack.translate(0.38F, -1.45F, 0.36F);
+            // poseStack.translate(0.38F, -1.45F, 0.36F);
+
+            poseStack.translate(0.0625f * -6.0f, 0.0625f * 10.0f, 0.0625f * 4.0f);
+            if (entity.isCrouching()) poseStack.translate(0, 0.0625f * 1.0f, 0.0625f * 4.0f);
+
             renderColoredCutoutModel(this.model, getTextureLocation(entity), poseStack, multiBufferSource, i, entity, 1.0f, 1.0f, 1.0f);
             poseStack.popPose();
         }

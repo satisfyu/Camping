@@ -12,12 +12,24 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.core.item.EnderpackItem;
 import net.satisfy.camping.core.registry.BackpackRegistry;
+import net.satisfy.camping.core.registry.ObjectRegistry;
 
 public class EnderpackTrinketRenderer implements TrinketRenderer {
     @Override
-    public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, LivingEntity livingEntity, float v, float v1, float v2, float v3, float v4, float v5) {
-        EnderpackItem backpack = (EnderpackItem) itemStack.getItem();
-        Model model = BackpackRegistry.getBodyModel(backpack, ((HumanoidModel<?>) entityModel).body);
-        model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(backpack.getEnderpackTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+    public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, LivingEntity entity, float v, float v1, float v2, float v3, float v4, float v5) {
+        EnderpackItem enderpack = (EnderpackItem) itemStack.getItem();
+        Model model = BackpackRegistry.getBodyModel(enderpack, ((HumanoidModel<?>) entityModel).body);
+
+        final boolean isEnderBag = enderpack == ObjectRegistry.ENDERBAG_ITEM.get();
+        final boolean isEnderPack = enderpack == ObjectRegistry.ENDERPACK_ITEM.get();
+
+        poseStack.pushPose();
+
+        if (isEnderBag) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
+        if (isEnderPack) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
+
+        if (entity.isCrouching()) poseStack.translate(0, -0.0625f - (0.0625f / 8f), (0.0625f) / 10.0f);
+        model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(enderpack.getEnderpackTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        poseStack.popPose();
     }
 }

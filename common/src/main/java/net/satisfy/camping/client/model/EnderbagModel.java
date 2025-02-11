@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.satisfy.camping.core.util.CampingIdentifier;
 
@@ -23,8 +24,10 @@ public class EnderbagModel<T extends Entity> extends EntityModel<T> implements B
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition enderbag = partdefinition.addOrReplaceChild("enderbag", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -12.0F, -8.0F, 10.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(1, 16).addBox(-1.0F, -10.0F, -4.0F, 2.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition enderbag = partdefinition.addOrReplaceChild("enderbag", CubeListBuilder.create()
+                .texOffs(0, 0).addBox(0, 0, 0, 10.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 16).addBox(4, 2, 4, 2.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
@@ -33,15 +36,13 @@ public class EnderbagModel<T extends Entity> extends EntityModel<T> implements B
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.pushPose();
-        poseStack.scale(1F, 1F, 1F);
-        poseStack.translate(0F, 0.75F, 0.6F);
         enderbag.render(poseStack, buffer, packedLight, packedOverlay);
         poseStack.popPose();
     }
 
     @Override
     public void setupAnim(T entity, float f, float g, float h, float i, float j) {
-
+        enderbag.xRot = entity.isCrouching() ? 30.0f * (Mth.PI/180.0f) : 0;
     }
 
     @Override

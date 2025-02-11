@@ -36,7 +36,10 @@ public class LargeBackpackLayer<T extends LivingEntity, M extends HumanoidModel<
         if (shouldRender) {
             this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             poseStack.pushPose();
-            poseStack.translate(0F, -1.4F, 0.025F);
+
+             poseStack.translate(0, 0.0625f * 12.0f, 0.0625f * 10.0f);
+             if (entity.isCrouching()) poseStack.translate(0, 0.0625f * -3.0f, 0.0625f * 4.0f);
+
             renderColoredCutoutModel(this.model, getTextureLocation(entity), poseStack, multiBufferSource, i, entity, 1.0f, 1.0f, 1.0f);
             poseStack.popPose();
         }

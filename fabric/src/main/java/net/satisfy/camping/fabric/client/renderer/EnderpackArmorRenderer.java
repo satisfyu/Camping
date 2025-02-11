@@ -11,14 +11,25 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.core.item.EnderpackItem;
 import net.satisfy.camping.core.registry.BackpackRegistry;
+import net.satisfy.camping.core.registry.ObjectRegistry;
 
 public class EnderpackArmorRenderer implements ArmorRenderer {
     @Override
-    public void render(PoseStack matrices, MultiBufferSource vertexConsumers, ItemStack stack, LivingEntity entity, EquipmentSlot slot, int light, HumanoidModel<LivingEntity> contextModel) {
+    public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, ItemStack stack, LivingEntity entity, EquipmentSlot slot, int light, HumanoidModel<LivingEntity> contextModel) {
         EnderpackItem enderpack = (EnderpackItem) stack.getItem();
-
         Model model = BackpackRegistry.getBodyModel(enderpack, contextModel.body);
 
-        model.renderToBuffer(matrices, vertexConsumers.getBuffer(model.renderType(enderpack.getEnderpackTexture())), light, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        final boolean isEnderBag = enderpack == ObjectRegistry.ENDERBAG_ITEM.get();
+        final boolean isEnderPack = enderpack == ObjectRegistry.ENDERPACK_ITEM.get();
+
+        poseStack.pushPose();
+
+        if (isEnderBag) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
+        if (isEnderPack) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
+
+        if (entity.isCrouching()) poseStack.translate(0, -0.0625f - (0.0625f / 8f), (0.0625f) / 10.0f);
+
+        model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(enderpack.getEnderpackTexture())), light, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        poseStack.popPose();
     }
 }
