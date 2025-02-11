@@ -119,4 +119,8 @@ public class PlatformHelperImpl {
         }
         return ItemStack.EMPTY;
     }
+
+    public static String getLoaderAsString() {
+        return "fabric";
+    }
 }

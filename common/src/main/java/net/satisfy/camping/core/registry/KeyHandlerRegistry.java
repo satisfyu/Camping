@@ -22,10 +22,10 @@ public class KeyHandlerRegistry {
     private static final String CATEGORY = "key.camping.category";
     private static final String OPEN_KEY = "key.camping.open";
 
-    private static final KeyMapping open_key = new KeyMapping(OPEN_KEY, InputConstants.Type.KEYSYM, InputConstants.KEY_B, CATEGORY);
+    public static final KeyMapping open_key = new KeyMapping(OPEN_KEY, InputConstants.Type.KEYSYM, InputConstants.KEY_B, CATEGORY);
 
     public static void init() {
-        KeyMappingRegistry.register(open_key);
+        if (PlatformHelper.getLoaderAsString().equalsIgnoreCase("fabric")) KeyMappingRegistry.register(open_key);
         registerKeyHandler();
     }
 

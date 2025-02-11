@@ -45,4 +45,8 @@ public class PlatformHelperImpl {
         tag.putBoolean("Grilled", true);
         CampingUtil.Grilling.increaseFoodValue(itemStack);
     }
+
+    public static String getLoaderAsString() {
+        return "forge";
+    }
 }

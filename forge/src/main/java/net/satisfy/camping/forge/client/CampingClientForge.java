@@ -1,5 +1,6 @@
 package net.satisfy.camping.forge.client;
 
+import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -8,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -15,6 +17,7 @@ import net.minecraftforge.registries.RegisterEvent;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.client.CampingClient;
 import net.satisfy.camping.client.model.*;
+import net.satisfy.camping.core.registry.KeyHandlerRegistry;
 import net.satisfy.camping.forge.client.renderer.player.layers.*;
 
 import java.util.function.Function;
@@ -38,6 +41,14 @@ public class CampingClientForge {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         CampingClient.onInitializeClient();
+    }
+
+    @SubscribeEvent
+    public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+        event.register(KeyHandlerRegistry.open_key);
+
+        // todo revert to this possibly
+        // KeyMappingRegistry.register(KeyHandlerRegistry.open_key);
     }
 
     @SubscribeEvent

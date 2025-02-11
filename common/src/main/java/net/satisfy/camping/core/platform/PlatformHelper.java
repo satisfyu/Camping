@@ -31,4 +31,8 @@ public class PlatformHelper {
         throw new AssertionError();
     }
 
+    @ExpectPlatform
+    public static String getLoaderAsString() {
+        throw new AssertionError();
+    }
 }
