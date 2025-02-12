@@ -7,6 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.satisfy.camping.core.block.BackpackBlock;
 import net.satisfy.camping.core.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.core.inventory.BackpackContainer;
 import net.satisfy.camping.core.registry.ScreenhandlerTypeRegistry;
@@ -110,6 +111,6 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return this.container.stillValid(player);
+        return this.container.stillValid(player) && player.level().getBlockState(this.blockPos).getBlock() instanceof BackpackBlock;
     }
 }
