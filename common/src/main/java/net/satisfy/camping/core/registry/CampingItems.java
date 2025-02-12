@@ -1,6 +1,8 @@
 package net.satisfy.camping.core.registry;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.satisfy.camping.Camping;
 
@@ -19,6 +21,7 @@ public class CampingItems {
     public static final Item ENDERBAG = new Item(new Item.Properties());
 
     public static void register(BiConsumer<Item, ResourceLocation> consumer) {
+
         consumer.accept(MULTITOOL, Camping.identifier("multitool"));
         consumer.accept(SMALL_BACKPACK, Camping.identifier("small_backpack"));
         consumer.accept(LARGE_BACKPACK, Camping.identifier("large_backpack"));
@@ -28,5 +31,9 @@ public class CampingItems {
         consumer.accept(SHEEPBAG, Camping.identifier("sheepbag"));
         consumer.accept(ENDERPACK, Camping.identifier("enderpack"));
         consumer.accept(ENDERBAG, Camping.identifier("enderbag"));
+
+        consumer.accept(new BlockItem(CampingBlocks.GRILL, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(CampingBlocks.GRILL));
+        CampingBlocks.TENT_MAIN.forEach((blockName, tentMainBlock) -> consumer.accept(new BlockItem(tentMainBlock, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(tentMainBlock)));
+        CampingBlocks.SLEEPING_BAGS.forEach((blockName, sleepingBagBlock) -> consumer.accept(new BlockItem(sleepingBagBlock, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(sleepingBagBlock)));
     }
 }
