@@ -1,24 +1,32 @@
-architectury {
-    common(rootProject.enabled_platforms.split(","))
+plugins {
+    id 'multiloader-common'
+    id 'net.neoforged.moddev.legacyforge'
 }
 
-loom {
-    accessWidenerPath = file("src/main/resources/camping.accesswidener")
+legacyForge {
+    mcpVersion = minecraft_version
+    if (file("src/main/resources/META-INF/accesstransformer.cfg").exists()) {
+        accessWideners(file("src/main/resources/META-INF/accesstransformer.cfg"))
+    }
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modApi "dev.architectury:architectury:${rootProject.architectury_version}"
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 }
 
-publishing {
-    publications {
-        mavenCommon(MavenPublication) {
-            artifactId = rootProject.archives_base_name
-            from components.java
-        }
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
     }
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
 
-    repositories {
-    }
+artifacts {
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+    commonResources sourceSets.main.resources.sourceDirectories.singleFile
 }
