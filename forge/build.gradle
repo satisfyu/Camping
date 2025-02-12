@@ -3,6 +3,10 @@ plugins {
     id 'net.neoforged.moddev.legacyforge'
 }
 
+repositories {
+    maven { url 'https://maven.theillusivec4.top/' }
+}
+
 mixin {
     add(sourceSets.main, "${mod_id}.refmap.json")
 
@@ -43,6 +47,7 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 dependencies {
     compileOnly project(":common")
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+    modImplementation("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}")
 }
 
 jar {
