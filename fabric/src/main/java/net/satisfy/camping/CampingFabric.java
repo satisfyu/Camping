@@ -22,7 +22,7 @@ public class CampingFabric implements ModInitializer {
         RegistryFabric.register();
         CampingMessagesFabric.registerC2SPackets();
 
-        if (Services.PLATFORM.isModLoaded("trinekts")) TrinketsCompatibility.load();
+        if (Services.PLATFORM.isModLoaded("trinkets")) TrinketsCompatibility.load();
 
         EntitySleepEvents.ALLOW_SETTING_SPAWN.register((player, sleepingPos) -> {
             boolean onClient = player.level().isClientSide;
