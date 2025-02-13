@@ -7,8 +7,6 @@ import net.satisfy.camping.core.registry.CampingScreenHandlers;
 
 public class CampingClient {
 
-    // todo register the keybind
-
     public static void init() {
         MenuScreens.<BackpackScreenHandler, BackpackScreen>register(CampingScreenHandlers.BACKPACK, BackpackScreen::new);
     }
