@@ -33,7 +33,8 @@
         "fabricloader": ">=0.14",
         "fabric": "*",
         "minecraft": "${minecraft_version}",
-        "java": ">=17"
+        "java": ">=17",
+        "trinkets": ">=3.7.1"
     },
     "suggests": {
         "another-mod": "*"
