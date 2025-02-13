@@ -17,6 +17,7 @@ public class RegistryForge {
         bind(Registries.BLOCK, CampingBlocks::register);
         bind(Registries.BLOCK_ENTITY_TYPE, CampingBlockEntities::register);
         bind(Registries.ITEM, CampingItems::register);
+        bind(Registries.CREATIVE_MODE_TAB, CampingTab::register);
     }
 
     private static <T> void bind(ResourceKey<Registry<T>> registry, Consumer<BiConsumer<T, ResourceLocation>> source) {

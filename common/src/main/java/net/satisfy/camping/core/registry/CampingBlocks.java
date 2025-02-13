@@ -4,9 +4,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.satisfy.camping.Camping;
+import net.satisfy.camping.core.world.block.*;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -23,15 +27,17 @@ public class CampingBlocks {
     public static final Map<String, Block> TENT_RIGHT = new HashMap<>();
     public static final Map<String, Block> TENT_HEAD_RIGHT = new HashMap<>();
 
-    public static final Block GRILL = new Block(BlockBehaviour.Properties.of());
-    public static final Block SMALL_BACKPACK = new Block(BlockBehaviour.Properties.of());
-    public static final Block LARGE_BACKPACK = new Block(BlockBehaviour.Properties.of());
-    public static final Block WANDERER_BACKPACK = new Block(BlockBehaviour.Properties.of());
-    public static final Block WANDERER_BAG = new Block(BlockBehaviour.Properties.of());
-    public static final Block GOODYBAG = new Block(BlockBehaviour.Properties.of());
-    public static final Block SHEEPBAG = new Block(BlockBehaviour.Properties.of());
-    public static final Block ENDERPACK = new Block(BlockBehaviour.Properties.of());
-    public static final Block ENDERBAG = new Block(BlockBehaviour.Properties.of());
+    public static final Block GRILL = new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON).lightLevel((state) -> state.getValue(GrillBlock.LIT) ? 10 : 0), 1);
+
+    public static final BlockBehaviour.Properties BACKPACK_BEHAVIOUR = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion().noParticlesOnBreak().instabreak();
+    public static final Block SMALL_BACKPACK = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackType.SMALL_BACKPACK);
+    public static final Block LARGE_BACKPACK = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackType.LARGE_BACKPACK);
+    public static final Block WANDERER_BACKPACK = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackType.WANDERER_BACKPACK);
+    public static final Block WANDERER_BAG = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackType.WANDERER_BAG);
+    public static final Block GOODYBAG = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackType.GOODYBAG);
+    public static final Block SHEEPBAG = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackType.SHEEPBAG);
+    public static final Block ENDERPACK = new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackBlock.BackpackType.ENDERPACK);
+    public static final Block ENDERBAG = new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackBlock.BackpackType.ENDERBAG);
 
     public static final Block[] BACKPACKS = new Block[]{SMALL_BACKPACK, LARGE_BACKPACK, WANDERER_BACKPACK, WANDERER_BAG, GOODYBAG, SHEEPBAG};
     public static final Block[] ENDERPACKS = new Block[]{ENDERPACK, ENDERBAG};
@@ -50,13 +56,13 @@ public class CampingBlocks {
 
         for (String color : COLORS) {
 
-            // DyeColor dyeColor = DyeColor.valueOf(color.toUpperCase(Locale.ENGLISH));
+            DyeColor dyeColor = DyeColor.valueOf(color.toUpperCase(Locale.ENGLISH));
 
-            Block coloredSleepingBag = new Block(BlockBehaviour.Properties.of());
-            Block coloredTentMain = new Block(BlockBehaviour.Properties.of());
-            Block coloredTentMainHead = new Block(BlockBehaviour.Properties.of());
-            Block coloredTentRight = new Block(BlockBehaviour.Properties.of());
-            Block coloredTentHeadRight = new Block(BlockBehaviour.Properties.of());
+            Block coloredSleepingBag = new SleepingBagBlock(dyeColor, BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak().mapColor(DyeColor.WHITE));
+            Block coloredTentMain = new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
+            Block coloredTentMainHead = new TentMainHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
+            Block coloredTentRight = new TentRightBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
+            Block coloredTentHeadRight = new TentRightHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
 
             SLEEPING_BAGS.put(color, coloredSleepingBag);
             TENT_MAIN.put(color, coloredTentMain);
