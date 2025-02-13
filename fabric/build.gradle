@@ -4,6 +4,7 @@ plugins {
 }
 
 repositories {
+    maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com" }
     maven { url 'https://maven.ladysnake.org/releases' }
 }
@@ -16,6 +17,7 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
 
+    modApi include("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_fabric_version}")
     modImplementation "com.terraformersmc:modmenu:${rootProject.mod_menu_version}"
     modImplementation("dev.emi:trinkets:${rootProject.trinkets_version}")
 }

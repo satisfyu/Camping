@@ -8,8 +8,8 @@
         "${mod_author}"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "homepage": "https://modrinth.com/mod/lets-do-camping",
+        "sources": "https://github.com/satisfyu/Camping"
     },
     "license": "${license}",
     "icon": "assets/modid/${mod_id}.png",
@@ -20,6 +20,9 @@
         ],
         "client": [
             "net.satisfy.camping.client.CampingClientFabric"
+        ],
+        "modmenu": [
+            "net.satisfy.camping.core.config.ModMenu"
         ]
     },
     "mixins": [
