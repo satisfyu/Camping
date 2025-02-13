@@ -1,7 +1,20 @@
 package net.satisfy.camping;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootDataManager;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.loot.LootModifierManager;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,6 +34,11 @@ import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
+import java.lang.ref.WeakReference;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 @Mod(Constants.MOD_ID)
 public class CampingForge {
 
@@ -32,7 +50,6 @@ public class CampingForge {
         RegistryForge.register(CampingForge.EVENT_BUS);
         CampingForge.EVENT_BUS.addListener(this::setup);
         CampingForge.EVENT_BUS.addListener(this::enqueueIMC);
-        CampingForge.EVENT_BUS.addListener(this::clientSetup);
     }
 
     @SuppressWarnings("all")
@@ -42,41 +59,6 @@ public class CampingForge {
 
     private void setup(final FMLCommonSetupEvent evt) {
         CuriosApi.registerCurio(CampingItems.SMALL_BACKPACK, new CuriosBackpack());
-    }
-
-    private void clientSetup(final FMLClientSetupEvent event) {
-        CuriosRendererRegistry.register(
-                CampingItems.SMALL_BACKPACK,
-                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.SMALL_BACKPACK)
-        );
-        CuriosRendererRegistry.register(
-                CampingItems.ENDERPACK,
-                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.ENDERPACK)
-        );
-        CuriosRendererRegistry.register(
-                CampingItems.ENDERBAG,
-                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.ENDERBAG)
-        );
-        CuriosRendererRegistry.register(
-                CampingItems.GOODYBAG,
-                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.GOODYBAG)
-        );
-        CuriosRendererRegistry.register(
-                CampingItems.LARGE_BACKPACK,
-                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.LARGE_BACKPACK)
-        );
-        CuriosRendererRegistry.register(
-                CampingItems.SHEEPBAG,
-                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.SHEEPBAG)
-        );
-        CuriosRendererRegistry.register(
-                CampingItems.WANDERER_BACKPACK,
-                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.WANDERER_BACKPACK)
-        );
-        CuriosRendererRegistry.register(
-                CampingItems.WANDERER_BAG,
-                () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.WANDERER_BAG)
-        );
     }
 
     @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)

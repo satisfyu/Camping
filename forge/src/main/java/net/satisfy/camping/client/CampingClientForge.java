@@ -17,6 +17,9 @@ import net.satisfy.camping.client.model.*;
 import net.satisfy.camping.client.renderer.GrillRenderer;
 import net.satisfy.camping.client.renderer.player.layers.*;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
+import net.satisfy.camping.core.registry.CampingItems;
+import net.satisfy.camping.integration.CuriosBackpackRenderer;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import java.util.function.Function;
 
@@ -38,6 +41,39 @@ public class CampingClientForge {
         public static void onClientSetup(final FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
                 CampingClient.init();
+
+                CuriosRendererRegistry.register(
+                        CampingItems.SMALL_BACKPACK,
+                        () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.SMALL_BACKPACK)
+                );
+                CuriosRendererRegistry.register(
+                        CampingItems.ENDERPACK,
+                        () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.ENDERPACK)
+                );
+                CuriosRendererRegistry.register(
+                        CampingItems.ENDERBAG,
+                        () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.ENDERBAG)
+                );
+                CuriosRendererRegistry.register(
+                        CampingItems.GOODYBAG,
+                        () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.GOODYBAG)
+                );
+                CuriosRendererRegistry.register(
+                        CampingItems.LARGE_BACKPACK,
+                        () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.LARGE_BACKPACK)
+                );
+                CuriosRendererRegistry.register(
+                        CampingItems.SHEEPBAG,
+                        () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.SHEEPBAG)
+                );
+                CuriosRendererRegistry.register(
+                        CampingItems.WANDERER_BACKPACK,
+                        () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.WANDERER_BACKPACK)
+                );
+                CuriosRendererRegistry.register(
+                        CampingItems.WANDERER_BAG,
+                        () -> new CuriosBackpackRenderer(CuriosBackpackRenderer.BackpackType.WANDERER_BAG)
+                );
             });
         }
 

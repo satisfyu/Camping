@@ -13,6 +13,8 @@ public class RegistryFabric {
         CampingBlockEntities.register(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE));
         CampingItems.register(bind(BuiltInRegistries.ITEM));
         CampingTab.register(bind(BuiltInRegistries.CREATIVE_MODE_TAB));
+
+        CampingLootModifiersFabric.register();
     }
 
     private static <T> BiConsumer<T, ResourceLocation> bind(Registry<? super T> registry) {

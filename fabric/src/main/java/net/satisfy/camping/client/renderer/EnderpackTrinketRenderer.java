@@ -10,9 +10,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.core.item.EnderpackItem;
+import net.satisfy.camping.core.registry.CampingItems;
+import net.satisfy.camping.core.world.item.EnderpackItem;
 import net.satisfy.camping.core.registry.BackpackRegistry;
-import net.satisfy.camping.core.registry.ObjectRegistry;
 
 public class EnderpackTrinketRenderer implements TrinketRenderer {
     @Override
@@ -20,8 +20,8 @@ public class EnderpackTrinketRenderer implements TrinketRenderer {
         EnderpackItem enderpack = (EnderpackItem) itemStack.getItem();
         Model model = BackpackRegistry.getBodyModel(enderpack, ((HumanoidModel<?>) entityModel).body);
 
-        final boolean isEnderBag = enderpack == ObjectRegistry.ENDERBAG_ITEM.get();
-        final boolean isEnderPack = enderpack == ObjectRegistry.ENDERPACK_ITEM.get();
+        final boolean isEnderBag = enderpack == CampingItems.ENDERBAG;
+        final boolean isEnderPack = enderpack == CampingItems.ENDERPACK;
 
         poseStack.pushPose();
 

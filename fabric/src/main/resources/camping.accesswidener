@@ -5,3 +5,4 @@ accessible method net/minecraft/client/gui/screens/MenuScreens register (Lnet/mi
 accessible class net/minecraft/client/gui/screens/MenuScreens$ScreenConstructor
 accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
 accessible class net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds
+accessible method net/minecraft/world/entity/player/Player closeContainer ()V
