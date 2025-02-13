@@ -25,6 +25,8 @@ public class CampingItems {
     public static final Item ENDERPACK = new EnderpackItem(CampingBlocks.ENDERPACK, ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, Camping.identifier("textures/model/enderpack.png"), new Item.Properties());
     public static final Item ENDERBAG = new EnderpackItem(CampingBlocks.ENDERBAG, ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, Camping.identifier("textures/model/enderbag.png"), new Item.Properties());
 
+    public static final Item[] BACKPACKS = new Item[]{SMALL_BACKPACK, LARGE_BACKPACK, WANDERER_BACKPACK, WANDERER_BAG, GOODYBAG, SHEEPBAG};
+
     public static final List<ItemLike> CREATIVE_TAB_ITEMS = new ArrayList<>();
 
     public static void register(BiConsumer<Item, ResourceLocation> consumer) {
