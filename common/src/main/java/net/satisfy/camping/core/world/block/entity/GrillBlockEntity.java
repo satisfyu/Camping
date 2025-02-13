@@ -23,8 +23,6 @@ import net.minecraft.world.level.gameevent.GameEvent.Context;
 import net.satisfy.camping.core.world.block.GrillBlock;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.util.CampingUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -134,7 +132,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public @NotNull CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag() {
         CompoundTag compoundTag = new CompoundTag();
         ContainerHelper.saveAllItems(compoundTag, this.items, true);
         return compoundTag;
@@ -144,7 +142,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         return this.items.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.quickCheck.getRecipeFor(new SimpleContainer(stack), this.level);
     }
 
-    public boolean placeFood(@Nullable Entity entity, ItemStack stack, int cookTime) {
+    public boolean placeFood(Entity entity, ItemStack stack, int cookTime) {
         for (int i = 0; i < this.items.size(); ++i) {
             ItemStack itemStack = this.items.get(i);
             if (itemStack.isEmpty()) {

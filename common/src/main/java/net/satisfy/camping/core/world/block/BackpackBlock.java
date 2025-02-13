@@ -32,8 +32,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.world.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.core.util.CampingUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +52,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
 
-    public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else if (player.isSpectator()) {
@@ -109,12 +107,12 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     @Override
-    public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack pItemStack) {
+    public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity, ItemStack pItemStack) {
         super.playerDestroy(level, player, blockPos, blockState, blockEntity, pItemStack);
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
         BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
             builder = builder.withDynamicDrop(CONTENTS, consumer -> {
@@ -127,7 +125,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new BackpackBlockEntity(blockPos, blockState);
     }
 
@@ -151,17 +149,17 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
+    public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
+    public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    public @Nullable BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
         FluidState fluidState = blockPlaceContext.getLevel().getFluidState(blockPlaceContext.getClickedPos());
         return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
@@ -189,12 +187,12 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPES.get(backpackType).get(state.getValue(FACING));
     }
 
     @Override
-    public @NotNull RenderShape getRenderShape(BlockState blockState) {
+    public RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.MODEL;
     }
 }

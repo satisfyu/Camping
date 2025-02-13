@@ -9,10 +9,10 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.satisfy.camping.core.util.CampingIdentifier;
+import net.satisfy.camping.Camping;
 
 public class WandererBackpackModel<T extends Entity> extends EntityModel<T> implements BackpackModel {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new CampingIdentifier("wanderer_backpack"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Camping.identifier("wanderer_backpack"), "main");
     private final ModelPart wanderer_backpack;
 
     public WandererBackpackModel(ModelPart root) {

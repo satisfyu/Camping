@@ -36,8 +36,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 
 import java.util.List;
 
@@ -56,12 +56,12 @@ public class SleepingBagBlock extends BedBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
         return state.getValue(PART) == BedPart.HEAD ? rotateShape(Direction.NORTH, state.getValue(FACING), SLEEPING_BAG_SHAPE) : SLEEPING_BAG_SHAPE;
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide) {
             return InteractionResult.CONSUME;
         } else {
@@ -125,7 +125,7 @@ public class SleepingBagBlock extends BedBlock {
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState newState, LevelAccessor accessor, BlockPos pos, BlockPos newPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState newState, LevelAccessor accessor, BlockPos pos, BlockPos newPos) {
         if (direction == getNeighbourDirection(state.getValue(PART), state.getValue(FACING))) {
             return newState.is(this) && newState.getValue(PART) != state.getValue(PART) ? state.setValue(OCCUPIED, newState.getValue(OCCUPIED)) : Blocks.AIR.defaultBlockState();
         } else {
@@ -138,7 +138,7 @@ public class SleepingBagBlock extends BedBlock {
     }
 
     @Override
-    public @NotNull RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -147,7 +147,7 @@ public class SleepingBagBlock extends BedBlock {
         super.playerWillDestroy(level, pos, state, player);
     }
 
-    @Nullable
+   
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction direction = context.getHorizontalDirection();
@@ -162,7 +162,7 @@ public class SleepingBagBlock extends BedBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack itemstack) {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity livingEntity, ItemStack itemstack) {
         super.setPlacedBy(level, pos, state, livingEntity, itemstack);
         if (!level.isClientSide) {
             BlockPos headPos = pos.relative(state.getValue(FACING));
@@ -179,14 +179,14 @@ public class SleepingBagBlock extends BedBlock {
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         if (!state.getValue(CAN_DROP)) {
             return List.of();
         }
         return super.getDrops(state, builder);
     }
 
-    @Nullable
+   
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return null;

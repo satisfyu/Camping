@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.satisfy.camping.core.registry.CampingBlocks;
-import org.jetbrains.annotations.NotNull;
+
 
 public class TentBlock extends HorizontalDirectionalBlock {
 
@@ -33,7 +33,7 @@ public class TentBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(BlockGetter getter, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(BlockGetter getter, BlockPos pos, BlockState state) {
         if (this instanceof TentMainBlock tentMainBlock) {
             DyeColor color = tentMainBlock.getColor();
             return new ItemStack(CampingBlocks.TENT_MAIN.get(color.getName()));

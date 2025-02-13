@@ -12,7 +12,6 @@ import net.satisfy.camping.core.registry.CampingTags;
 import net.satisfy.camping.core.world.block.BackpackBlock;
 import net.satisfy.camping.core.world.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.core.inventory.BackpackContainer;
-import org.jetbrains.annotations.NotNull;
 
 public class BackpackScreenHandler extends AbstractContainerMenu {
     private final BackpackContainer container;
@@ -56,7 +55,7 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     }
 
     @Override
-    public @NotNull ItemStack quickMoveStack(Player player, int i) {
+    public ItemStack quickMoveStack(Player player, int i) {
         if (i >= 0 && i < this.slots.size()) {
             ItemStack itemStack = ItemStack.EMPTY;
             Slot slot = this.slots.get(i);

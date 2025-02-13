@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.satisfy.camping.core.registry.CampingBlocks;
 import net.satisfy.camping.core.registry.CampingItems;
-import org.jetbrains.annotations.NotNull;
+
 
 public class EnderpackItem extends BlockItem implements Equipable {
 	protected final ArmorMaterial material;
@@ -37,12 +37,12 @@ public class EnderpackItem extends BlockItem implements Equipable {
 	}
 
 	@Override
-	public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		return InteractionResultHolder.pass(player.getItemInHand(hand));
 	}
 
 	@Override
-	public @NotNull InteractionResult useOn(UseOnContext context) {
+	public InteractionResult useOn(UseOnContext context) {
 		Player player = context.getPlayer();
 		Level level = context.getLevel();
 		BlockPos clickedPos = context.getClickedPos();
@@ -67,12 +67,12 @@ public class EnderpackItem extends BlockItem implements Equipable {
 	}
 
 	@Override
-	public @NotNull EquipmentSlot getEquipmentSlot() {
+	public EquipmentSlot getEquipmentSlot() {
 		return this.type.getSlot();
 	}
 
 	@Override
-	public @NotNull SoundEvent getEquipSound() {
+	public SoundEvent getEquipSound() {
 		return this.material.getEquipSound();
 	}
 }

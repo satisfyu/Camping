@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.satisfy.camping.core.world.block.BackpackBlock;
 import net.satisfy.camping.core.world.block.BackpackType;
-import org.jetbrains.annotations.NotNull;
+
 
 public class BackpackItem extends BlockItem implements Equipable {
 
@@ -33,17 +33,17 @@ public class BackpackItem extends BlockItem implements Equipable {
     }
 
     @Override
-    public @NotNull EquipmentSlot getEquipmentSlot() {
+    public EquipmentSlot getEquipmentSlot() {
         return EquipmentSlot.CHEST;
     }
 
     @Override
-    public @NotNull SoundEvent getEquipSound() {
+    public SoundEvent getEquipSound() {
         return ArmorMaterials.LEATHER.getEquipSound();
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
 
         return InteractionResultHolder.pass(player.getItemInHand(interactionHand));
     }

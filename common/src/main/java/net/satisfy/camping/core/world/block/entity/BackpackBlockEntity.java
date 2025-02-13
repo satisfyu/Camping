@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.camping.client.screen.BackpackScreenHandler;
 import net.satisfy.camping.core.inventory.BackpackContainer;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
-import org.jetbrains.annotations.NotNull;
 
 public class BackpackBlockEntity extends BaseContainerBlockEntity {
     public static final int CONTAINER_SIZE = 24;
@@ -36,12 +35,12 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    public @NotNull ItemStack getItem(int i) {
+    public ItemStack getItem(int i) {
         return this.getItems().get(i);
     }
 
     @Override
-    public @NotNull ItemStack removeItem(int i, int j) {
+    public ItemStack removeItem(int i, int j) {
         ItemStack itemStack = ContainerHelper.removeItem(this.getItems(), i, j);
         if (!itemStack.isEmpty()) {
             this.setChanged();
@@ -51,7 +50,7 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    public @NotNull ItemStack removeItemNoUpdate(int i) {
+    public ItemStack removeItemNoUpdate(int i) {
         return ContainerHelper.takeItem(this.getItems(), i);
     }
 
@@ -80,7 +79,7 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    protected @NotNull Component getDefaultName() {
+    protected Component getDefaultName() {
         return Component.translatable("container.camping.backpack");
     }
 
@@ -106,7 +105,7 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    protected @NotNull AbstractContainerMenu createMenu(int i, Inventory inventory) {
+    protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
         return new BackpackScreenHandler(i, inventory, new BackpackContainer(this.itemStacks), this.worldPosition);
     }
 

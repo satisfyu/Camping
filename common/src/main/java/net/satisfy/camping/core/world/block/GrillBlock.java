@@ -37,8 +37,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.world.block.entity.GrillBlockEntity;
 import net.satisfy.camping.core.util.CampingUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +56,7 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, true).setValue(WATERLOGGED, false).setValue(FACING, Direction.NORTH));
     }
 
-    public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if (blockEntity instanceof GrillBlockEntity grillBlockEntity) {
             ItemStack itemStack = player.getItemInHand(interactionHand);
@@ -91,7 +89,7 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
         super.stepOn(world, pos, state, entity);
     }
 
-    @Nullable
+
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         LevelAccessor level = context.getLevel();
         BlockPos pos = context.getClickedPos();
@@ -102,7 +100,7 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
                 .setValue(FACING, context.getHorizontalDirection());
     }
 
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -129,7 +127,7 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
     });
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE.get(state.getValue(FACING));
     }
 
@@ -138,17 +136,15 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
     }
 
     @Override
-    public @NotNull RenderShape getRenderShape(BlockState state) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
-    @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new GrillBlockEntity(pos, state);
     }
 
-    @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return createTickerHelper(type, CampingBlockEntities.GRILL, level.isClientSide ? GrillBlockEntity::particleTick : GrillBlockEntity::cookTick);
     }

@@ -5,10 +5,10 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.satisfy.camping.core.util.CampingIdentifier;
+import net.satisfy.camping.Camping;
 
 public class BackpackScreen extends AbstractContainerScreen<BackpackScreenHandler> {
-    private static final ResourceLocation CONTAINER_LOCATION = new CampingIdentifier("textures/gui/backpack.png");
+    private static final ResourceLocation CONTAINER_LOCATION = Camping.identifier("textures/gui/backpack.png");
 
     public BackpackScreen(BackpackScreenHandler screenHandler, Inventory inventory, Component component) {
         super(screenHandler, inventory, component);

@@ -33,9 +33,6 @@ import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.world.block.entity.EnderpackBlockEntity;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.util.CampingUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -62,12 +59,12 @@ public class EnderpackBlock extends BaseEntityBlock {
   }
 
   @Override
-  public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+  public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
     return new ItemStack(CampingItems.ENDERPACK);
   }
 
   @Override
-  public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+  public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
     if (player.isCrouching()) {
       level.destroyBlock(pos, false);
       level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(CampingItems.ENDERPACK)));
@@ -121,7 +118,7 @@ public class EnderpackBlock extends BaseEntityBlock {
   }
 
   @Override
-  public @NotNull VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+  public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
     return SHAPES.get(backpackType).get(state.getValue(FACING));
   }
 
@@ -130,17 +127,15 @@ public class EnderpackBlock extends BaseEntityBlock {
   }
 
   @Override
-  public @NotNull RenderShape getRenderShape(BlockState state) {
+  public RenderShape getRenderShape(BlockState state) {
     return RenderShape.MODEL;
   }
 
-  @Nullable
   @Override
   public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
     return new EnderpackBlockEntity(pos, state);
   }
 
-  @Nullable
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
     return createTickerHelper(type, CampingBlockEntities.ENDERPACK,

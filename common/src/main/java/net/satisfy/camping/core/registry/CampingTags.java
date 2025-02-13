@@ -4,7 +4,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.satisfy.camping.Camping;
-import net.satisfy.camping.core.util.CampingIdentifier;
 
 public class CampingTags {
     public static final TagKey<Item> BACKPACK_BLACKLIST = TagKey.create(Registries.ITEM, Camping.identifier("backpack_blacklist"));
