@@ -18,6 +18,8 @@ import net.satisfy.camping.client.keymap.OpenKeyForge;
 import net.satisfy.camping.client.model.*;
 import net.satisfy.camping.client.renderer.GrillRenderer;
 import net.satisfy.camping.client.renderer.player.layers.*;
+import net.satisfy.camping.core.network.CampingMessagesForge;
+import net.satisfy.camping.core.network.packet.ForgeOpenEnderPackC2SPacket;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.integration.CuriosBackpackRenderer;
@@ -134,8 +136,7 @@ public class CampingClientForge {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if (OpenKeyForge.OPEN_KEY.consumeClick()) {
-                // todo networking forge
-                // ModMessagesForge.sendToServer(new ForgeOpenEnderPackC2SPacket());
+                CampingMessagesForge.sendToServer(new ForgeOpenEnderPackC2SPacket());
             }
         }
     }

@@ -24,6 +24,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.satisfy.camping.core.network.CampingMessagesForge;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.registry.RegistryForge;
 import net.satisfy.camping.core.world.block.SleepingBagBlock;
@@ -57,7 +58,8 @@ public class CampingForge {
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BACK.getMessageBuilder().build());
     }
 
-    private void setup(final FMLCommonSetupEvent evt) {
+    private void setup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(CampingMessagesForge::register);
         CuriosApi.registerCurio(CampingItems.SMALL_BACKPACK, new CuriosBackpack());
     }
 
