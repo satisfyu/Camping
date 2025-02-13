@@ -1,10 +1,13 @@
 package net.satisfy.camping.platform;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.satisfy.camping.core.world.item.BackpackItem;
 import net.satisfy.camping.platform.services.IPlatformHelper;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -35,5 +38,14 @@ public class ForgePlatformHelper implements IPlatformHelper {
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func, Block... blocks) {
 
         return BlockEntityType.Builder.of(func::apply, blocks).build(null);
+    }
+
+    public ItemStack getEquippedBackpack(Player player) {
+        for (ItemStack itemStack : player.getInventory().items) {
+            if (itemStack.getItem() instanceof BackpackItem) {
+                return itemStack;
+            }
+        }
+        return ItemStack.EMPTY;
     }
 }

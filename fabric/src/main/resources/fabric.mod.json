@@ -17,6 +17,9 @@
     "entrypoints": {
         "main": [
             "net.satisfy.camping.CampingFabric"
+        ],
+        "client": [
+            "net.satisfy.camping.client.CampingClientFabric"
         ]
     },
     "mixins": [
