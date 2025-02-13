@@ -1,17 +1,26 @@
 package net.satisfy.camping.client;
 
+import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import net.satisfy.camping.client.model.*;
+import net.satisfy.camping.client.renderer.BackpackTrinketRenderer;
+import net.satisfy.camping.client.renderer.EnderpackTrinketRenderer;
 import net.satisfy.camping.client.renderer.GrillRenderer;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.registry.CampingBlocks;
+import net.satisfy.camping.core.registry.CampingItems;
+import net.satisfy.camping.core.util.CampingUtil;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 public class CampingClientFabric implements ClientModInitializer {
@@ -40,5 +49,18 @@ public class CampingClientFabric implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(SheepbagModel.LAYER_LOCATION, SheepbagModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(EnderpackModel.LAYER_LOCATION, EnderpackModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(EnderbagModel.LAYER_LOCATION, EnderbagModel::createBodyLayer);
+
+        TrinketRendererRegistry.registerRenderer(CampingItems.SMALL_BACKPACK, new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(CampingItems.LARGE_BACKPACK, new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(CampingItems.WANDERER_BACKPACK, new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(CampingItems.WANDERER_BAG, new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(CampingItems.SHEEPBAG, new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(CampingItems.GOODYBAG, new BackpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(CampingItems.ENDERPACK, new EnderpackTrinketRenderer());
+        TrinketRendererRegistry.registerRenderer(CampingItems.ENDERBAG, new EnderpackTrinketRenderer());
+    }
+
+    private void onItemTooltip(ItemStack itemStack, TooltipFlag context, List<Component> tooltip) {
+        CampingUtil.Grilling.addGrilledTooltip(itemStack, tooltip);
     }
 }
