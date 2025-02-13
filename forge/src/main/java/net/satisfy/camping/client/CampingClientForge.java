@@ -4,15 +4,17 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.Constants;
+import net.satisfy.camping.client.keymap.OpenKeyForge;
 import net.satisfy.camping.client.model.*;
 import net.satisfy.camping.client.renderer.GrillRenderer;
 import net.satisfy.camping.client.renderer.player.layers.*;
@@ -119,6 +121,22 @@ public class CampingClientForge {
         void addLayerToPlayerSkin(EntityRenderersEvent.AddLayers event, String skinName, Function<LivingEntityRenderer<E, M>, ? extends RenderLayer<E, M>> factory) {
             LivingEntityRenderer renderer = event.getSkin(skinName);
             if (renderer != null) renderer.addLayer(factory.apply(renderer));
+        }
+
+        @SubscribeEvent
+        public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+            event.register(OpenKeyForge.OPEN_KEY);
+        }
+    }
+
+    @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    public static class ForgeBusEvents {
+        @SubscribeEvent
+        public static void onKeyInput(InputEvent.Key event) {
+            if (OpenKeyForge.OPEN_KEY.consumeClick()) {
+                // todo networking forge
+                // ModMessagesForge.sendToServer(new ForgeOpenEnderPackC2SPacket());
+            }
         }
     }
 }

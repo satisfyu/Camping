@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "camping:small_backpack",
+    "camping:large_backpack",
+    "camping:wanderer_backpack",
+    "camping:wanderer_bag",
+    "camping:sheepbag",
+    "camping:goodybag",
+    "camping:enderpack",
+    "camping:enderbag"
+  ]
+}

@@ -6,11 +6,11 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
+import net.satisfy.camping.client.keymap.OpenKeyFabric;
 import net.satisfy.camping.client.model.*;
 import net.satisfy.camping.client.renderer.BackpackTrinketRenderer;
 import net.satisfy.camping.client.renderer.EnderpackTrinketRenderer;
@@ -28,6 +28,7 @@ public class CampingClientFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CampingClient.init();
+        OpenKeyFabric.register();
         adjustBlockRenderLayers();
         registerEntityModelLayers();
         BlockEntityRenderers.register(CampingBlockEntities.GRILL, GrillRenderer::new);
