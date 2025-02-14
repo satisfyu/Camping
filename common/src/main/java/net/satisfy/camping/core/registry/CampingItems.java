@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
 public class CampingItems {
 
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
-    public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties());
+    public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
 
     public static final Item SMALL_BACKPACK = new BackpackItem(CampingBlocks.SMALL_BACKPACK, Camping.identifier("textures/model/small_backpack.png"));
     public static final Item LARGE_BACKPACK = new BackpackItem(CampingBlocks.LARGE_BACKPACK, Camping.identifier("textures/model/large_backpack.png"));
