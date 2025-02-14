@@ -1,0 +1,53 @@
+{
+	"credit": "Made by jason13 with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "camping:item/walking_stick",
+		"particle": "camping:item/walking_stick"
+	},
+	"elements": [
+		{
+			"from": [7, 0, 7],
+			"to": [9, 30, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 7]},
+			"faces": {
+				"north": {"uv": [1, 1, 2, 16], "texture": "#0"},
+				"east": {"uv": [0, 1, 1, 16], "texture": "#0"},
+				"south": {"uv": [3, 1, 4, 16], "texture": "#0"},
+				"west": {"uv": [2, 1, 3, 16], "texture": "#0"},
+				"up": {"uv": [2, 1, 1, 0], "texture": "#0"},
+				"down": {"uv": [3, 0, 2, 1], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [69, 0, 0],
+			"translation": [0, -3.25, -4.25]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [69, 0, 0],
+			"translation": [0, -3.25, -4.25]
+		},
+		"firstperson_righthand": {
+			"translation": [0, -9, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, -9, 0]
+		},
+		"ground": {
+			"rotation": [22.5, 0, -22.5],
+			"translation": [0, 1, 0],
+			"scale": [0.5, 0.25, 0.5]
+		},
+		"gui": {
+			"rotation": [0, 35, -12.5],
+			"translation": [0, -3.25, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"fixed": {
+			"translation": [0, -3.5, 0],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

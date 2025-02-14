@@ -10,10 +10,8 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.core.block.entity.BackpackBlockEntity;
-import net.satisfy.camping.core.platform.PlatformHelper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.satisfy.camping.core.world.block.entity.BackpackBlockEntity;
+import net.satisfy.camping.platform.Services;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -22,16 +20,16 @@ import java.util.function.Predicate;
 public class BackpackContainer implements Container, StackedContentsCompatible {
     private NonNullList<ItemStack> stacks = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
 
-    @Nullable
+    
     private List<ContainerListener> listeners;
 
-    private @Nullable Player player;
+    private  Player player;
 
     public BackpackContainer(NonNullList<ItemStack> itemStacks) {
         this.stacks = itemStacks;
     }
 
-    public BackpackContainer(NonNullList<ItemStack> itemStacks, @Nullable Player player) {
+    public BackpackContainer(NonNullList<ItemStack> itemStacks,  Player player) {
         this(itemStacks);
         this.player = player;
     }
@@ -47,17 +45,17 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
     }
 
     @Override
-    public @NotNull ItemStack getItem(int i) {
+    public ItemStack getItem(int i) {
         return stacks.get(i);
     }
 
     @Override
-    public @NotNull ItemStack removeItem(int i, int j) {
+    public ItemStack removeItem(int i, int j) {
         return ContainerHelper.removeItem(stacks, i, j);
     }
 
     @Override
-    public @NotNull ItemStack removeItemNoUpdate(int i) {
+    public ItemStack removeItemNoUpdate(int i) {
         return ContainerHelper.takeItem(this.stacks, i);
     }
 
@@ -96,13 +94,13 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
 
         NonNullList<ItemStack> itemStacks = NonNullList.withSize(24, ItemStack.EMPTY);
 
-        CompoundTag blockEntityTag = BlockItem.getBlockEntityData(PlatformHelper.getEquippedBackpack(this.player));
+        CompoundTag blockEntityTag = BlockItem.getBlockEntityData(Services.PLATFORM.getEquippedBackpack(this.player));
 
         if (blockEntityTag == null) {
 
             CompoundTag compoundTag = new CompoundTag();
             ContainerHelper.saveAllItems(compoundTag, NonNullList.withSize(24, ItemStack.EMPTY));
-            ItemStack itemStack1 = PlatformHelper.getEquippedBackpack(this.player);
+            ItemStack itemStack1 = Services.PLATFORM.getEquippedBackpack(this.player);
             itemStack1.addTagElement("BlockEntityTag", compoundTag);
             blockEntityTag = BlockItem.getBlockEntityData(itemStack1);
         }
@@ -119,7 +117,7 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
 
             ContainerHelper.saveAllItems(compoundTag, this.stacks);
 
-            PlatformHelper.getEquippedBackpack(this.player).addTagElement("BlockEntityTag", compoundTag);
+            Services.PLATFORM.getEquippedBackpack(this.player).addTagElement("BlockEntityTag", compoundTag);
         }
 
     }

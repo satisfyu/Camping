@@ -1,15 +1,19 @@
 {
-  "required": true,
-  "package": "net.satisfy.camping.fabric.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "minVersion": "0.8",
-  "client": [
-  ],
-  "mixins": [
-    "FoodDataMixin",
-    "ItemMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
+    "required": true,
+    "minVersion": "0.8",
+    "package": "net.satisfy.camping.mixin",
+    "refmap": "${mod_id}.refmap.json",
+    "compatibilityLevel": "JAVA_17",
+    "mixins": [
+        "FoodDataMixin",
+        "ItemMixin"
+    ],
+    "client": [
+    ],
+    "server": [
+    ],
+    "injectors": {
+      "defaultRequire": 1
+    }
   }
-}
+  

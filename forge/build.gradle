@@ -1,92 +1,63 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
-}
-
-architectury {
-    platformSetupLoomIde()
-    forge()
-}
-
-def jarFileName = 'letsdo-camping-forge'
-
-archivesBaseName = jarFileName
-
-
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-
-        mixinConfig "camping-common.mixins.json"
-        mixinConfig "camping.mixins.json"
-    }
-}
-
-configurations {
-    common
-    shadowCommon
-    compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev.legacyforge'
 }
 
 repositories {
-    mavenCentral()
-    maven { url 'https://maven.minecraftforge.net' }
-    maven { url 'https://maven.architectury.dev' }
-    maven { url 'https://maven.blamejared.com' }
-    maven { url 'https://curios-api.github.io/curios-api/' }
+    maven { url 'https://maven.theillusivec4.top/' }
 }
 
-dependencies {
-    forge "net.minecraftforge:forge:${rootProject.forge_version}"
-    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
-    modImplementation("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}")
+mixin {
+    add(sourceSets.main, "${mod_id}.refmap.json")
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+    config("${mod_id}.mixins.json")
+    config("${mod_id}.forge.mixins.json")
 }
 
-processResources {
-    inputs.property "version", project.version
+legacyForge {
+    version = "${minecraft_version}-${forge_version}"
 
-    filesMatching("META-INF/mods.toml") {
-        expand "version": project.version
+    // validateAccessTransformers = true
+    validateAccessTransformers = false
+
+    def at1 = project(":common").file('src/main/resources/META-INF/accesstransformer.cfg')
+    def at2 = file('src/main/resources/META-INF/forge/accesstransformer.cfg')
+    if (at1.exists()) {
+        accessTransformers.from at1.absolutePath
     }
-}
-
-shadowJar {
-    exclude "fabric.mod.json"
-    exclude "architectury.common.json"
-
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
-}
-
-remapJar {
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
-}
-
-sourcesJar {
-    def commonSources = project(":common").sourcesJar
-    dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) }
-}
-
-components.java {
-    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-        skip()
+    if (at2.exists()) {
+        accessTransformers.from at2.absolutePath
     }
-}
-
-publishing {
-    publications {
-        mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
+    runs {
+        client {
+            client()
+        }
+        data {
+            data()
+        }
+        server {
+            server()
         }
     }
+
+    mods {
+        testproject {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
+dependencies {
+    compileOnly project(":common")
+    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+    modImplementation("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}")
+}
+
+jar {
+    finalizedBy('reobfJar')
+    manifest.attributes([
+            "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+    ])
 }

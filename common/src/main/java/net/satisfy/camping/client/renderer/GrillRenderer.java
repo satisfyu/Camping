@@ -10,8 +10,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.core.block.GrillBlock;
-import net.satisfy.camping.core.block.entity.GrillBlockEntity;
+import net.satisfy.camping.core.world.block.GrillBlock;
+import net.satisfy.camping.core.world.block.entity.GrillBlockEntity;
 
 public class GrillRenderer implements BlockEntityRenderer<GrillBlockEntity> {
     private static final float SIZE = 0.3F;

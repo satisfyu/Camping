@@ -1,38 +1,43 @@
 {
-  "schemaVersion": 1,
-  "id": "camping",
-  "version": "${version}",
-  "name": "[Let's Do] Camping",
-  "description": "Let's sleep outside today! Grab your backpack, pack your tent, the grill, and the sleeping bag, and let's go!",
-  "authors": [
-    "satisfy, jason13"
-  ],
-  "contact": {
-    "homepage": "https://modrinth.com/mod/lets-do-camping",
-    "sources": "https://github.com/satisfyu/Camping"
-  },
-  "license": "Custom",
-  "icon": "assets/camping/pack.png",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "net.satisfy.camping.fabric.CampingFabric"
+    "schemaVersion": 1,
+    "id": "camping",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
     ],
-    "client": [
-      "net.satisfy.camping.fabric.client.CampingClientFabric"
+    "contact": {
+        "homepage": "https://modrinth.com/mod/lets-do-camping",
+        "sources": "https://github.com/satisfyu/Camping"
+    },
+    "license": "${license}",
+    "icon": "assets/modid/${mod_id}.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "net.satisfy.camping.CampingFabric"
+        ],
+        "client": [
+            "net.satisfy.camping.client.CampingClientFabric"
+        ],
+        "modmenu": [
+            "net.satisfy.camping.core.config.ModMenu"
+        ]
+    },
+    "mixins": [
+        "${mod_id}.mixins.json",
+        "${mod_id}.fabric.mixins.json"
     ],
-    "modmenu": [
-      "net.satisfy.camping.fabric.config.ModMenu"
-    ]
-  },
-  "mixins": [
-    "camping.fabric.mixins.json",
-    "camping-common.mixins.json"
-  ],
-  "depends": {
-    "fabric": "*",
-    "minecraft": ">=1.20.1",
-    "architectury": ">=9.1.12",
-    "trinkets": ">=3.7.1"
-  }
+    "depends": {
+        "fabricloader": ">=0.14",
+        "fabric": "*",
+        "minecraft": "${minecraft_version}",
+        "java": ">=17",
+        "trinkets": ">=3.7.1"
+    },
+    "suggests": {
+        "another-mod": "*"
+    }
 }
+  

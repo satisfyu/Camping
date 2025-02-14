@@ -1,0 +1,25 @@
+{
+  "type": "camping:backpack_upgrade",
+  "key": {
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "S": {
+      "tag": "camping:sleeping_bags"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "W": {
+      "item": "camping:small_backpack"
+    }
+  },
+  "pattern": [
+    "LSL",
+    "LIL",
+    "LWL"
+  ],
+  "result": {
+    "item": "camping:large_backpack"
+  }
+}

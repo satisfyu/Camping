@@ -7,12 +7,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.core.block.BackpackBlock;
-import net.satisfy.camping.core.block.entity.BackpackBlockEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.satisfy.camping.core.registry.CampingScreenHandlers;
+import net.satisfy.camping.core.registry.CampingTags;
+import net.satisfy.camping.core.world.block.BackpackBlock;
+import net.satisfy.camping.core.world.block.entity.BackpackBlockEntity;
 import net.satisfy.camping.core.inventory.BackpackContainer;
-import net.satisfy.camping.core.registry.ScreenhandlerTypeRegistry;
-import net.satisfy.camping.core.registry.TagRegistry;
-import org.jetbrains.annotations.NotNull;
 
 public class BackpackScreenHandler extends AbstractContainerMenu {
     private final BackpackContainer container;
@@ -20,7 +22,7 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     private final BlockPos blockPos;
 
     public BackpackScreenHandler(int syncId, Inventory playerInventory, BackpackContainer container, BlockPos blockPos) {
-        super(ScreenhandlerTypeRegistry.BACKPACK_SCREENHANDLER.get(), syncId);
+        super(CampingScreenHandlers.BACKPACK, syncId);
         checkContainerSize(container, BackpackBlockEntity.CONTAINER_SIZE);
         this.container = container;
         this.player = playerInventory.player;
@@ -32,7 +34,7 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
                 this.addSlot(new Slot(container, k + j * 8, 17 + k * 18, 12 + j * 18) {
                     @Override
                     public boolean mayPlace(ItemStack stack) {
-                        return !stack.is(TagRegistry.BACKPACK_BLACKLIST);
+                        return !stack.is(CampingTags.BACKPACK_BLACKLIST);
                     }
                 });
             }
@@ -56,7 +58,7 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     }
 
     @Override
-    public @NotNull ItemStack quickMoveStack(Player player, int i) {
+    public ItemStack quickMoveStack(Player player, int i) {
         if (i >= 0 && i < this.slots.size()) {
             ItemStack itemStack = ItemStack.EMPTY;
             Slot slot = this.slots.get(i);
@@ -111,6 +113,11 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return this.container.stillValid(player) && player.level().getBlockState(this.blockPos).getBlock() instanceof BackpackBlock;
+        BlockState checkedState = player.level().getBlockState(this.blockPos);
+        Block checkedBlock = checkedState.getBlock();
+
+        boolean validBlock = checkedBlock instanceof BackpackBlock && (player.level().getBlockEntity(this.blockPos) != null && !player.level().getBlockEntity(this.blockPos).isRemoved());
+
+        return this.container.stillValid(player) && (validBlock || (checkedBlock == Blocks.AIR && player.distanceToSqr(blockPos.getX(), blockPos.getY(), blockPos.getZ()) < 2.0D));
     }
 }

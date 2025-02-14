@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "entries": [
+    "camping:end_city_treasure_modifier",
+    "camping:spawn_bonus_chest_modifier",
+    "camping:stronghold_corridor_modifier",
+    "camping:stronghold_crossing_modifier",
+    "camping:stronghold_library_modifier"
+  ]
+}

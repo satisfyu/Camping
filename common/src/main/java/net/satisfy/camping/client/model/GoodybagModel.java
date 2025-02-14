@@ -9,10 +9,10 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.satisfy.camping.core.util.CampingIdentifier;
+import net.satisfy.camping.Camping;
 
 public class GoodybagModel<T extends Entity> extends EntityModel<T> implements BackpackModel {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new CampingIdentifier("goodybag"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Camping.identifier("goodybag"), "main");
     private final ModelPart goodybag;
 
     public GoodybagModel(ModelPart root) {

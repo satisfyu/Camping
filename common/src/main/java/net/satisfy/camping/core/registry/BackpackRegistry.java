@@ -16,21 +16,21 @@ public class BackpackRegistry {
     public static Model getBodyModel(Item item, ModelPart baseBody) {
         EntityModelSet modelSet = Minecraft.getInstance().getEntityModels();
         BackpackModel model = models.computeIfAbsent(item, key -> {
-            if (key == ObjectRegistry.SMALL_BACKPACK_ITEM.get()) {
+            if (key == CampingItems.SMALL_BACKPACK) {
                 return new SmallBackpackModel<>(modelSet.bakeLayer(SmallBackpackModel.LAYER_LOCATION));
-            } else if (key == ObjectRegistry.LARGE_BACKPACK_ITEM.get()) {
+            } else if (key == CampingItems.LARGE_BACKPACK) {
                 return new LargeBackpackModel<>(modelSet.bakeLayer(LargeBackpackModel.LAYER_LOCATION));
-            } else if (key == ObjectRegistry.WANDERER_BACKPACK_ITEM.get()) {
+            } else if (key == CampingItems.WANDERER_BACKPACK) {
                 return new WandererBackpackModel<>(modelSet.bakeLayer(WandererBackpackModel.LAYER_LOCATION));
-            } else if (key == ObjectRegistry.WANDERER_BAG_ITEM.get()) {
+            } else if (key == CampingItems.WANDERER_BAG) {
                 return new WandererBagModel<>(modelSet.bakeLayer(WandererBagModel.LAYER_LOCATION));
-            } else if (key == ObjectRegistry.GOODYBAG_ITEM.get()) {
+            } else if (key == CampingItems.GOODYBAG) {
                 return new GoodybagModel<>(modelSet.bakeLayer(GoodybagModel.LAYER_LOCATION));
-            } else if (key == ObjectRegistry.SHEEPBAG_ITEM.get()) {
+            } else if (key == CampingItems.SHEEPBAG) {
                 return new SheepbagModel<>(modelSet.bakeLayer(SheepbagModel.LAYER_LOCATION));
-            } else if (key == ObjectRegistry.ENDERPACK_ITEM.get()) {
+            } else if (key == CampingItems.ENDERPACK) {
                 return new EnderpackModel<>(modelSet.bakeLayer(EnderpackModel.LAYER_LOCATION));
-            } else if (key == ObjectRegistry.ENDERBAG_ITEM.get()) {
+            } else if (key == CampingItems.ENDERBAG) {
                 return new EnderbagModel<>(modelSet.bakeLayer(EnderbagModel.LAYER_LOCATION));
             } else {
                 return null;
