@@ -20,6 +20,7 @@ public class RegistryForge {
         bind(Registries.CREATIVE_MODE_TAB, CampingTab::register);
 
         CampingLootModifiersForge.register(modEventBus);
+        CampingRecipesForge.register(modEventBus);
     }
 
     private static <T> void bind(ResourceKey<Registry<T>> registry, Consumer<BiConsumer<T, ResourceLocation>> source) {

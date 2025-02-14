@@ -24,6 +24,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.satisfy.camping.core.crafting.CapabilityBackpackWrapper;
 import net.satisfy.camping.core.network.CampingMessagesForge;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.registry.RegistryForge;
@@ -51,6 +52,7 @@ public class CampingForge {
         RegistryForge.register(CampingForge.EVENT_BUS);
         CampingForge.EVENT_BUS.addListener(this::setup);
         CampingForge.EVENT_BUS.addListener(this::enqueueIMC);
+        CampingForge.EVENT_BUS.addListener(CapabilityBackpackWrapper::onRegister);
     }
 
     @SuppressWarnings("all")

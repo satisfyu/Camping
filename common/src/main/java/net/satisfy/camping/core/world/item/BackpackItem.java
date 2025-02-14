@@ -47,4 +47,12 @@ public class BackpackItem extends BlockItem implements Equipable {
 
         return InteractionResultHolder.pass(player.getItemInHand(interactionHand));
     }
+
+    public int getNumberOfSlots() {
+        return 9 * 3;
+    }
+
+    public int getNumberOfUpgradeSlots() {
+        return 0;
+    }
 }

@@ -1,0 +1,19 @@
+{
+  "type": "camping:backpack_upgrade",
+  "key": {
+    "B": {
+      "item": "camping:small_backpack"
+    },
+    "C": {
+      "tag": "forge:ingots/copper"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "CBC",
+    "CCC"
+  ],
+  "result": {
+    "item": "camping:large_backpack"
+  }
+}

@@ -17,11 +17,16 @@ mixin {
 legacyForge {
     version = "${minecraft_version}-${forge_version}"
 
-    validateAccessTransformers = true
+    // validateAccessTransformers = true
+    validateAccessTransformers = false
 
-    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
-    if (at.exists()) {
-        accessTransformers = [at.absolutePath]
+    def at1 = project(":common").file('src/main/resources/META-INF/accesstransformer.cfg')
+    def at2 = file('src/main/resources/META-INF/forge/accesstransformer.cfg')
+    if (at1.exists()) {
+        accessTransformers.from at1.absolutePath
+    }
+    if (at2.exists()) {
+        accessTransformers.from at2.absolutePath
     }
     runs {
         client {

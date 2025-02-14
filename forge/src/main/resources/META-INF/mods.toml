@@ -34,3 +34,6 @@ mandatory = true
 versionRange = "[5.10.0,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[accessTransformers]]
+file="META-INF/forge/accesstransformer2.cfg"
