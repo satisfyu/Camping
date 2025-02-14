@@ -8,6 +8,7 @@ import net.satisfy.camping.Camping;
 import net.satisfy.camping.core.world.item.BackpackItem;
 import net.satisfy.camping.core.world.item.EnderpackItem;
 import net.satisfy.camping.core.world.item.MultitoolItem;
+import net.satisfy.camping.core.world.item.WalkingStick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.function.BiConsumer;
 public class CampingItems {
 
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
+    public static final Item WALKING_STICK = new WalkingStick(new Item.Properties());
+
     public static final Item SMALL_BACKPACK = new BackpackItem(CampingBlocks.SMALL_BACKPACK, Camping.identifier("textures/model/small_backpack.png"));
     public static final Item LARGE_BACKPACK = new BackpackItem(CampingBlocks.LARGE_BACKPACK, Camping.identifier("textures/model/large_backpack.png"));
     public static final Item WANDERER_BACKPACK = new BackpackItem(CampingBlocks.WANDERER_BACKPACK, Camping.identifier("textures/model/wanderer_backpack.png"));
@@ -32,6 +35,7 @@ public class CampingItems {
     public static void register(BiConsumer<Item, ResourceLocation> consumer) {
 
         consumer.accept(MULTITOOL, Camping.identifier("multitool"));
+        consumer.accept(WALKING_STICK, Camping.identifier("walking_stick"));
         consumer.accept(SMALL_BACKPACK, Camping.identifier("small_backpack"));
         consumer.accept(LARGE_BACKPACK, Camping.identifier("large_backpack"));
         consumer.accept(WANDERER_BACKPACK, Camping.identifier("wanderer_backpack"));
@@ -52,6 +56,7 @@ public class CampingItems {
         CREATIVE_TAB_ITEMS.add(ENDERPACK);
         CREATIVE_TAB_ITEMS.add(ENDERBAG);
         CREATIVE_TAB_ITEMS.add(MULTITOOL);
+        CREATIVE_TAB_ITEMS.add(WALKING_STICK);
         CREATIVE_TAB_ITEMS.add(CampingBlocks.GRILL);
 
         CampingBlocks.SLEEPING_BAGS.forEach((blockName, sleepingBagBlock) -> {
