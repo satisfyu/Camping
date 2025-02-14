@@ -8,9 +8,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class WalkingStick extends Item {
+public class WalkingStickItem extends Item {
 
-    public WalkingStick(Properties properties) {
+    public WalkingStickItem(Properties properties) {
         super(properties);
     }
 
@@ -21,7 +21,8 @@ public class WalkingStick extends Item {
 
         if (player.hasEffect(MobEffects.MOVEMENT_SPEED) && player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() >= 0) return;
 
-        // duration in ticks (5 seconds), amplifier (0, base level)
-        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 5 * 20, 0));
+        // duration in ticks (0.5 seconds), amplifier (0, base level)
+        // tickDuration, amplifier, ambient, showParticles, showIcon
+        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10, 0, false, false, false));
     }
 }
