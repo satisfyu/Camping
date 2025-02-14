@@ -9,7 +9,6 @@
         "ItemMixin"
     ],
     "client": [
-      "MixinTitleScreen"
     ],
     "server": [
     ],
