@@ -6,7 +6,6 @@ public class Camping {
 
     // todo checklist
     /*
-    * 1. Walking Stick - faster walking
     * 2. Coffee Pot & Cofee Pot Stand
     * 3. New Campfire models
     * 4. Marshmallow on a stick
@@ -19,6 +18,8 @@ public class Camping {
     * 11. park bench/table set
     * 12. mosquito rare chance during the daytime, small swarms
     */
+
+    // 1. DONE Walking Stick - faster walking
 
     public static void init() {}
 
