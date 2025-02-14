@@ -8,6 +8,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.satisfy.camping.core.registry.CampingRecipesFabric;
 import net.satisfy.camping.core.world.item.BackpackItem;
+import net.satisfy.camping.mixin.ShapedRecipeAccessor;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -18,7 +19,7 @@ public class BackpackUpgradeRecipe extends ShapedRecipe implements IWrapperRecip
     private final ShapedRecipe compose;
 
     public BackpackUpgradeRecipe(ShapedRecipe compose) {
-        super(compose.getId(), compose.getGroup(), compose.category(), compose.getWidth(), compose.getHeight(), compose.getIngredients(), compose.result);
+        super(compose.getId(), compose.getGroup(), compose.category(), compose.getWidth(), compose.getHeight(), compose.getIngredients(), ((ShapedRecipeAccessor) compose).getResult());
         this.compose = compose;
         REGISTERED_RECIPES.add(compose.getId());
     }
