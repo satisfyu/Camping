@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -34,6 +35,7 @@ import net.satisfy.camping.core.world.block.entity.EnderpackBlockEntity;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.util.CampingUtil;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -140,5 +142,10 @@ public class EnderpackBlock extends BaseEntityBlock {
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
     return createTickerHelper(type, CampingBlockEntities.ENDERPACK,
             (world, pos, state1, blockEntity) -> blockEntity.tick(world, pos, state1, blockEntity));
+  }
+
+  @Override
+  public List<ItemStack> getDrops(BlockState p_287732_, LootParams.Builder p_287596_) {
+    return this.backpackType == BackpackType.ENDERPACK ? List.of(new ItemStack(CampingItems.ENDERPACK)) : List.of(new ItemStack(CampingItems.ENDERBAG));
   }
 }
