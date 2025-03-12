@@ -2,19 +2,21 @@ package net.satisfy.camping.core.registry;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ItemLike;
 import net.satisfy.camping.Camping;
-import net.satisfy.camping.core.world.item.BackpackItem;
-import net.satisfy.camping.core.world.item.EnderpackItem;
-import net.satisfy.camping.core.world.item.MultitoolItem;
-import net.satisfy.camping.core.world.item.WalkingStickItem;
+import net.satisfy.camping.core.world.item.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
 public class CampingItems {
+
+    public static final Item MARSHMALLOW = new Item(new Item.Properties().food(CampingFoods.MARSHMALLOW));
+    public static final Item MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(false, new Item.Properties().food(CampingFoods.MARSHMALLOW).stacksTo(1));
+    public static final Item ROASTED_MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(true, new Item.Properties().food(CampingFoods.ROASTED_MARSHMALLOW).stacksTo(1));
 
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
     public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
@@ -33,6 +35,10 @@ public class CampingItems {
     public static final List<ItemLike> CREATIVE_TAB_ITEMS = new ArrayList<>();
 
     public static void register(BiConsumer<Item, ResourceLocation> consumer) {
+
+        consumer.accept(MARSHMALLOW, Camping.identifier("marshmallow"));
+        consumer.accept(MARSHMALLOW_ON_A_STICK, Camping.identifier("marshmallow_on_a_stick"));
+        consumer.accept(ROASTED_MARSHMALLOW_ON_A_STICK, Camping.identifier("roasted_marshmallow_on_a_stick"));
 
         consumer.accept(MULTITOOL, Camping.identifier("multitool"));
         consumer.accept(WALKING_STICK, Camping.identifier("walking_stick"));
