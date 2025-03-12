@@ -41,7 +41,7 @@ public class MarshmallowOnAStickItem extends Item {
         if (level.isClientSide()) level.playLocalSound(clickedPos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1, 1, false);
 
         if (!level.isClientSide() && context.getPlayer() != null) {
-            context.getPlayer().setItemInHand(context.getHand(), new ItemStack(this.roasted ? Items.COAL : CampingItems.ROASTED_MARSHMALLOW_ON_A_STICK));
+            context.getPlayer().setItemInHand(context.getHand(), new ItemStack(this.roasted ? Items.CHARCOAL : CampingItems.ROASTED_MARSHMALLOW_ON_A_STICK));
         }
 
         return InteractionResult.SUCCESS;
