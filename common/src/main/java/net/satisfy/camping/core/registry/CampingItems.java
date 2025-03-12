@@ -15,6 +15,7 @@ import java.util.function.BiConsumer;
 public class CampingItems {
 
     public static final Item MARSHMALLOW = new Item(new Item.Properties().food(CampingFoods.MARSHMALLOW));
+    public static final Item ROASTED_MARSHMALLOW = new Item(new Item.Properties().food(CampingFoods.ROASTED_MARSHMALLOW));
     public static final Item MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(false, new Item.Properties().food(CampingFoods.MARSHMALLOW).stacksTo(1));
     public static final Item ROASTED_MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(true, new Item.Properties().food(CampingFoods.ROASTED_MARSHMALLOW).stacksTo(1));
 

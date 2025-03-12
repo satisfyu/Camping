@@ -3,7 +3,9 @@ package net.satisfy.camping.core.world.item;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowlFoodItem;
@@ -45,5 +47,15 @@ public class MarshmallowOnAStickItem extends Item {
         }
 
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (!player.isCrouching()) return super.use(level, player, hand);
+
+        player.setItemInHand(hand, new ItemStack(this.roasted ? CampingItems.ROASTED_MARSHMALLOW : CampingItems.MARSHMALLOW));
+        player.addItem(new ItemStack(Items.STICK));
+
+        return InteractionResultHolder.success(player.getItemInHand(hand));
     }
 }
