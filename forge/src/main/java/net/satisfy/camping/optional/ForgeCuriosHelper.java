@@ -14,6 +14,7 @@ import net.satisfy.camping.client.renderer.entity.layers.BackpackRenderLayer;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.util.BackpackRegistry;
 import net.satisfy.camping.core.world.item.BackpackBlockItem;
+import net.satisfy.camping.core.world.item.EnderpackBlockItem;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
@@ -64,8 +65,8 @@ public class ForgeCuriosHelper {
         CuriosRendererRegistry.register(CampingItems.WANDERER_BAG, BackpackCuriosRenderer::new);
         CuriosRendererRegistry.register(CampingItems.SHEEPBAG, BackpackCuriosRenderer::new);
         CuriosRendererRegistry.register(CampingItems.GOODYBAG, BackpackCuriosRenderer::new);
-        CuriosRendererRegistry.register(CampingItems.ENDERPACK, BackpackCuriosRenderer::new);
-        CuriosRendererRegistry.register(CampingItems.ENDERBAG, BackpackCuriosRenderer::new);
+        CuriosRendererRegistry.register(CampingItems.ENDERPACK, EnderpackCuriosRenderer::new);
+        CuriosRendererRegistry.register(CampingItems.ENDERBAG, EnderpackCuriosRenderer::new);
     }
 
     public static class BackpackCuriosRenderer implements ICurioRenderer {
@@ -76,6 +77,27 @@ public class ForgeCuriosHelper {
             Model model = BackpackRegistry.getBodyModel(backpack, ((HumanoidModel<?>) renderLayerParent.getModel()).body);
             BackpackRenderLayer.performTranslations(poseStack, backpack.variant, slotContext.entity().isCrouching());
             model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(backpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        }
+    }
+
+    public static class EnderpackCuriosRenderer implements ICurioRenderer {
+
+        @Override
+        public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack itemStack, SlotContext slotContext, PoseStack poseStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource multiBufferSource, int i, float v, float v1, float v2, float v3, float v4, float v5) {
+            EnderpackBlockItem enderpack = (EnderpackBlockItem) itemStack.getItem();
+            Model model = BackpackRegistry.getBodyModel(enderpack, ((HumanoidModel<?>) renderLayerParent.getModel()).body);
+
+            final boolean isEnderBag = enderpack == CampingItems.ENDERBAG;
+            final boolean isEnderPack = enderpack == CampingItems.ENDERPACK;
+
+            poseStack.pushPose();
+
+            if (isEnderBag) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
+            if (isEnderPack) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
+
+            if (slotContext.entity().isCrouching()) poseStack.translate(0, -0.0625f - (0.0625f / 8f), (0.0625f) / 10.0f);
+            model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(enderpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            poseStack.popPose();
         }
     }
 }
