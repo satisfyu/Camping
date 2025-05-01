@@ -19,7 +19,6 @@ public class EnderbagModel<T extends Entity> extends EntityModel<T> implements B
         this.enderbag = root.getChild("enderbag");
     }
 
-    @SuppressWarnings("unused")
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
@@ -31,7 +30,6 @@ public class EnderbagModel<T extends Entity> extends EntityModel<T> implements B
 
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
-
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {

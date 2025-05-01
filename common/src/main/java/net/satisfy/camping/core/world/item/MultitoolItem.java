@@ -18,8 +18,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 
-
-
 import java.util.List;
 
 public class MultitoolItem extends Item {
@@ -75,7 +73,6 @@ public class MultitoolItem extends Item {
             );
         }
     }
-
 
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {

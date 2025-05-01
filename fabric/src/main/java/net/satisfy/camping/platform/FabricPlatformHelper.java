@@ -1,26 +1,19 @@
 package net.satisfy.camping.platform;
 
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketsApi;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.satisfy.camping.core.registry.CampingItems;
-import net.satisfy.camping.core.world.item.BackpackItem;
-import net.satisfy.camping.core.world.item.EnderpackItem;
+import net.satisfy.camping.core.world.item.BackpackBlockItem;
+import net.satisfy.camping.core.world.item.EnderpackBlockItem;
+import net.satisfy.camping.optional.trinkets.TrinketsHelper;
 import net.satisfy.camping.platform.services.IPlatformHelper;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class FabricPlatformHelper implements IPlatformHelper {
@@ -43,61 +36,29 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func, Block... blocks) {
+    public String getGameDirectory() {
 
-        return FabricBlockEntityTypeBuilder.create(func::apply, blocks).build();
+        return FabricLoader.getInstance().getGameDir().toString();
+    }
+
+    @Override
+    public boolean isClientSide() {
+        return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
+    }
+
+    @Override
+    public <T extends AbstractContainerMenu> MenuType<T> createMenuType(BiFunction<Integer, Inventory, T> o, FeatureFlagSet vanillaSet) {
+        return new MenuType<T>(o::apply, vanillaSet);
     }
 
     public ItemStack getEquippedBackpack(Player player) {
         ItemStack chestSlotItem = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chestSlotItem.getItem() instanceof BackpackItem || chestSlotItem.getItem() instanceof EnderpackItem) {
+
+        if (chestSlotItem.getItem() instanceof BackpackBlockItem || chestSlotItem.getItem() instanceof EnderpackBlockItem) {
             return chestSlotItem;
         }
-        Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
-        if (component.isPresent()) {
-            TrinketComponent trinketComponent = component.get();
-            List<Tuple<SlotReference, ItemStack>> equippedItems;
+        else if (isModLoaded("trinkets")) return TrinketsHelper.getBackpackFromTrinkets(player);
 
-            equippedItems = trinketComponent.getEquipped(CampingItems.SMALL_BACKPACK);
-            if (!equippedItems.isEmpty()) {
-                return equippedItems.get(0).getB();
-            }
-
-            equippedItems = trinketComponent.getEquipped(CampingItems.LARGE_BACKPACK);
-            if (!equippedItems.isEmpty()) {
-                return equippedItems.get(0).getB();
-            }
-
-            equippedItems = trinketComponent.getEquipped(CampingItems.WANDERER_BACKPACK);
-            if (!equippedItems.isEmpty()) {
-                return equippedItems.get(0).getB();
-            }
-
-            equippedItems = trinketComponent.getEquipped(CampingItems.WANDERER_BAG);
-            if (!equippedItems.isEmpty()) {
-                return equippedItems.get(0).getB();
-            }
-
-            equippedItems = trinketComponent.getEquipped(CampingItems.SHEEPBAG);
-            if (!equippedItems.isEmpty()) {
-                return equippedItems.get(0).getB();
-            }
-
-            equippedItems = trinketComponent.getEquipped(CampingItems.GOODYBAG);
-            if (!equippedItems.isEmpty()) {
-                return equippedItems.get(0).getB();
-            }
-
-            equippedItems = trinketComponent.getEquipped(CampingItems.ENDERPACK);
-            if (!equippedItems.isEmpty()) {
-                return equippedItems.get(0).getB();
-            }
-
-            equippedItems = trinketComponent.getEquipped(CampingItems.ENDERBAG);
-            if (!equippedItems.isEmpty()) {
-                return equippedItems.get(0).getB();
-            }
-        }
         return ItemStack.EMPTY;
     }
 }

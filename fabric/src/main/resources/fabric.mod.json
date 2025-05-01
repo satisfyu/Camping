@@ -1,9 +1,9 @@
 {
     "schemaVersion": 1,
-    "id": "camping",
+    "id": "${mod_id}",
     "version": "${version}",
     "name": "${mod_name}",
-    "description": "${description}",
+    "description": "${description}\n${credits}",
     "authors": [
         "${mod_author}"
     ],
@@ -12,17 +12,20 @@
         "sources": "https://github.com/satisfyu/Camping"
     },
     "license": "${license}",
-    "icon": "assets/modid/${mod_id}.png",
+    "icon": "${mod_id}.png",
     "environment": "*",
     "entrypoints": {
         "main": [
             "net.satisfy.camping.CampingFabric"
         ],
         "client": [
-            "net.satisfy.camping.client.CampingClientFabric"
+            "net.satisfy.camping.CampingClientFabric"
         ],
         "modmenu": [
             "net.satisfy.camping.core.config.ModMenu"
+        ],
+        "jei_mod_plugin": [
+            "net.satisfy.camping.optional.FabricJEICampingPlugin"
         ]
     },
     "mixins": [
@@ -34,10 +37,11 @@
         "fabric": "*",
         "minecraft": "${minecraft_version}",
         "java": ">=17",
-        "trinkets": ">=3.7.1"
+        "cloth-config": ">=11.1.136"
     },
     "suggests": {
-        "another-mod": "*"
+        "modmenu": ">=7.2.2",
+        "trinkets": ">=3.7.1"
     }
 }
   

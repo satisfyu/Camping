@@ -11,9 +11,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.satisfy.camping.client.screen.BackpackScreenHandler;
-import net.satisfy.camping.core.inventory.BackpackContainer;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
+import net.satisfy.camping.core.world.BackpackContainer;
+import net.satisfy.camping.core.world.inventory.BackpackScreenHandler;
 
 public class BackpackBlockEntity extends BaseContainerBlockEntity {
     public static final int CONTAINER_SIZE = 24;

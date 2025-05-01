@@ -1,12 +1,12 @@
 package net.satisfy.camping.platform.services;
 
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
+import net.satisfy.camping.core.world.inventory.BackpackScreenHandler;
 
 import java.util.function.BiFunction;
 
@@ -44,7 +44,14 @@ public interface IPlatformHelper {
         return isDevelopmentEnvironment() ? "development" : "production";
     }
 
-    <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func, Block... blocks);
+    String getGameDirectory();
+
+    boolean isClientSide();
 
     ItemStack getEquippedBackpack(Player player);
+
+    // learn from failures
+    // <T extends AbstractContainerMenu> BiFunction<Integer, Inventory, T> menu();
+
+    <T extends AbstractContainerMenu> MenuType<T> createMenuType(BiFunction<Integer, Inventory, T> o, FeatureFlagSet vanillaSet);
 }

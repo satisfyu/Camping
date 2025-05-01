@@ -1,4 +1,6 @@
 {
+  "itemGroup.camping": "[Let's Do] Camping!",
+
   "advancement.camping.get_a_bundle.desc": "Yes, you can craft it now!",
   "advancement.camping.get_a_bundle.title": "Big bags!",
   "advancement.camping.get_a_enderbag.desc": "Get a Enderbag.",
@@ -23,6 +25,7 @@
   "advancement.camping.use_beef_on_grill.title": "Flame Grilled",
   "advancement.camping.use_multitool_on_sheep.desc": "Use a Multitool on a Sheep.",
   "advancement.camping.use_multitool_on_sheep.title": "Mode I",
+
   "block.camping.enderbag": "§5Enderbag",
   "block.camping.enderpack": "§5Enderpack",
   "block.camping.goodybag": "§cGoodybag",
@@ -112,27 +115,31 @@
   "block.camping.tent_yellow": "Yellow Tent",
   "block.camping.wanderer_backpack": "§9Wanderer Backpack",
   "block.camping.wanderer_bag": "§9Wanderer Bag",
+
   "container.camping.backpack": "Backpack",
   "container.camping.ender_backpack": "Ender Backpack",
   "container.camping.enderpack": "Enderpack",
   "container.camping.large_backpack": "Hiking Backpack",
   "container.camping.small_backpack": "Small Backpack",
   "container.camping.wanderer_backpack": "Wanderer Backpack",
+
   "item.camping.multitool": "Multitool",
   "item.camping.walking_stick": "Walking Stick",
   "item.camping.marshmallow": "Marshmallow",
   "item.camping.roasted_marshmallow": "Roasted Marshmallow",
   "item.camping.marshmallow_on_a_stick": "Marshmallow on a Stick",
   "item.camping.roasted_marshmallow_on_a_stick": "Roasted Marshmallow on a Stick",
-  "itemGroup.camping.camping_tab": "[Let's Do] Camping",
+
   "key.camping.category": "[Let's Do] Camping",
   "key.camping.open": "Open Backpack",
+
   "text.autoconfig.camping.option.enableEffect": "Enable Regeneration while Sleeping",
   "text.autoconfig.camping.option.enableEffect.@PrefixText": "Sleeping Bag",
   "text.autoconfig.camping.option.enableGlint": "Enable Glint for grilled Items",
   "text.autoconfig.camping.option.enableGrilling": "Enable Grilling",
   "text.autoconfig.camping.option.enableGrilling.@PrefixText": "Grilling",
   "text.autoconfig.camping.title": "Camping Config (Experimental)",
+
   "tooltip.camping.grilled": "This item has been flame grilled:",
   "tooltip.camping.grilled.nutrition": "+25% Nutrition",
   "tooltip.camping.grilled.saturationModifier": "+25% Saturation",

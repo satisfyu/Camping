@@ -20,7 +20,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.camping.core.util.CampingUtil;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;

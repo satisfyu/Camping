@@ -1,87 +1,76 @@
 package net.satisfy.camping;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootDataManager;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.loot.LootModifierManager;
-import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.satisfy.camping.core.crafting.CapabilityBackpackWrapper;
-import net.satisfy.camping.core.network.CampingMessagesForge;
-import net.satisfy.camping.core.registry.CampingItems;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.satisfy.camping.core.config.ForgeCampingConfig;
+import net.satisfy.camping.core.network.ForgeCampingNetwork;
 import net.satisfy.camping.core.registry.RegistryForge;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.satisfy.camping.core.util.CampingUtil;
 import net.satisfy.camping.core.world.block.SleepingBagBlock;
-import net.satisfy.camping.integration.CuriosBackpack;
-import net.satisfy.camping.integration.CuriosBackpackRenderer;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
-import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
+import net.satisfy.camping.core.world.recipe.IBackpackWrapper;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.lang.ref.WeakReference;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.function.Consumer;
 
 @Mod(Constants.MOD_ID)
 public class CampingForge {
 
-    public static IEventBus EVENT_BUS = null;
+    public static IEventBus EVENT_BUS;
+    public static Pair<ForgeCampingConfig, ForgeConfigSpec> CONFIG;
+    
+    public CampingForge(FMLJavaModLoadingContext context) {
 
-    public CampingForge() {
+        CampingForge.EVENT_BUS = context.getModEventBus();
+
+        context.registerConfig(ModConfig.Type.COMMON, ForgeCampingConfig.SPEC, "camping");
+        EVENT_BUS.addListener(ForgeCampingConfig::onModConfigEvent);
+
         Camping.init();
-        CampingForge.EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();
-        RegistryForge.register(CampingForge.EVENT_BUS);
-        CampingForge.EVENT_BUS.addListener(this::setup);
-        CampingForge.EVENT_BUS.addListener(this::enqueueIMC);
-        CampingForge.EVENT_BUS.addListener(CapabilityBackpackWrapper::onRegister);
+        RegistryForge.register(CampingForge.EVENT_BUS); // ensure items/blocks are registered before reference on client
+        if (FMLEnvironment.dist == Dist.CLIENT) new CampingClientForge(CampingForge.EVENT_BUS);
+        ForgeCampingNetwork.register();
+
+        MinecraftForge.EVENT_BUS.addListener(CampingForge::onItemTooltip);
+        MinecraftForge.EVENT_BUS.addListener(CampingForge::onPlayerSetSpawn);
+        MinecraftForge.EVENT_BUS.addListener(CampingForge::onRegisterCapabilities);
     }
 
-    @SuppressWarnings("all")
-    private void enqueueIMC(final InterModEnqueueEvent event) {
-        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BACK.getMessageBuilder().build());
+    public static void onItemTooltip(final ItemTooltipEvent event) {
+        CampingUtil.Grilling.addGrilledTooltip(event.getItemStack(), event.getToolTip());
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(CampingMessagesForge::register);
-        CuriosApi.registerCurio(CampingItems.SMALL_BACKPACK, new CuriosBackpack());
+    public static void onPlayerSetSpawn(final PlayerSetSpawnEvent event) {
+        if (event.getNewSpawn() == null) return;
+        if (event.getEntity().level().getBlockState(event.getNewSpawn()).getBlock() instanceof SleepingBagBlock) event.setCanceled(true);
     }
 
-    @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-    public static class ForgeEventsHandler {
+    public static final Capability<IBackpackWrapper> BACKPACK_WRAPPER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static void onRegisterCapabilities(final RegisterCapabilitiesEvent event) {
+        event.register(IBackpackWrapper.class);
+    }
 
-        @SubscribeEvent
-        public static void playerSetSpawn(PlayerSetSpawnEvent event)
-        {
-            Level level = event.getEntity().level();
-
-            if(event.getNewSpawn() != null)
-            {
-                Block block = level.getBlockState(event.getNewSpawn()).getBlock();
-
-                if(!level.isClientSide && block instanceof SleepingBagBlock && !event.isForced())
-                {
-                    event.setCanceled(true);
-                }
-            }
-        }
+    /**
+     * Users may not be using Forge 47.4.0 yet, provide the original mod constructor to avoid errors.
+     * @author Jason13
+     */
+    @SuppressWarnings({"removal"})
+    public CampingForge() {
+        this(FMLJavaModLoadingContext.get());
     }
 }

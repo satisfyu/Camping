@@ -7,22 +7,20 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 
 public class EnderpackBlockEntity extends BlockEntity implements BlockEntityTicker<EnderpackBlockEntity> {
-  
-  public EnderpackBlockEntity(BlockPos pos, BlockState blockState) {
-    super(CampingBlockEntities.ENDERPACK, pos, blockState);
-  }
-  
-  @Override
-  public void tick(Level level, BlockPos blockPos, BlockState blockState, EnderpackBlockEntity blockEntity) {
-    
-    float random = level.random.nextFloat();
-    
-    if (random <= 0.00001f) {
-      level.addFreshEntity(new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(Items.ENDER_PEARL)));
+
+    public EnderpackBlockEntity(BlockPos pos, BlockState state) {
+        super(CampingBlockEntities.ENDERPACK, pos, state);
     }
-  }
+
+    @Override
+    public void tick(Level level, BlockPos pos, BlockState state, EnderpackBlockEntity enderpack) {
+        if (level.random.nextFloat() <= 0.00001f) {
+            level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.ENDER_PEARL)));
+        }
+    }
 }

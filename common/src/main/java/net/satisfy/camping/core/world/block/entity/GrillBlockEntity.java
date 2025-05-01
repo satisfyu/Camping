@@ -16,59 +16,39 @@ import net.minecraft.world.item.crafting.CampfireCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.gameevent.GameEvent.Context;
-import net.satisfy.camping.core.world.block.GrillBlock;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.util.CampingUtil;
+import net.satisfy.camping.core.world.block.GrillBlock;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class GrillBlockEntity extends BlockEntity implements Clearable {
-    private final NonNullList<ItemStack> items;
-    private final int[] cookingProgress;
+
+    private static final int INVENTORY_SIZE = 4;
+
     private final int[] cookingTime;
+    private final int[] cookingProgress;
+    private final NonNullList<ItemStack> items;
     private final RecipeManager.CachedCheck<Container, CampfireCookingRecipe> quickCheck;
 
     public GrillBlockEntity(BlockPos pos, BlockState state) {
         super(CampingBlockEntities.GRILL, pos, state);
-        this.items = NonNullList.withSize(4, ItemStack.EMPTY);
-        this.cookingProgress = new int[4];
-        this.cookingTime = new int[4];
+        this.cookingTime = new int[INVENTORY_SIZE];
+        this.cookingProgress = new int[INVENTORY_SIZE];
+        this.items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
         this.quickCheck = RecipeManager.createCheck(RecipeType.CAMPFIRE_COOKING);
     }
 
-    public static void cookTick(Level level, BlockPos pos, BlockState state, GrillBlockEntity grill) {
-        boolean hasItems = false;
-
-        for (int i = 0; i < grill.items.size(); ++i) {
-            ItemStack itemStack = grill.items.get(i);
-            if (!itemStack.isEmpty()) {
-                hasItems = true;
-                grill.cookingProgress[i]++;
-                if (grill.cookingProgress[i] >= grill.cookingTime[i]) {
-                    Container container = new SimpleContainer(itemStack);
-                    ItemStack result = grill.quickCheck.getRecipeFor(container, level).map((recipe) -> recipe.assemble(container, level.registryAccess())).orElse(itemStack);
-                    if (result.isItemEnabled(level.enabledFeatures())) {
-                        CampingUtil.Grilling.setGrilled(result);
-                        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), result);
-                        grill.items.set(i, ItemStack.EMPTY);
-                        level.sendBlockUpdated(pos, state, state, 3);
-                        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, Context.of(state));
-                    }
-                }
-            }
-        }
-
-        if (hasItems) {
-            setChanged(level, pos, state);
-            level.playSound(null, pos, SoundEvents.SMOKER_SMOKE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        }
+    private static void makeParticles(Level level, BlockPos pos) {
+        RandomSource randomSource = level.random;
+        level.addAlwaysVisibleParticle(ParticleTypes.SMOKE, true, pos.getX() + 0.5 + randomSource.nextDouble() / 3.0 * (randomSource.nextBoolean() ? 1 : -1), pos.getY() + 1.3 + randomSource.nextDouble() + randomSource.nextDouble(), pos.getZ() + 0.5 + randomSource.nextDouble() / 3.0 * (randomSource.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
     }
-
 
     public static void particleTick(Level level, BlockPos pos, BlockState state, GrillBlockEntity grill) {
         RandomSource randomSource = level.random;
@@ -96,14 +76,32 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         }
     }
 
+    public static void cookTick(Level level, BlockPos pos, BlockState state, GrillBlockEntity grill) {
+        boolean hasItems = false;
 
-    private static void makeParticles(Level level, BlockPos pos) {
-        RandomSource randomSource = level.random;
-        level.addAlwaysVisibleParticle(ParticleTypes.SMOKE, true, pos.getX() + 0.5 + randomSource.nextDouble() / 3.0 * (randomSource.nextBoolean() ? 1 : -1), pos.getY() + 1.3 + randomSource.nextDouble() + randomSource.nextDouble(), pos.getZ() + 0.5 + randomSource.nextDouble() / 3.0 * (randomSource.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
-    }
+        for (int i = 0; i < grill.items.size(); ++i) {
+            ItemStack itemStack = grill.items.get(i);
+            if (!itemStack.isEmpty()) {
+                hasItems = true;
+                grill.cookingProgress[i]++;
+                if (grill.cookingProgress[i] >= grill.cookingTime[i]) {
+                    Container container = new SimpleContainer(itemStack);
+                    ItemStack result = grill.quickCheck.getRecipeFor(container, level).map((recipe) -> recipe.assemble(container, level.registryAccess())).orElse(itemStack);
+                    if (result.isItemEnabled(level.enabledFeatures())) {
+                        CampingUtil.Grilling.setGrilled(result);
+                        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), result);
+                        grill.items.set(i, ItemStack.EMPTY);
+                        level.sendBlockUpdated(pos, state, state, 3);
+                        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(state));
+                    }
+                }
+            }
+        }
 
-    public NonNullList<ItemStack> getItems() {
-        return this.items;
+        if (hasItems) {
+            setChanged(level, pos, state);
+            level.playSound(null, pos, SoundEvents.SMOKER_SMOKE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
     }
 
     public void load(CompoundTag tag) {
@@ -128,14 +126,19 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         tag.putIntArray("CookingTotalTimes", this.cookingTime);
     }
 
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
     public CompoundTag getUpdateTag() {
         CompoundTag compoundTag = new CompoundTag();
         ContainerHelper.saveAllItems(compoundTag, this.items, true);
         return compoundTag;
+    }
+
+    private void markUpdated() {
+        this.setChanged();
+        Objects.requireNonNull(this.getLevel()).sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+    }
+
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public Optional<CampfireCookingRecipe> getCookableRecipe(ItemStack stack) {
@@ -150,7 +153,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
                 this.cookingProgress[i] = 0;
                 this.items.set(i, stack.split(1));
                 assert this.level != null;
-                this.level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), Context.of(entity, this.getBlockState()));
+                this.level.gameEvent(GameEvent.BLOCK_CHANGE, this.getBlockPos(), GameEvent.Context.of(entity, this.getBlockState()));
                 this.markUpdated();
                 return true;
             }
@@ -158,11 +161,11 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         return false;
     }
 
-    private void markUpdated() {
-        this.setChanged();
-        Objects.requireNonNull(this.getLevel()).sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+    public NonNullList<ItemStack> getItems() {
+        return this.items;
     }
 
+    @Override
     public void clearContent() {
         this.items.clear();
     }

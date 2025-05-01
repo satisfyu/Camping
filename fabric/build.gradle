@@ -1,9 +1,15 @@
 plugins {
-    id 'multiloader-loader'
+    id 'java'
+    id 'idea'
     id 'fabric-loom'
 }
 
+base {
+    archivesName = "${mod_id}-fabric-${minecraft_version}"
+}
+
 repositories {
+    maven { url "https://maven.blamejared.com/" }
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com" }
     maven { url 'https://maven.ladysnake.org/releases' }
@@ -11,11 +17,20 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.officialMojangMappings()
+    // mappings loom.officialMojangMappings()
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
+    }
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
+
+    // compile against the JEI API but do not include it at runtime
+    modCompileOnlyApi("mezz.jei:jei-${minecraft_version}-fabric-api:${rootProject.jei_version}")
+    // at runtime, use the full JEI jar for Fabric
+    modRuntimeOnly("mezz.jei:jei-${minecraft_version}-fabric:${rootProject.jei_version}")
 
     modApi include("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_fabric_version}")
     modImplementation "com.terraformersmc:modmenu:${rootProject.mod_menu_version}"
@@ -23,8 +38,8 @@ dependencies {
 }
 
 loom {
-    if (file("src/main/resources/${mod_id}.accesswidener").exists()) {
-        accessWidenerPath.set(file("src/main/resources/${mod_id}.accesswidener"))
+    if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
+        accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
     }
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")
@@ -43,4 +58,12 @@ loom {
             runDir("run")
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    source(project(":common").sourceSets.main.allSource)
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
 }
