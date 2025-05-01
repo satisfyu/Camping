@@ -1,5 +1,11 @@
 package net.satisfy.camping;
 
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
@@ -7,12 +13,14 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.satisfy.camping.core.config.ForgeCampingConfig;
 import net.satisfy.camping.core.network.ForgeCampingNetwork;
+import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.registry.RegistryForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -40,9 +48,18 @@ public class CampingForge {
         if (FMLEnvironment.dist == Dist.CLIENT) new CampingClientForge(CampingForge.EVENT_BUS);
         ForgeCampingNetwork.register();
 
+        MinecraftForge.EVENT_BUS.addListener(CampingForge::onLivingHurt);
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onItemTooltip);
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onPlayerSetSpawn);
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onRegisterCapabilities);
+    }
+
+    public static void onLivingHurt(final LivingHurtEvent event) {
+        if (!(event.getSource().getEntity() instanceof LivingEntity livingAttacker)) return;
+        ItemStack stack = livingAttacker.getMainHandItem();
+        if (stack.is(CampingItems.MARSHMALLOW_ON_A_STICK) || stack.is(CampingItems.ROASTED_MARSHMALLOW_ON_A_STICK)) {
+            if (!event.getEntity().hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) event.getEntity().addEffect(new MobEffectInstance(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 3, 2, false, true, false)));
+        }
     }
 
     public static void onItemTooltip(final ItemTooltipEvent event) {
