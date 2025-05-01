@@ -9,6 +9,7 @@ import net.satisfy.camping.core.world.item.BackpackBlockItem;
 import net.satisfy.camping.core.world.item.EnderpackBlockItem;
 import net.satisfy.camping.core.world.item.MultitoolItem;
 import net.minecraft.resources.ResourceLocation;
+import net.satisfy.camping.core.world.item.WalkingStickItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.function.Supplier;
 
 public class CampingItems {
 
+    public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
 
     public static final Item ENDERPACK = new EnderpackBlockItem(CampingBlocks.ENDERPACK, Camping.identifier("textures/model/enderpack.png"));
@@ -35,6 +37,9 @@ public class CampingItems {
 
         consumer.accept(new BlockItem(CampingBlocks.GRILL, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(CampingBlocks.GRILL));
 
+        consumer.accept(WALKING_STICK, Camping.identifier("walking_stick"));
+        consumer.accept(MULTITOOL, Camping.identifier("multitool"));
+
         consumer.accept(ENDERPACK, Camping.identifier("enderpack"));
         consumer.accept(ENDERBAG, Camping.identifier("enderbag"));
         consumer.accept(GOODYBAG, Camping.identifier("goodybag"));
@@ -43,8 +48,6 @@ public class CampingItems {
         consumer.accept(SMALL_BACKPACK, Camping.identifier("small_backpack"));
         consumer.accept(WANDERER_BACKPACK, Camping.identifier("wanderer_backpack"));
         consumer.accept(WANDERER_BAG, Camping.identifier("wanderer_bag"));
-
-        consumer.accept(MULTITOOL, Camping.identifier("multitool"));
 
         CREATIVE_TAB_ITEMS.add(CampingBlocks.GRILL);
         CREATIVE_TAB_ITEMS.add(ENDERPACK);
