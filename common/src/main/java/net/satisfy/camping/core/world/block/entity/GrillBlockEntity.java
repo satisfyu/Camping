@@ -18,11 +18,10 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
-import net.satisfy.camping.core.util.CampingUtil;
+import net.satisfy.camping.core.util.GrillingUtil;
 import net.satisfy.camping.core.world.block.GrillBlock;
 
 import java.util.Objects;
@@ -88,7 +87,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
                     Container container = new SimpleContainer(itemStack);
                     ItemStack result = grill.quickCheck.getRecipeFor(container, level).map((recipe) -> recipe.assemble(container, level.registryAccess())).orElse(itemStack);
                     if (result.isItemEnabled(level.enabledFeatures())) {
-                        CampingUtil.Grilling.setGrilled(result);
+                        GrillingUtil.setGrilled(result);
                         Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), result);
                         grill.items.set(i, ItemStack.EMPTY);
                         level.sendBlockUpdated(pos, state, state, 3);

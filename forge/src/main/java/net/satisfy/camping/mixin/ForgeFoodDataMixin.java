@@ -5,7 +5,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.core.config.ForgeCampingConfig;
-import net.satisfy.camping.core.util.CampingUtil;
+import net.satisfy.camping.core.util.GrillingUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,12 +26,12 @@ public class ForgeFoodDataMixin {
 
         FoodData instance = (FoodData) (Object) this;
 
-        if (!CampingUtil.Grilling.isGrilled(itemStack) || !ForgeCampingConfig.enableGrilling) {
+        if (!GrillingUtil.isGrilled(itemStack) || !ForgeCampingConfig.enableGrilling) {
             return;
         }
 
         FoodProperties foodProperties = itemStack.getItem().getFoodProperties();
-        CampingUtil.Grilling.FoodValue additionalFoodValues = CampingUtil.Grilling.getAdditionalFoodValue(itemStack);
+        GrillingUtil.FoodValue additionalFoodValues = GrillingUtil.getAdditionalFoodValue(itemStack);
 
         if (foodProperties != null) {
             int nutrition = (int) (foodProperties.getNutrition() * 1.25) + additionalFoodValues.nutrition();

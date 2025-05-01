@@ -3,7 +3,7 @@ package net.satisfy.camping.mixin;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.satisfy.camping.core.config.ForgeCampingConfig;
-import net.satisfy.camping.core.util.CampingUtil;
+import net.satisfy.camping.core.util.GrillingUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,6 +19,6 @@ public class ForgeItemMixin {
 
     @Inject(method = "isFoil(Lnet/minecraft/world/item/ItemStack;)Z", at = @At(value = "RETURN"), cancellable = true)
     private void camping$isFoilInject(ItemStack pStack, CallbackInfoReturnable<Boolean> cir) {
-        if (ForgeCampingConfig.enableGlint && CampingUtil.Grilling.isGrilled(pStack)) cir.setReturnValue(true);
+        if (ForgeCampingConfig.enableGlint && GrillingUtil.isGrilled(pStack)) cir.setReturnValue(true);
     }
 }

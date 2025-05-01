@@ -1,9 +1,6 @@
 package net.satisfy.camping;
 
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -13,7 +10,6 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.satisfy.camping.core.config.ForgeCampingConfig;
 import net.satisfy.camping.core.network.ForgeCampingNetwork;
@@ -21,12 +17,10 @@ import net.satisfy.camping.core.registry.RegistryForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.satisfy.camping.core.util.CampingUtil;
+import net.satisfy.camping.core.util.GrillingUtil;
 import net.satisfy.camping.core.world.block.SleepingBagBlock;
 import net.satisfy.camping.core.world.recipe.IBackpackWrapper;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.function.Consumer;
 
 @Mod(Constants.MOD_ID)
 public class CampingForge {
@@ -52,7 +46,7 @@ public class CampingForge {
     }
 
     public static void onItemTooltip(final ItemTooltipEvent event) {
-        CampingUtil.Grilling.addGrilledTooltip(event.getItemStack(), event.getToolTip());
+        GrillingUtil.addGrilledTooltip(event.getItemStack(), event.getToolTip());
     }
 
     public static void onPlayerSetSpawn(final PlayerSetSpawnEvent event) {

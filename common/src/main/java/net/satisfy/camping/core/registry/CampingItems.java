@@ -1,15 +1,13 @@
 package net.satisfy.camping.core.registry;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ItemLike;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.core.util.BackpackVariant;
-import net.satisfy.camping.core.world.item.BackpackBlockItem;
-import net.satisfy.camping.core.world.item.EnderpackBlockItem;
-import net.satisfy.camping.core.world.item.MultitoolItem;
+import net.satisfy.camping.core.world.item.*;
 import net.minecraft.resources.ResourceLocation;
-import net.satisfy.camping.core.world.item.WalkingStickItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +15,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public class CampingItems {
+
+    public static final Item MARSHMALLOW = new MarshmallowItem(false, new Item.Properties().food(CampingFoods.MARSHMALLOW));
+    public static final Item ROASTED_MARSHMALLOW = new MarshmallowItem(true, new Item.Properties().food(CampingFoods.ROASTED_MARSHMALLOW));
+    public static final Item MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(false, new Item.Properties());
+    public static final Item ROASTED_MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(true, new Item.Properties());
 
     public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
@@ -36,6 +39,11 @@ public class CampingItems {
     public static void register(BiConsumer<Item, ResourceLocation> consumer) {
 
         consumer.accept(new BlockItem(CampingBlocks.GRILL, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(CampingBlocks.GRILL));
+
+        consumer.accept(MARSHMALLOW, Camping.identifier("marshmallow"));
+        consumer.accept(ROASTED_MARSHMALLOW, Camping.identifier("roasted_marshmallow"));
+        consumer.accept(MARSHMALLOW_ON_A_STICK, Camping.identifier("marshmallow_on_a_stick"));
+        consumer.accept(ROASTED_MARSHMALLOW_ON_A_STICK, Camping.identifier("roasted_marshmallow_on_a_stick"));
 
         consumer.accept(WALKING_STICK, Camping.identifier("walking_stick"));
         consumer.accept(MULTITOOL, Camping.identifier("multitool"));
@@ -59,6 +67,11 @@ public class CampingItems {
         CREATIVE_TAB_ITEMS.add(WANDERER_BACKPACK);
         CREATIVE_TAB_ITEMS.add(WANDERER_BAG);
         CREATIVE_TAB_ITEMS.add(MULTITOOL);
+        CREATIVE_TAB_ITEMS.add(WALKING_STICK);
+        CREATIVE_TAB_ITEMS.add(MARSHMALLOW);
+        CREATIVE_TAB_ITEMS.add(ROASTED_MARSHMALLOW);
+        CREATIVE_TAB_ITEMS.add(MARSHMALLOW_ON_A_STICK);
+        CREATIVE_TAB_ITEMS.add(ROASTED_MARSHMALLOW_ON_A_STICK);
 
         CampingBlocks.SLEEPING_BAGS.forEach((s, block) -> {
             consumer.accept(new BlockItem(block, new Item.Properties()),  BuiltInRegistries.BLOCK.getKey(block));

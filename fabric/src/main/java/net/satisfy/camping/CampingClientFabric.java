@@ -18,7 +18,7 @@ import net.satisfy.camping.client.world.block.renderer.GrillRenderer;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.registry.CampingBlocks;
 import net.satisfy.camping.core.registry.CampingScreenHandlers;
-import net.satisfy.camping.core.util.CampingUtil;
+import net.satisfy.camping.core.util.GrillingUtil;
 import net.satisfy.camping.core.world.inventory.BackpackScreenHandler;
 import net.satisfy.camping.optional.trinkets.TrinketsHelper;
 import net.satisfy.camping.platform.Services;
@@ -63,6 +63,6 @@ public class CampingClientFabric implements ClientModInitializer {
     }
 
     private void onItemTooltip(ItemStack itemStack, TooltipFlag context, List<Component> tooltip) {
-        CampingUtil.Grilling.addGrilledTooltip(itemStack, tooltip);
+        GrillingUtil.addGrilledTooltip(itemStack, tooltip);
     }
 }
