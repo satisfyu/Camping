@@ -9,7 +9,7 @@ public class LivingEvents {
 
     public static final Event<LivingHurt> LIVING_HURT = EventFactory.createArrayBacked(LivingHurt.class, callbacks -> (source, amount, entity) -> {
         for (LivingHurt callback : callbacks) {
-            callback.onUpdate(source, amount, entity);
+            if (!entity.isInvulnerableTo(source)) callback.onUpdate(source, amount, entity);
         }
     });
 
