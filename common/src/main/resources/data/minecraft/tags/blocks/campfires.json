@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "camping:turned_campfire",
+    "camping:stick_campfire"
+  ]
+}
