@@ -25,9 +25,9 @@
 [x] Walking Stick 
 [x] Marshmallow on-a-stick
 [] Coffee Pot & Coffee Pot Stand
-[] New Campfire models
-[] Campfires turn off after configurable amount of time / during rain
-[] Campfires have a chance to ignite wood around them
+[x] New Campfire models
+[x] Campfires turn off after configurable amount of time / during rain
+[x] Campfires have a chance to ignite wood around them
 [] Twist Bread / Twisted Bread on-a-stick
 [] New grill variants
 [] Fire Pit

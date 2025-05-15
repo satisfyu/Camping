@@ -7,8 +7,10 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,13 +23,21 @@ public class CampfireBlockEntityMixin {
     /**
      * {@link CampfireBlockEntity#cookTick} is called on the server every tick when the campfire is lit.
      */
-    @Inject(method = "cookTick", at = @At("HEAD"))
+    @Inject(method = "cookTick", at = @At("HEAD"), cancellable = true)
     private static void camping$cookTick(Level level, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
 
         // get a source of random values
         final RandomSource random = level.getRandom();
 
-        // lower chance of occurring (1 in 200 chance per tick, or every 10 ticks/half a second on average)
+        /// Here we are checking if it's raining, and dowsing the campfire if so
+        /// 1 in 400 chance per tick
+        if (level.isRainingAt(pos.above()) && random.nextInt(400) == 1) {
+            level.setBlock(pos, state.setValue(BlockStateProperties.LIT, false), Block.UPDATE_ALL);
+            ci.cancel();
+            return;
+        }
+
+        // lower chance of occurring (1 in 200 chance per tick)
         if (random.nextInt(200) != 1) return;
 
         // if doFireTick is not enabled, return early
