@@ -22,7 +22,7 @@ public class CampfireBlockEntityMixin {
      * {@link CampfireBlockEntity#cookTick} is called on the server every tick when the campfire is lit.
      */
     @Inject(method = "cookTick", at = @At("HEAD"))
-    private static void camping$cooldownTick(Level level, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
+    private static void camping$cookTick(Level level, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
 
         // get a source of random values
         final RandomSource random = level.getRandom();
