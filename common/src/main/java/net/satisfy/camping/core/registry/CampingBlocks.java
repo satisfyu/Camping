@@ -2,6 +2,7 @@ package net.satisfy.camping.core.registry;
 
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,6 +29,8 @@ public class CampingBlocks {
     public static final Block GRILL = new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON).lightLevel((state) -> state.getValue(GrillBlock.LIT) ? 10 : 0));
     public static final Block TURNED_CAMPFIRE = new TurnedCampfireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).lightLevel(litBlockEmission(15)).noOcclusion().ignitedByLava());
 
+    public static final Block STICK_CAMPFIRE = new StickCampfireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).lightLevel(litBlockEmission(15)).noOcclusion().ignitedByLava());
+
     public static final Block ENDERPACK = new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackVariant.ENDERPACK);
     public static final Block ENDERBAG = new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackVariant.ENDERBAG);
 
@@ -46,6 +49,7 @@ public class CampingBlocks {
 
     public static void register(BiConsumer<Block, ResourceLocation> consumer) {
 
+        consumer.accept(STICK_CAMPFIRE, Camping.identifier("stick_campfire"));
         consumer.accept(TURNED_CAMPFIRE, Camping.identifier("turned_campfire"));
         consumer.accept(GRILL, Camping.identifier("grill"));
 
