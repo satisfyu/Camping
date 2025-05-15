@@ -37,11 +37,9 @@ public class CampingClientFabric implements ClientModInitializer {
         // item tooltips
         ItemTooltipCallback.EVENT.register(this::onItemTooltip);
 
-        // block entity renderers
-        BlockEntityRenderers.register(CampingBlockEntities.GRILL, GrillRenderer::new);
-
         // block texture layer modification
         BlockRenderLayerMap.INSTANCE.putBlock(CampingBlocks.GRILL, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(CampingBlocks.TURNED_CAMPFIRE, RenderType.cutout());
         for (Block block : Stream.concat(CampingBlocks.TENT_MAIN.values().stream(), Stream.concat(CampingBlocks.TENT_MAIN_HEAD.values().stream(), Stream.concat(CampingBlocks.TENT_RIGHT.values().stream(), CampingBlocks.TENT_HEAD_RIGHT.values().stream()))).toList()) {
             BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
         }

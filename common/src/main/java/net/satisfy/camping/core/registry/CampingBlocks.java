@@ -4,6 +4,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -17,10 +19,14 @@ import net.minecraft.world.level.block.Block;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.ToIntFunction;
 
 public class CampingBlocks {
 
     public static final BlockBehaviour.Properties BACKPACK_BEHAVIOUR = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion().noParticlesOnBreak().instabreak();
+
+    public static final Block GRILL = new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON).lightLevel((state) -> state.getValue(GrillBlock.LIT) ? 10 : 0));
+    public static final Block TURNED_CAMPFIRE = new TurnedCampfireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).lightLevel(litBlockEmission(15)).noOcclusion().ignitedByLava());
 
     public static final Block ENDERPACK = new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackVariant.ENDERPACK);
     public static final Block ENDERBAG = new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackVariant.ENDERBAG);
@@ -32,8 +38,6 @@ public class CampingBlocks {
     public static final Block WANDERER_BACKPACK = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.WANDERER_BACKPACK);
     public static final Block WANDERER_BAG = new BackpackBlock(BACKPACK_BEHAVIOUR, BackpackVariant.WANDERER_BAG);
 
-    public static final Block GRILL = new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON).lightLevel((state) -> state.getValue(GrillBlock.LIT) ? 10 : 0));
-
     public static final Map<String, Block> SLEEPING_BAGS = new HashMap<>();
     public static final Map<String, Block> TENT_MAIN = new HashMap<>();
     public static final Map<String, Block> TENT_MAIN_HEAD = new HashMap<>();
@@ -42,6 +46,7 @@ public class CampingBlocks {
 
     public static void register(BiConsumer<Block, ResourceLocation> consumer) {
 
+        consumer.accept(TURNED_CAMPFIRE, Camping.identifier("turned_campfire"));
         consumer.accept(GRILL, Camping.identifier("grill"));
 
         consumer.accept(ENDERPACK, Camping.identifier("enderpack"));
@@ -77,5 +82,9 @@ public class CampingBlocks {
             consumer.accept(coloredTentRight, Camping.identifier("tent_right_" + colorName));
             consumer.accept(coloredTentHeadRight, Camping.identifier("tent_head_right_" + colorName));
         }
+    }
+
+    private static ToIntFunction<BlockState> litBlockEmission(int $$0) {
+        return ($$1) -> (Boolean)$$1.getValue(BlockStateProperties.LIT) ? $$0 : 0;
     }
 }

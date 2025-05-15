@@ -39,10 +39,6 @@ public class CampingClientForge {
             });
         });
 
-        modEventBus.addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) event -> {
-            event.registerBlockEntityRenderer(CampingBlockEntities.GRILL, GrillRenderer::new);
-        });
-
         modEventBus.addListener((Consumer<EntityRenderersEvent.RegisterLayerDefinitions>) event -> {
             event.registerLayerDefinition(EnderpackModel.LAYER_LOCATION, EnderpackModel::createBodyLayer);
             event.registerLayerDefinition(EnderbagModel.LAYER_LOCATION, EnderbagModel::createBodyLayer);

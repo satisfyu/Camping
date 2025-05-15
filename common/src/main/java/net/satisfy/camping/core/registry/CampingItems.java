@@ -38,6 +38,7 @@ public class CampingItems {
     public static final List<ItemLike> CREATIVE_TAB_ITEMS = new ArrayList<>();
     public static void register(BiConsumer<Item, ResourceLocation> consumer) {
 
+        consumer.accept(new BlockItem(CampingBlocks.TURNED_CAMPFIRE, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(CampingBlocks.TURNED_CAMPFIRE));
         consumer.accept(new BlockItem(CampingBlocks.GRILL, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(CampingBlocks.GRILL));
 
         consumer.accept(MARSHMALLOW, Camping.identifier("marshmallow"));
