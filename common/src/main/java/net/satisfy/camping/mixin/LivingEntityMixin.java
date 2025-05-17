@@ -36,6 +36,9 @@ public class LivingEntityMixin {
     @Unique
     private static final int untag_cycle = 20 * 60; // one minute
 
+    @Unique
+    private static final String MOSQUITO_SPAWNED = "mosquito.spawned";
+
     @Inject(method = "tick()V", at = @At("HEAD"))
     private void camping$tick(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
@@ -44,17 +47,17 @@ public class LivingEntityMixin {
         if (!(entity instanceof Player) || level.isClientSide()) return;
 
         if (level.getGameTime() % 20 != 0) return; // operate once per second
-        if (level.getGameTime() % untag_cycle == 0 && entity.getTags().contains("mosquito.spawned")) entity.removeTag("mosquito.spawned");
+        if (level.getGameTime() % untag_cycle == 0 && entity.getTags().contains(MOSQUITO_SPAWNED)) entity.removeTag(MOSQUITO_SPAWNED);
 
         float additionalChance = level.getBiome(entity.blockPosition()).is(Biomes.SWAMP) || level.getBiome(entity.blockPosition()).is(Biomes.MANGROVE_SWAMP) ? 0.20f : 0;
 
         RandomSource random = entity.getRandom();
-        if (!entity.getTags().contains("mosquito.spawned") && random.nextFloat() < (0.005 + additionalChance)) { // 0.5% normally or 20.5% chance if in swamp
+        if (!entity.getTags().contains(MOSQUITO_SPAWNED) && random.nextFloat() < (0.005 + additionalChance)) { // 0.5% normally or 20.5% chance if in swamp
             Mosquito mosquito = new Mosquito(level);
             Supplier<Integer> randomInversion = () -> random.nextFloat() >= 0.5 ? 1 : -1;
-            mosquito.moveTo(entity.getX() + (random.nextInt(10) * randomInversion.get()), entity.getY() + 1, entity.getZ() + (random.nextInt(10) * randomInversion.get()));
+            mosquito.moveTo(entity.getX() + (random.nextInt(10) * randomInversion.get()), entity.getY() + 5, entity.getZ() + (random.nextInt(10) * randomInversion.get()));
             level.addFreshEntity(mosquito);
-            entity.addTag("mosquito.spawned");
+            entity.addTag(MOSQUITO_SPAWNED);
         }
     }
 
