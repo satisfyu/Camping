@@ -22,6 +22,8 @@ public class RegistryFabric {
 
         CampingScreenHandlers.register(bind(BuiltInRegistries.MENU));
 
+        CampingEntities.register(bind(BuiltInRegistries.ENTITY_TYPE));
+
         FabricCampingLootModifiers.register();
         FabricCampingRecipes.register();
 

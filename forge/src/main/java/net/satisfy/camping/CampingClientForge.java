@@ -12,6 +12,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.satisfy.camping.client.gui.screens.inventory.BackpackScreen;
 import net.satisfy.camping.client.keys.ForgeOpenBackpackKey;
 import net.satisfy.camping.client.model.*;
+import net.satisfy.camping.client.renderer.entity.MosquitoRenderer;
 import net.satisfy.camping.client.renderer.entity.layers.BackpackRenderLayer;
 import net.satisfy.camping.client.renderer.entity.layers.EnderpackRenderLayer;
 import net.satisfy.camping.client.world.block.renderer.GrillRenderer;
@@ -40,6 +41,8 @@ public class CampingClientForge {
         });
 
         modEventBus.addListener((Consumer<EntityRenderersEvent.RegisterLayerDefinitions>) event -> {
+            event.registerLayerDefinition(MosquitoModel.MOSQUITO_LAYER, MosquitoModel::createBodyLayer);
+
             event.registerLayerDefinition(EnderpackModel.LAYER_LOCATION, EnderpackModel::createBodyLayer);
             event.registerLayerDefinition(EnderbagModel.LAYER_LOCATION, EnderbagModel::createBodyLayer);
             event.registerLayerDefinition(GoodybagModel.LAYER_LOCATION, GoodybagModel::createBodyLayer);

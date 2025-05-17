@@ -28,6 +28,8 @@ public class RegistryForge {
 
         bind(Registries.MENU, CampingScreenHandlers::register);
 
+        bind(Registries.ENTITY_TYPE, CampingEntities::register);
+
         bind(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, ForgeCampingLootModifiers::register);
         bind(ForgeRegistries.Keys.RECIPE_SERIALIZERS, ForgeCampingRecipes::register);
     }

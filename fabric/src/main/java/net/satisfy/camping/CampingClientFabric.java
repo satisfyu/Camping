@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.satisfy.camping.client.gui.screens.inventory.BackpackScreen;
 import net.satisfy.camping.client.keys.FabricOpenBackpackKey;
 import net.satisfy.camping.client.model.*;
+import net.satisfy.camping.client.renderer.entity.MosquitoRenderer;
 import net.satisfy.camping.client.world.block.renderer.GrillRenderer;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.registry.CampingBlocks;
@@ -46,6 +47,8 @@ public class CampingClientFabric implements ClientModInitializer {
         }
 
         // entity layer registration
+        EntityModelLayerRegistry.registerModelLayer(MosquitoModel.MOSQUITO_LAYER, MosquitoModel::createBodyLayer);
+
         EntityModelLayerRegistry.registerModelLayer(EnderpackModel.LAYER_LOCATION, EnderpackModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(EnderbagModel.LAYER_LOCATION, EnderbagModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(GoodybagModel.LAYER_LOCATION, GoodybagModel::createBodyLayer);

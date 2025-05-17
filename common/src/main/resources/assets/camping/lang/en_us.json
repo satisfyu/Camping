@@ -135,6 +135,8 @@
   "key.camping.category": "[Let's Do] Camping",
   "key.camping.open": "Open Backpack",
 
+  "entity.camping.mosquito": "Mosquito",
+
   "text.autoconfig.camping.option.enableEffect": "Enable Regeneration while Sleeping",
   "text.autoconfig.camping.option.enableEffect.@PrefixText": "Sleeping Bag",
   "text.autoconfig.camping.option.enableGlint": "Enable Glint for grilled Items",
@@ -145,5 +147,7 @@
   "tooltip.camping.grilled": "This item has been flame grilled:",
   "tooltip.camping.grilled.nutrition": "+25% Nutrition",
   "tooltip.camping.grilled.saturationModifier": "+25% Saturation",
-  "tooltip.camping.multitool": "Right-Click to rotate Blocks"
+  "tooltip.camping.multitool": "Right-Click to rotate Blocks",
+
+  "subtitles.camping.mosquito_buzz": "Mosquito Buzzes"
 }

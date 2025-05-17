@@ -4,6 +4,9 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -13,6 +16,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
@@ -20,6 +24,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.satisfy.camping.core.config.ForgeCampingConfig;
 import net.satisfy.camping.core.network.ForgeCampingNetwork;
+import net.satisfy.camping.core.registry.CampingEntities;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.registry.RegistryForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -52,6 +57,7 @@ public class CampingForge {
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onItemTooltip);
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onPlayerSetSpawn);
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onRegisterCapabilities);
+        MinecraftForge.EVENT_BUS.addListener(CampingForge::onRegisterAttributes);
     }
 
     public static void onLivingHurt(final LivingHurtEvent event) {
@@ -74,6 +80,10 @@ public class CampingForge {
     public static final Capability<IBackpackWrapper> BACKPACK_WRAPPER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
     public static void onRegisterCapabilities(final RegisterCapabilitiesEvent event) {
         event.register(IBackpackWrapper.class);
+    }
+
+    public static void onRegisterAttributes(final EntityAttributeCreationEvent event) {
+        event.put(CampingEntities.MOSQUITO, AttributeSupplier.builder().add(Attributes.MAX_HEALTH, 0.5D).add(Attributes.KNOCKBACK_RESISTANCE, 0).add(Attributes.MOVEMENT_SPEED).add(Attributes.ARMOR, 0).add(Attributes.ARMOR_TOUGHNESS, 0).add(Attributes.FOLLOW_RANGE, 16.0F).add(Attributes.ATTACK_KNOCKBACK, 0).add(Attributes.ATTACK_DAMAGE, 0.5f).build());
     }
 
     /**

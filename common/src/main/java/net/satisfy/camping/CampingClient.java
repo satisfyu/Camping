@@ -1,9 +1,11 @@
 package net.satisfy.camping;
 
+import net.satisfy.camping.client.renderer.entity.MosquitoRenderer;
 import net.satisfy.camping.client.world.block.renderer.StickCampfireRenderer;
 import net.satisfy.camping.client.world.block.renderer.TurnedCampfireRenderer;
 import net.satisfy.camping.client.world.block.renderer.GrillRenderer;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
+import net.satisfy.camping.core.registry.CampingEntities;
 import net.satisfy.camping.platform.Services;
 
 public class CampingClient {
@@ -12,5 +14,7 @@ public class CampingClient {
         Services.REGISTER.blockEntityRenderer(CampingBlockEntities.GRILL, GrillRenderer::new);
         Services.REGISTER.blockEntityRenderer(CampingBlockEntities.TURNED_CAMPFIRE, TurnedCampfireRenderer::new);
         Services.REGISTER.blockEntityRenderer(CampingBlockEntities.STICK_CAMPFIRE, StickCampfireRenderer::new);
+
+        Services.REGISTER.entityRenderer(CampingEntities.MOSQUITO, MosquitoRenderer::new);
     }
 }
