@@ -35,4 +35,5 @@
 [] Park bench/table set
 [] Mosquitoes rare chance during the daytime, small swarms
 [] Hotkey for rolling out the sleeping bag when using the large backpack
+[] tiki torches (to repel mosquito without spray)
 -->
