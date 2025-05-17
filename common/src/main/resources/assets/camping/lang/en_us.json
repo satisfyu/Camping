@@ -125,8 +125,9 @@
   "container.camping.small_backpack": "Small Backpack",
   "container.camping.wanderer_backpack": "Wanderer Backpack",
 
-  "item.camping.multitool": "Multitool",
   "item.camping.walking_stick": "Walking Stick",
+  "item.camping.multitool": "Multitool",
+  "item.camping.mosquito_repellent": "Mosquito Repellent",
   "item.camping.marshmallow": "Marshmallow",
   "item.camping.roasted_marshmallow": "Roasted Marshmallow",
   "item.camping.marshmallow_on_a_stick": "Marshmallow on a Stick",

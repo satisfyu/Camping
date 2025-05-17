@@ -9,16 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.FlyingMob;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -32,6 +23,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import net.satisfy.camping.core.registry.CampingEntities;
 import net.satisfy.camping.core.registry.CampingSounds;
+import net.satisfy.camping.core.world.item.MosquitoRepellentItem;
 
 public class Mosquito extends FlyingMob implements Enemy {
 
@@ -396,6 +388,11 @@ public class Mosquito extends FlyingMob implements Enemy {
 
     class MosquitoSweepAttackGoalMosquito extends MosquitoMoveTargetGoal {
 
+        private static final int REPEL_SEARCH_TICK_DELAY = 20;
+
+        private int repelSearchTick = 0;
+        private boolean repelled = false;
+
         public boolean canUse() {
             return Mosquito.this.getTarget() != null && Mosquito.this.attackPhase == Mosquito.AttackPhase.SWOOP;
         }
@@ -409,8 +406,8 @@ public class Mosquito extends FlyingMob implements Enemy {
                 return false;
             }
             else {
-                if (livingentity instanceof Player) {
-                    Player player = (Player)livingentity;
+
+                if (livingentity instanceof Player player) {
                     if (livingentity.isSpectator() || player.isCreative()) {
                         return false;
                     }
@@ -419,8 +416,19 @@ public class Mosquito extends FlyingMob implements Enemy {
                 if (!this.canUse()) {
                     return false;
                 }
+                else {
+                    if (Mosquito.this.tickCount > this.repelSearchTick) {
+                        this.repelSearchTick = Mosquito.this.tickCount + REPEL_SEARCH_TICK_DELAY;
 
-                return true;
+                        List<Player> players = Mosquito.this.level().getEntitiesOfClass(Player.class, Mosquito.this.getBoundingBox().inflate(16.0D), EntitySelector.ENTITY_STILL_ALIVE);
+
+                        for (Player player : players) {
+                            if (player.getTags().contains(MosquitoRepellentItem.PLAYER_TAG)) this.repelled = true;
+                        }
+                    }
+                }
+
+                return !this.repelled;
             }
         }
 

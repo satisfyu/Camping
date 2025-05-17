@@ -1,7 +1,6 @@
 package net.satisfy.camping.core.registry;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ItemLike;
 import net.satisfy.camping.Camping;
@@ -23,6 +22,7 @@ public class CampingItems {
 
     public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
+    public static final Item MOSQUITO_REPELLENT = new MosquitoRepellentItem(new Item.Properties().stacksTo(16));
 
     public static final Item ENDERPACK = new EnderpackBlockItem(CampingBlocks.ENDERPACK, Camping.identifier("textures/model/enderpack.png"));
     public static final Item ENDERBAG = new EnderpackBlockItem(CampingBlocks.ENDERBAG, Camping.identifier("textures/model/enderbag.png"));
@@ -49,6 +49,7 @@ public class CampingItems {
 
         consumer.accept(WALKING_STICK, Camping.identifier("walking_stick"));
         consumer.accept(MULTITOOL, Camping.identifier("multitool"));
+        consumer.accept(MOSQUITO_REPELLENT, Camping.identifier("mosquito_repellent"));
 
         consumer.accept(ENDERPACK, Camping.identifier("enderpack"));
         consumer.accept(ENDERBAG, Camping.identifier("enderbag"));
@@ -68,8 +69,9 @@ public class CampingItems {
         CREATIVE_TAB_ITEMS.add(SMALL_BACKPACK);
         CREATIVE_TAB_ITEMS.add(WANDERER_BACKPACK);
         CREATIVE_TAB_ITEMS.add(WANDERER_BAG);
-        CREATIVE_TAB_ITEMS.add(MULTITOOL);
         CREATIVE_TAB_ITEMS.add(WALKING_STICK);
+        CREATIVE_TAB_ITEMS.add(MULTITOOL);
+        CREATIVE_TAB_ITEMS.add(MOSQUITO_REPELLENT);
         CREATIVE_TAB_ITEMS.add(MARSHMALLOW);
         CREATIVE_TAB_ITEMS.add(ROASTED_MARSHMALLOW);
         CREATIVE_TAB_ITEMS.add(MARSHMALLOW_ON_A_STICK);
