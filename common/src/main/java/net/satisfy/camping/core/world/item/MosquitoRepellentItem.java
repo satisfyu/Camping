@@ -31,19 +31,19 @@ public class MosquitoRepellentItem extends Item {
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity player, ItemStack stack, int durationTimeCharged) {
-        super.onUseTick(level, player, stack, durationTimeCharged);
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        super.onUseTick(level, entity, stack, remainingUseDuration);
 
-        float yaw = player.getYRot();
+        float yaw = entity.getYRot();
         float radians = (float) Math.toRadians(yaw);
 
         double dx = -Mth.sin(radians);
         double dz = Mth.cos(radians);
 
         double offset = 1.0;
-        double px = player.getX() + dx * offset;
-        double py = player.getY() + player.getEyeHeight() - 0.1; // Near eye level
-        double pz = player.getZ() + dz * offset;
+        double px = entity.getX() + dx * offset;
+        double py = entity.getY() + entity.getEyeHeight() - 0.1; // Near eye level
+        double pz = entity.getZ() + dz * offset;
 
         double speedX = dx * 0.05;
         double speedY = 0.0;
@@ -55,7 +55,7 @@ public class MosquitoRepellentItem extends Item {
                 speedX, speedY, speedZ
         );
 
-        if (durationTimeCharged >= 40 && !player.getTags().contains(PLAYER_TAG)) player.addTag(PLAYER_TAG);
+        if (remainingUseDuration >= 40 && !entity.getTags().contains(PLAYER_TAG)) entity.addTag(PLAYER_TAG);
     }
 
     @Override

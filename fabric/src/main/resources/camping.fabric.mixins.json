@@ -7,7 +7,8 @@
     "mixins": [
         "FabricFoodDataMixin",
         "FabricItemMixin",
-        "FabricLivingEntityMixin"
+        "FabricLivingEntityMixin",
+        "FabricMobMixin"
     ],
     "client": [
         "FabricPlayerRendererMixin"

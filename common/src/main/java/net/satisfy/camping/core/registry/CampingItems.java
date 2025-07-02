@@ -22,6 +22,7 @@ public class CampingItems {
 
     public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
+    public static final Item MOSQUITO_SPAWN_EGG = new ModSpawnEggItem(() -> CampingEntities.MOSQUITO, new Item.Properties().stacksTo(16));
     public static final Item MOSQUITO_REPELLENT = new MosquitoRepellentItem(new Item.Properties().stacksTo(16));
 
     public static final Item ENDERPACK = new EnderpackBlockItem(CampingBlocks.ENDERPACK, Camping.identifier("textures/model/enderpack.png"));
@@ -49,6 +50,7 @@ public class CampingItems {
 
         consumer.accept(WALKING_STICK, Camping.identifier("walking_stick"));
         consumer.accept(MULTITOOL, Camping.identifier("multitool"));
+        consumer.accept(MOSQUITO_SPAWN_EGG, Camping.identifier("mosquito_spawn_egg"));
         consumer.accept(MOSQUITO_REPELLENT, Camping.identifier("mosquito_repellent"));
 
         consumer.accept(ENDERPACK, Camping.identifier("enderpack"));
@@ -71,6 +73,7 @@ public class CampingItems {
         CREATIVE_TAB_ITEMS.add(WANDERER_BAG);
         CREATIVE_TAB_ITEMS.add(WALKING_STICK);
         CREATIVE_TAB_ITEMS.add(MULTITOOL);
+        CREATIVE_TAB_ITEMS.add(MOSQUITO_SPAWN_EGG);
         CREATIVE_TAB_ITEMS.add(MOSQUITO_REPELLENT);
         CREATIVE_TAB_ITEMS.add(MARSHMALLOW);
         CREATIVE_TAB_ITEMS.add(ROASTED_MARSHMALLOW);

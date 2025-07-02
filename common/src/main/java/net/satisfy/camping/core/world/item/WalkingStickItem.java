@@ -48,7 +48,8 @@ public class WalkingStickItem extends TieredItem {
         if (!player.hasEffect(MobEffects.MOVEMENT_SPEED)) {
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10, 0, false, false, false));
         }
-        if (player.isHurt() && !player.getCooldowns().isOnCooldown(CampingItems.WALKING_STICK)) {
+        // if (player.isHurt() && !player.getCooldowns().isOnCooldown(CampingItems.WALKING_STICK)) {
+        if (player.hurtMarked && !player.getCooldowns().isOnCooldown(CampingItems.WALKING_STICK)) {
             player.getCooldowns().addCooldown(CampingItems.WALKING_STICK, 100);
         }
     }
