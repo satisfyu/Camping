@@ -37,7 +37,7 @@ public class SheepbagModel<T extends Entity> extends EntityModel<T> implements B
 
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int alpha) {
         poseStack.pushPose();
         sheepbag.render(poseStack, buffer, packedLight, packedOverlay);
         poseStack.popPose();

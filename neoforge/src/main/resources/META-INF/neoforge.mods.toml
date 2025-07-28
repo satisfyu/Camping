@@ -36,4 +36,4 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[accessTransformers]]
-file="META-INF/forge/accesstransformer2.cfg"
+file="META-INF/neoforge/accesstransformer2.cfg"

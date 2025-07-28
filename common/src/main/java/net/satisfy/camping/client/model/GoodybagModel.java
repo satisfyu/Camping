@@ -44,7 +44,7 @@ public class GoodybagModel<T extends Entity> extends EntityModel<T> implements B
 
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int alpha) {
         poseStack.pushPose();
         goodybag.render(poseStack, buffer, packedLight, packedOverlay);
         poseStack.popPose();
