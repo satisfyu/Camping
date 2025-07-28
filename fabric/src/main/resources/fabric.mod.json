@@ -1,7 +1,7 @@
 {
     "schemaVersion": 1,
-    "id": "camping",
-    "version": "${version}",
+    "id": "${mod_id}",
+    "version": "${mod_version}",
     "name": "${mod_name}",
     "description": "${description}",
     "authors": [
@@ -12,17 +12,17 @@
         "sources": "https://github.com/satisfyu/Camping"
     },
     "license": "${license}",
-    "icon": "assets/modid/${mod_id}.png",
+    "icon": "assets/${mod_id}/${mod_id}.png",
     "environment": "*",
     "entrypoints": {
         "main": [
-            "net.satisfy.camping.CampingFabric"
+          "net.satisfy.camping.fabric.CampingFabric"
         ],
         "client": [
-            "net.satisfy.camping.client.CampingClientFabric"
+          "net.satisfy.camping.fabric.client.CampingClientFabric"
         ],
         "modmenu": [
-            "net.satisfy.camping.core.config.ModMenu"
+          "net.satisfy.camping.fabric.core.config.ModMenu"
         ]
     },
     "mixins": [

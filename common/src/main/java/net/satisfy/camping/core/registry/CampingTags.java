@@ -6,5 +6,6 @@ import net.minecraft.world.item.Item;
 import net.satisfy.camping.Camping;
 
 public class CampingTags {
-    public static final TagKey<Item> BACKPACK_BLACKLIST = TagKey.create(Registries.ITEM, Camping.identifier("backpack_blacklist"));
+    public static final TagKey<Item> BACKPACK_BLACKLIST =
+            TagKey.create(Registries.ITEM, Camping.identifier("backpack_blacklist"));
 }

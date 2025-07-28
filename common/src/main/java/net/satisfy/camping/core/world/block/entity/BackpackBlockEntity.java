@@ -1,6 +1,7 @@
 package net.satisfy.camping.core.world.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -83,25 +84,32 @@ public class BackpackBlockEntity extends BaseContainerBlockEntity {
         return Component.translatable("container.camping.backpack");
     }
 
-    public void load(CompoundTag compoundTag) {
-        this.loadFromTag(compoundTag);
-        super.load(compoundTag);
+    @Override
+    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        this.loadFromTag(compoundTag, provider);
+        super.loadAdditional(compoundTag, provider);
     }
 
-    protected void saveAdditional(CompoundTag compoundTag) {
-        ContainerHelper.saveAllItems(compoundTag, this.itemStacks, false);
-        super.saveAdditional(compoundTag);
+    @Override
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        ContainerHelper.saveAllItems(compoundTag, this.itemStacks, provider);
+        super.saveAdditional(compoundTag, provider);
     }
 
-    public void loadFromTag(CompoundTag compoundTag) {
+    public void loadFromTag(CompoundTag compoundTag, HolderLookup.Provider provider) {
         this.itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         if (compoundTag.contains(ITEMS_TAG, 9)) {
-            ContainerHelper.loadAllItems(compoundTag, this.itemStacks);
+            ContainerHelper.loadAllItems(compoundTag, this.itemStacks, provider);
         }
     }
 
     protected NonNullList<ItemStack> getItems() {
         return this.itemStacks;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> nonNullList) {
+        this.itemStacks = nonNullList;
     }
 
     @Override

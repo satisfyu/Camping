@@ -3,6 +3,7 @@ package net.satisfy.camping.mixin;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.satisfy.camping.core.registry.CampingItems;
@@ -24,7 +25,7 @@ public class WanderingTraderMixin {
 
         if (random.nextInt(5) == 0) {
             int emeraldCost = 27 + random.nextInt(27);
-            MerchantOffer customOffer = new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(CampingItems.WANDERER_BACKPACK, 1), 6, 2, 0.05F);
+            MerchantOffer customOffer = new MerchantOffer(new ItemCost(Items.EMERALD, emeraldCost), new ItemStack(CampingItems.WANDERER_BACKPACK, 1), 6, 2, 0.05F);
             offers.add(customOffer);
         }
     }

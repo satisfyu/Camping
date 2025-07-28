@@ -13,6 +13,9 @@ repositories {
     maven { url 'https://maven.ladysnake.org/releases' }
 }
 
+def jarFileName = 'letsdo-camping-fabric'
+
+archivesBaseName = jarFileName
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
@@ -35,14 +38,8 @@ dependencies {
     modApi include("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_fabric_version}")
     modImplementation "com.terraformersmc:modmenu:${rootProject.mod_menu_version}"
     modImplementation("dev.emi:trinkets:${rootProject.trinkets_version}")
-}
-
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 }
 
 shadowJar {

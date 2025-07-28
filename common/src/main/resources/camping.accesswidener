@@ -1,1 +1,12 @@
 accessWidener   v2  named
+accessible method net/minecraft/client/gui/screens/MenuScreens register (Lnet/minecraft/world/inventory/MenuType;Lnet/minecraft/client/gui/screens/MenuScreens$ScreenConstructor;)V
+accessible method net/minecraft/world/entity/player/Player closeContainer ()V
+accessible class net/minecraft/world/inventory/MenuType
+accessible class net/minecraft/world/inventory/MenuType$MenuSupplier
+accessible class net/minecraft/client/gui/screens/MenuScreens$ScreenConstructor
+accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible class net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds
+accessible field net/minecraft/world/food/FoodProperties saturation F
+accessible field net/minecraft/world/food/FoodProperties nutrition I
+mutable field net/minecraft/world/food/FoodProperties saturation F
+mutable field net/minecraft/world/food/FoodProperties nutrition I

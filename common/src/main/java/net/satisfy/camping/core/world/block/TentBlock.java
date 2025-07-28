@@ -1,14 +1,15 @@
 package net.satisfy.camping.core.world.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,13 +33,20 @@ public class TentBlock extends HorizontalDirectionalBlock {
         this.registerDefaultState(this.defaultBlockState());
     }
 
+    public static final MapCodec<TentBlock> CODEC = simpleCodec(TentBlock::new);
+
     @Override
-    public ItemStack getCloneItemStack(BlockGetter getter, BlockPos pos, BlockState state) {
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
         if (this instanceof TentMainBlock tentMainBlock) {
             DyeColor color = tentMainBlock.getColor();
             return new ItemStack(CampingBlocks.TENT_MAIN.get(color.getName()));
         }
-        return super.getCloneItemStack(getter, pos, state);
+        return super.getCloneItemStack(levelReader, blockPos, blockState);
     }
 
     @Override

@@ -76,9 +76,8 @@ public class MultitoolItem extends Item {
         }
     }
 
-
     @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag tooltipFlag) {
         tooltip.add(Component.translatable("tooltip.camping.multitool").withStyle(ChatFormatting.WHITE));
     }
 }

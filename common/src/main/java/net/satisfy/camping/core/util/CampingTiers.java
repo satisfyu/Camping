@@ -1,9 +1,12 @@
 package net.satisfy.camping.core.util;
 
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 
 public enum CampingTiers implements Tier {
 
@@ -25,9 +28,10 @@ public enum CampingTiers implements Tier {
     }
 
     @Override
-    public int getLevel() {
-        return 0;
+    public TagKey<Block> getIncorrectBlocksForDrops() {
+        return BlockTags.INCORRECT_FOR_IRON_TOOL;
     }
+
 
     @Override
     public int getEnchantmentValue() {

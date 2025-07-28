@@ -1,10 +1,10 @@
 package net.satisfy.camping.core.world.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -44,6 +45,10 @@ public class EnderpackBlock extends BaseEntityBlock {
   public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
   private final BackpackType backpackType;
 
+  public EnderpackBlock(Properties properties) {
+    this(properties, BackpackType.ENDERPACK);
+  }
+
   public EnderpackBlock(Properties properties, BackpackType backpackType) {
     super(properties);
     this.backpackType = backpackType;
@@ -61,12 +66,12 @@ public class EnderpackBlock extends BaseEntityBlock {
   }
 
   @Override
-  public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+  public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
     return new ItemStack(CampingItems.ENDERPACK);
   }
 
   @Override
-  public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+  protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
     if (player.isCrouching()) {
       level.destroyBlock(pos, false);
       level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(CampingItems.ENDERPACK)));
@@ -126,6 +131,13 @@ public class EnderpackBlock extends BaseEntityBlock {
 
   public enum BackpackType {
     ENDERPACK, ENDERBAG
+  }
+
+  public static final MapCodec<EnderpackBlock> CODEC = simpleCodec(EnderpackBlock::new);
+
+  @Override
+  protected MapCodec<? extends BaseEntityBlock> codec() {
+    return CODEC;
   }
 
   @Override

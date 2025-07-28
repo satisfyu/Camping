@@ -5,7 +5,15 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.item.Item;
-import net.satisfy.camping.client.model.*;
+import net.satisfy.camping.client.model.BackpackModel;
+import net.satisfy.camping.client.model.EnderbagModel;
+import net.satisfy.camping.client.model.EnderpackModel;
+import net.satisfy.camping.client.model.GoodybagModel;
+import net.satisfy.camping.client.model.LargeBackpackModel;
+import net.satisfy.camping.client.model.SheepbagModel;
+import net.satisfy.camping.client.model.SmallBackpackModel;
+import net.satisfy.camping.client.model.WandererBackpackModel;
+import net.satisfy.camping.client.model.WandererBagModel;
 
 import java.util.HashMap;
 import java.util.Map;

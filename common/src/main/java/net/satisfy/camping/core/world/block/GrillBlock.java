@@ -1,5 +1,6 @@
 package net.satisfy.camping.core.world.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
@@ -11,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -50,6 +50,10 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private final int fireDamage;
 
+    public GrillBlock(Properties properties) {
+        this(properties, 1);
+    }
+
     public GrillBlock(Properties properties, int i) {
         super(properties);
         this.fireDamage = i;
@@ -83,7 +87,7 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
 
     @Override
     public void stepOn(Level world, BlockPos pos, BlockState state, Entity entity) {
-        if (state.getValue(LIT) && entity instanceof LivingEntity livingEntity && !EnchantmentHelper.hasFrostWalker(livingEntity)) {
+        if (state.getValue(LIT) && entity instanceof LivingEntity livingEntity) {
             entity.hurt(world.damageSources().hotFloor(), (float) this.fireDamage);
         }
         super.stepOn(world, pos, state, entity);
@@ -135,6 +139,13 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
         builder.add(LIT, WATERLOGGED, FACING);
     }
 
+    public static final MapCodec<GrillBlock> CODEC = simpleCodec(GrillBlock::new);
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
@@ -150,7 +161,7 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
+    protected boolean isPathfindable(BlockState blockState, PathComputationType pathComputationType) {
         return false;
     }
 }

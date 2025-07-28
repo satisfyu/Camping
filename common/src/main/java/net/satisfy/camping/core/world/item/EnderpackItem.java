@@ -1,6 +1,7 @@
 package net.satisfy.camping.core.world.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -72,7 +73,7 @@ public class EnderpackItem extends BlockItem implements Equipable {
 	}
 
 	@Override
-	public SoundEvent getEquipSound() {
-		return this.material.getEquipSound();
+	public Holder<SoundEvent> getEquipSound() {
+		return this.material.equipSound();
 	}
 }

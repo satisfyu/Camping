@@ -2,6 +2,7 @@ package net.satisfy.camping.core.world.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -13,8 +14,10 @@ import net.minecraft.world.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,7 +34,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
     private final NonNullList<ItemStack> items;
     private final int[] cookingProgress;
     private final int[] cookingTime;
-    private final RecipeManager.CachedCheck<Container, CampfireCookingRecipe> quickCheck;
+    private final RecipeManager.CachedCheck<SingleRecipeInput, CampfireCookingRecipe> quickCheck;
 
     public GrillBlockEntity(BlockPos pos, BlockState state) {
         super(CampingBlockEntities.GRILL, pos, state);
@@ -51,7 +54,7 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
                 grill.cookingProgress[i]++;
                 if (grill.cookingProgress[i] >= grill.cookingTime[i]) {
                     Container container = new SimpleContainer(itemStack);
-                    ItemStack result = grill.quickCheck.getRecipeFor(container, level).map((recipe) -> recipe.assemble(container, level.registryAccess())).orElse(itemStack);
+                    ItemStack result = grill.quickCheck.getRecipeFor(new SingleRecipeInput(itemStack), level).map((recipe) -> recipe.value().assemble(new SingleRecipeInput(itemStack), level.registryAccess())).orElse(itemStack);
                     if (result.isItemEnabled(level.enabledFeatures())) {
                         CampingUtil.Grilling.setGrilled(result);
                         Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), result);
@@ -106,10 +109,11 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         return this.items;
     }
 
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
         this.items.clear();
-        ContainerHelper.loadAllItems(tag, this.items);
+        ContainerHelper.loadAllItems(tag, this.items, provider);
         if (tag.contains("CookingTimes", 11)) {
             int[] times = tag.getIntArray("CookingTimes");
             System.arraycopy(times, 0, this.cookingProgress, 0, Math.min(this.cookingTime.length, times.length));
@@ -121,9 +125,10 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         }
     }
 
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        ContainerHelper.saveAllItems(tag, this.items, true);
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        ContainerHelper.saveAllItems(tag, this.items, provider);
         tag.putIntArray("CookingTimes", this.cookingProgress);
         tag.putIntArray("CookingTotalTimes", this.cookingTime);
     }
@@ -132,14 +137,17 @@ public class GrillBlockEntity extends BlockEntity implements Clearable {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public CompoundTag getUpdateTag() {
-        CompoundTag compoundTag = new CompoundTag();
-        ContainerHelper.saveAllItems(compoundTag, this.items, true);
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag compoundTag = super.getUpdateTag(provider);
+        ContainerHelper.saveAllItems(compoundTag, this.items, provider);
         return compoundTag;
     }
 
     public Optional<CampfireCookingRecipe> getCookableRecipe(ItemStack stack) {
-        return this.items.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.quickCheck.getRecipeFor(new SimpleContainer(stack), this.level);
+        Optional<RecipeHolder<CampfireCookingRecipe>> recipeHolder = this.quickCheck.getRecipeFor(new SingleRecipeInput(stack), this.level);
+        Optional<CampfireCookingRecipe> recipe = Optional.of(recipeHolder.get().value());
+        return this.items.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : recipe;
     }
 
     public boolean placeFood(Entity entity, ItemStack stack, int cookTime) {

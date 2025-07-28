@@ -1,10 +1,12 @@
 package net.satisfy.camping.core.world.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -44,7 +46,11 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private final BackpackType backpackType;
 
-    public static final ResourceLocation CONTENTS = new ResourceLocation("contents");
+    public static final ResourceLocation CONTENTS = ResourceLocation.parse("contents");
+
+    public BackpackBlock(Properties properties) {
+        this(properties, BackpackType.SMALL_BACKPACK);
+    }
 
     public BackpackBlock(Properties properties, BackpackType backpackType) {
         super(properties);
@@ -52,7 +58,8 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
 
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+    @Override
+    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else if (player.isSpectator()) {
@@ -62,7 +69,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
             if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
                 if (player.isShiftKeyDown()) {
                     level.destroyBlock(blockPos, true);
-                    dropBlockWithContents(level, blockPos, backpackBlockEntity);
+                    dropBlockWithContents(level, blockPos, backpackBlockEntity, level.registryAccess());
                     return InteractionResult.CONSUME;
                 }
 
@@ -75,11 +82,11 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         }
     }
 
-    private void dropBlockWithContents(Level level, BlockPos blockPos, BackpackBlockEntity backpackBlockEntity) {
+    private void dropBlockWithContents(Level level, BlockPos blockPos, BackpackBlockEntity backpackBlockEntity, HolderLookup.Provider provider) {
         ItemStack itemStack = new ItemStack(getBackpackItem());
-        backpackBlockEntity.saveToItem(itemStack);
+        backpackBlockEntity.saveToItem(itemStack, provider);
         if (backpackBlockEntity.hasCustomName()) {
-            itemStack.setHoverName(backpackBlockEntity.getCustomName());
+            itemStack.set(DataComponents.CUSTOM_NAME, backpackBlockEntity.getCustomName());
         }
         ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, itemStack);
         itemEntity.setDefaultPickUpDelay();
@@ -98,12 +105,12 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
-            dropBlockWithContents(level, blockPos, backpackBlockEntity);
+            dropBlockWithContents(level, blockPos, backpackBlockEntity, level.registryAccess());
         }
-        super.playerWillDestroy(level, blockPos, blockState, player);
+        return super.playerWillDestroy(level, blockPos, blockState, player);
     }
 
     @Override
@@ -165,7 +172,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     @Override
-    public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
+    protected boolean isPathfindable(BlockState blockState, PathComputationType pathComputationType) {
         return false;
     }
 
@@ -189,6 +196,11 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPES.get(backpackType).get(state.getValue(FACING));
+    }
+    public static final MapCodec<BackpackBlock> CODEC = simpleCodec(BackpackBlock::new);
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override

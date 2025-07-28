@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/satisfyu/Camping/issues" #optional
 
 [[mods]] #mandatory
 modId = "${mod_id}" #mandatory
-version = "${version}" #mandatory
+version = "${mod_version}" #mandatory
 displayName = "${mod_name}" #mandatory
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional (see https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/)
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional (displayed in the mod UI)
@@ -14,8 +14,12 @@ credits = "Thanks for this example mod goes to Java" #optional
 authors = "${mod_author}" #optional
 description = '''${description}''' #mandatory (Supports multiline text)
 
+config = [
+    "camping.mixins.json"
+]
+
 [[dependencies.${mod_id}]] #optional
-modId = "forge" #mandatory
+modId = "neoforge" #mandatory
 mandatory = true #mandatory
 versionRange = "[${forge_version},)" #mandatory
 ordering = "NONE" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
@@ -34,6 +38,3 @@ mandatory = true
 versionRange = "[5.10.0,)"
 ordering = "AFTER"
 side = "BOTH"
-
-[[accessTransformers]]
-file="META-INF/neoforge/accesstransformer2.cfg"

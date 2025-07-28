@@ -25,8 +25,8 @@ public class CampingItems {
     public static final Item WANDERER_BAG = new BackpackItem(CampingBlocks.WANDERER_BAG, Camping.identifier("textures/model/wanderer_bag.png"));
     public static final Item GOODYBAG = new BackpackItem(CampingBlocks.GOODYBAG, Camping.identifier("textures/model/goodybag.png"));
     public static final Item SHEEPBAG = new BackpackItem(CampingBlocks.SHEEPBAG, Camping.identifier("textures/model/sheepbag.png"));
-    public static final Item ENDERPACK = new EnderpackItem(CampingBlocks.ENDERPACK, ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, Camping.identifier("textures/model/enderpack.png"), new Item.Properties());
-    public static final Item ENDERBAG = new EnderpackItem(CampingBlocks.ENDERBAG, ArmorMaterials.LEATHER, ArmorItem.Type.CHESTPLATE, Camping.identifier("textures/model/enderbag.png"), new Item.Properties());
+    public static final Item ENDERPACK = new EnderpackItem(CampingBlocks.ENDERPACK, ArmorMaterials.LEATHER.value(), ArmorItem.Type.CHESTPLATE, Camping.identifier("textures/model/enderpack.png"), new Item.Properties());
+    public static final Item ENDERBAG = new EnderpackItem(CampingBlocks.ENDERBAG, ArmorMaterials.LEATHER.value(), ArmorItem.Type.CHESTPLATE, Camping.identifier("textures/model/enderbag.png"), new Item.Properties());
 
     public static final Item[] BACKPACKS = new Item[]{SMALL_BACKPACK, LARGE_BACKPACK, WANDERER_BACKPACK, WANDERER_BAG, GOODYBAG, SHEEPBAG};
 

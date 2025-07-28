@@ -1,5 +1,6 @@
 package net.satisfy.camping.mixin;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
@@ -15,14 +16,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
 
-    @Redirect(method = "knockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/world/entity/ai/attributes/Attribute;)D"))
-    private double camping$onGetKnockBackResistance(LivingEntity instance, Attribute attribute) {
+    @Redirect(method = "knockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
+    private double camping$onGetKnockBackResistance(LivingEntity instance, Holder<Attribute> holder) {
         if (instance instanceof Player player && player.getMainHandItem().getItem() instanceof WalkingStickItem) {
             if (!player.getCooldowns().isOnCooldown(CampingItems.WALKING_STICK)) {
                 return 10.0D;
             }
         }
-        return instance.getAttributeValue(attribute);
+        return instance.getAttributeValue(holder);
     }
 
     @Inject(method = "knockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;"))

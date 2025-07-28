@@ -7,17 +7,16 @@ architectury {
     neoForge()
 }
 
+def jarFileName = 'letsdo-camping-neoforge'
+
+archivesBaseName = jarFileName
+
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
 
     neoForge {
     }
 }
-
-
-def jarFileName = 'letsdo-bloomingnature-neoforge'
-
-archivesBaseName = jarFileName
 
 configurations {
     common
@@ -32,14 +31,8 @@ dependencies {
     modApi "dev.architectury:architectury-neoforge:${rootProject.architectury_version}"
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
-}
-
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("META-INF/neoforge.neoforge.mods.toml") {
-        expand "version": project.version
-    }
+    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
 }
 
 shadowJar {
