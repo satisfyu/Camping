@@ -1,4 +1,4 @@
-package net.satisfy.camping.neoforge.core.network.packet;
+package net.satisfy.camping.fabric.core.network.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -8,8 +8,7 @@ import net.satisfy.camping.Camping;
 /**
  * @author wdog5
  * For new network system
- * since neoforge reworked the network system
- * @see <a href="https://neoforged.net/news/20.4networking-rework">...</a>
+ * since minecraft reworked the network system
  */
 public class EnderPackPayload implements CustomPacketPayload {
 

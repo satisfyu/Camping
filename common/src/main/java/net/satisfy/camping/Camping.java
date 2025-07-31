@@ -1,6 +1,7 @@
 package net.satisfy.camping;
 
 import net.minecraft.resources.ResourceLocation;
+import net.satisfy.camping.core.registry.CampingNetworks;
 
 public class Camping {
 
@@ -21,7 +22,9 @@ public class Camping {
     * 13. hotkey for rolling out the sleeping bag when using the large backpack
     */
 
-    public static void init() {}
+    public static void init() {
+        CampingNetworks.register();
+    }
 
     public static ResourceLocation identifier(String path) {
         return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, path);

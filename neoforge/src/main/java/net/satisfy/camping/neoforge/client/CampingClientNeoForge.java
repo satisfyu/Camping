@@ -16,7 +16,6 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.Constants;
 import net.satisfy.camping.client.CampingClient;
-import net.satisfy.camping.neoforge.client.keymap.OpenKeyNeoForge;
 import net.satisfy.camping.client.model.*;
 import net.satisfy.camping.client.renderer.GrillRenderer;
 import net.satisfy.camping.neoforge.client.renderer.player.layers.EnderbagLayer;
@@ -27,8 +26,6 @@ import net.satisfy.camping.neoforge.client.renderer.player.layers.SheepbagLayer;
 import net.satisfy.camping.neoforge.client.renderer.player.layers.SmallBackpackLayer;
 import net.satisfy.camping.neoforge.client.renderer.player.layers.WandererBackpackLayer;
 import net.satisfy.camping.neoforge.client.renderer.player.layers.WandererBagLayer;
-import net.satisfy.camping.neoforge.core.network.NetworkEventHandler;
-import net.satisfy.camping.neoforge.core.network.packet.NeoForgeOpenEnderPackC2SPacket;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.neoforge.integration.CuriosBackpackRenderer;
@@ -134,19 +131,5 @@ public class CampingClientNeoForge {
             if (renderer != null) renderer.addLayer(factory.apply(renderer));
         }
 
-        @SubscribeEvent
-        public static void onKeyRegister(RegisterKeyMappingsEvent event) {
-            event.register(OpenKeyNeoForge.OPEN_KEY);
-        }
-    }
-
-    @EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-    public static class ForgeBusEvents {
-        @SubscribeEvent
-        public static void onKeyInput(InputEvent.Key event) {
-            if (OpenKeyNeoForge.OPEN_KEY.consumeClick()) {
-                NetworkEventHandler.sendToServer(new NeoForgeOpenEnderPackC2SPacket());
-            }
-        }
     }
 }

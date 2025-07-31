@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import net.satisfy.camping.client.CampingClient;
-import net.satisfy.camping.fabric.client.keymap.OpenKeyFabric;
 import net.satisfy.camping.client.model.EnderbagModel;
 import net.satisfy.camping.client.model.EnderpackModel;
 import net.satisfy.camping.client.model.GoodybagModel;
@@ -36,7 +35,6 @@ public class CampingClientFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CampingClient.init();
-        OpenKeyFabric.register();
         adjustBlockRenderLayers();
         registerEntityModelLayers();
         BlockEntityRenderers.register(CampingBlockEntities.GRILL, GrillRenderer::new);
