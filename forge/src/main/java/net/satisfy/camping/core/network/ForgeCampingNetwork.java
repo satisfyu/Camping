@@ -10,6 +10,7 @@ import net.satisfy.camping.Constants;
 import net.satisfy.camping.core.network.packet.ForgeOpenBackpackC2SPacket;
 
 public class ForgeCampingNetwork {
+    
 
     private static SimpleChannel INSTANCE;
 

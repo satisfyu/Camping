@@ -23,14 +23,10 @@ public class OpenBackpackC2SPacketHandler {
         ItemStack equipped = Services.PLATFORM.getEquippedBackpack(player);
         if (equipped == null || equipped == ItemStack.EMPTY) return;
 
-        // HANDLE ENDERPACKS
         if (equipped.is(CampingItems.ENDERPACK) || equipped.is(CampingItems.ENDERBAG)) {
-            player.openMenu(new SimpleMenuProvider((i, inventory, playerX) -> {
-                return ChestMenu.threeRows(i, inventory, player.getEnderChestInventory());
-            }, Component.translatable("container.camping.enderpack")));
+            player.openMenu(new SimpleMenuProvider((i, inventory, playerX) -> ChestMenu.threeRows(i, inventory, player.getEnderChestInventory()), Component.translatable("container.camping.enderpack")));
         }
 
-        // HANDLE BACKPACKS
         boolean isBackpack = false;
         for (Item backpack : CampingItems.BACKPACKS.get()) {
             if (equipped.is(backpack)) isBackpack = true;
@@ -57,6 +53,7 @@ public class OpenBackpackC2SPacketHandler {
 
             NonNullList<ItemStack> itemStacks = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
             blockEntityTag = BlockItem.getBlockEntityData(equipped);
+            assert blockEntityTag != null;
             ContainerHelper.loadAllItems(blockEntityTag, itemStacks);
 
             player.openMenu(new SimpleMenuProvider(
