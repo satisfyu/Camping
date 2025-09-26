@@ -10,11 +10,9 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.util.BackpackRegistry;
 import net.satisfy.camping.core.util.BackpackVariant;
 import net.satisfy.camping.core.world.item.BackpackBlockItem;
-import net.satisfy.camping.core.world.item.EnderpackBlockItem;
 
 public class BackpackRenderLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 

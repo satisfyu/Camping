@@ -28,7 +28,7 @@ public class FabricCampingLootModifiers {
                 if (validFiles.contains(file)) {
                     LootPool.Builder poolBuilder = LootPool.lootPool()
                             .setRolls(ConstantValue.exactly(1))
-                            .when(LootItemRandomChanceCondition.randomChance(0.35f)) // Drops 35% of the time
+                            .when(LootItemRandomChanceCondition.randomChance(0.35f))
                             .add(getPoolEntry(file))
                             .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)).build());
 

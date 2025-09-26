@@ -2,12 +2,15 @@ package net.satisfy.camping.core.world.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -27,7 +30,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -36,9 +38,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.camping.core.registry.CampingBlockEntities;
 import net.satisfy.camping.core.util.CampingUtil;
 import net.satisfy.camping.core.world.block.entity.GrillBlockEntity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -115,18 +119,13 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
         return new GrillBlockEntity(blockPos, blockState);
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, BlockEntityType<T> type) {
         return createTickerHelper(type, CampingBlockEntities.GRILL, level.isClientSide ? GrillBlockEntity::particleTick : GrillBlockEntity::cookTick);
-    }
-
-    @Override
-    public boolean isPathfindable(BlockState $$0, BlockGetter $$1, BlockPos $$2, PathComputationType $$3) {
-        return false;
     }
 
     static {
@@ -147,5 +146,10 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
                 map.put(direction, CampingUtil.rotateShape(Direction.NORTH, direction, VOXEL_SHAPE_SUPPLIER.get()));
             }
         });
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("tooltip.camping.canbeplaced").setStyle(Style.EMPTY.withColor(0x556B2F).withItalic(true)));
     }
 }

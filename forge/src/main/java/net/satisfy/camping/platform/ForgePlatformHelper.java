@@ -7,17 +7,14 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.core.registry.CampingItems;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.satisfy.camping.core.world.item.BackpackBlockItem;
 import net.satisfy.camping.core.world.item.EnderpackBlockItem;
 import net.satisfy.camping.optional.ForgeCuriosHelper;
 import net.satisfy.camping.platform.services.IPlatformHelper;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.fml.loading.FMLPaths;
-import top.theillusivec4.curios.api.CuriosApi;
 
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 
 public class ForgePlatformHelper implements IPlatformHelper {

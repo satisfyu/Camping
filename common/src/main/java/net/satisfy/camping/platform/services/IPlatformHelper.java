@@ -6,7 +6,6 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.satisfy.camping.core.world.inventory.BackpackScreenHandler;
 
 import java.util.function.BiFunction;
 

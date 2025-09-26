@@ -1,9 +1,9 @@
 package net.satisfy.camping.mixin;
 
-import net.satisfy.camping.Constants;
-import net.satisfy.camping.platform.Services;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
+import net.satisfy.camping.Constants;
+import net.satisfy.camping.platform.Services;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

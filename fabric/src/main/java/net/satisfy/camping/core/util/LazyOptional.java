@@ -20,9 +20,6 @@ import java.util.Set;
 public class LazyOptional<T> {
     private final NonNullSupplier<T> supplier;
     private final Object lock = new Object();
-    // null -> not resolved yet
-    // non-null and contains non-null value -> resolved
-    // non-null and contains null -> resolved, but supplier returned null (contract violation)
     private Mutable<T> resolved;
     private final Set<NonNullConsumer<LazyOptional<T>>> listeners = new HashSet<>();
     private boolean isValid = true;

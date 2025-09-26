@@ -23,6 +23,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.camping.core.registry.CampingBlocks;
 import net.satisfy.camping.core.util.CampingUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -114,7 +115,7 @@ public class TentMainBlock extends TentBlock {
 
    
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext blockPlaceContext) {
         Level level = blockPlaceContext.getLevel();
         BlockPos mainPos = blockPlaceContext.getClickedPos();
         BlockState blockState = super.getStateForPlacement(blockPlaceContext);

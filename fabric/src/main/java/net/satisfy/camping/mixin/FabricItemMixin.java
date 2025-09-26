@@ -12,12 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
 public class FabricItemMixin {
-//    @Redirect(method = "isFoil(Lnet/minecraft/world/item/ItemStack;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEnchanted()Z"))
-//    private boolean redirectIsEnchanted(ItemStack itemStack) {
-//        FabricCampingConfig config = AutoConfig.getConfigHolder(FabricCampingConfig.class).getConfig();
-//        return (itemStack.isEnchanted() || CampingUtil.Grilling.isGrilled(itemStack)) && config.enableGlint;
-//    }
-
     @Inject(method = "isFoil(Lnet/minecraft/world/item/ItemStack;)Z", at = @At(value = "RETURN"), cancellable = true)
     private void camping$isFoilInject(ItemStack pStack, CallbackInfoReturnable<Boolean> cir) {
         FabricCampingConfig config = AutoConfig.getConfigHolder(FabricCampingConfig.class).getConfig();

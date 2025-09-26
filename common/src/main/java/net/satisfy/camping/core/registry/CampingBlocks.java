@@ -1,12 +1,11 @@
 package net.satisfy.camping.core.registry;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -14,22 +13,16 @@ import net.satisfy.camping.Camping;
 import net.satisfy.camping.core.util.BackpackVariant;
 import net.satisfy.camping.core.util.EnderpackVariant;
 import net.satisfy.camping.core.world.block.*;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.ToIntFunction;
 
 public class CampingBlocks {
 
     public static final BlockBehaviour.Properties BACKPACK_BEHAVIOUR = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BIT).strength(1.5F).sound(SoundType.CANDLE).ignitedByLava().noOcclusion().noParticlesOnBreak().instabreak();
 
     public static final Block GRILL = new GrillBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON).lightLevel((state) -> state.getValue(GrillBlock.LIT) ? 10 : 0));
-    public static final Block TURNED_CAMPFIRE = new TurnedCampfireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).lightLevel(litBlockEmission(15)).noOcclusion().ignitedByLava());
-
-    public static final Block STICK_CAMPFIRE = new StickCampfireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).lightLevel(litBlockEmission(15)).noOcclusion().ignitedByLava());
 
     public static final Block ENDERPACK = new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackVariant.ENDERPACK);
     public static final Block ENDERBAG = new EnderpackBlock(BACKPACK_BEHAVIOUR, EnderpackVariant.ENDERBAG);
@@ -48,9 +41,6 @@ public class CampingBlocks {
     public static final Map<String, Block> TENT_HEAD_RIGHT = new HashMap<>();
 
     public static void register(BiConsumer<Block, ResourceLocation> consumer) {
-
-        consumer.accept(STICK_CAMPFIRE, Camping.identifier("stick_campfire"));
-        consumer.accept(TURNED_CAMPFIRE, Camping.identifier("turned_campfire"));
         consumer.accept(GRILL, Camping.identifier("grill"));
 
         consumer.accept(ENDERPACK, Camping.identifier("enderpack"));
@@ -67,12 +57,10 @@ public class CampingBlocks {
 
             String colorName = dyeColor.getName();
 
-            // sleeping bags
             Block dyedSleepingBag = new SleepingBagBlock(dyeColor);
             SLEEPING_BAGS.put(colorName, dyedSleepingBag);
             consumer.accept(dyedSleepingBag, Camping.identifier("sleeping_bag_" + colorName));
 
-            // tents
             Block coloredTentMain = new TentMainBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
             Block coloredTentMainHead = new TentMainHeadBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
             Block coloredTentRight = new TentRightBlock(BlockBehaviour.Properties.copy(Blocks.RED_WOOL).pushReaction(PushReaction.IGNORE).instabreak(), dyeColor);
@@ -86,9 +74,5 @@ public class CampingBlocks {
             consumer.accept(coloredTentRight, Camping.identifier("tent_right_" + colorName));
             consumer.accept(coloredTentHeadRight, Camping.identifier("tent_head_right_" + colorName));
         }
-    }
-
-    private static ToIntFunction<BlockState> litBlockEmission(int $$0) {
-        return ($$1) -> (Boolean)$$1.getValue(BlockStateProperties.LIT) ? $$0 : 0;
     }
 }

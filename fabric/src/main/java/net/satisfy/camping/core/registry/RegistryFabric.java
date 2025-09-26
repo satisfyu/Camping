@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +23,6 @@ public class RegistryFabric {
 
         CampingScreenHandlers.register(bind(BuiltInRegistries.MENU));
 
-        CampingEntities.register(bind(BuiltInRegistries.ENTITY_TYPE));
-
         FabricCampingLootModifiers.register();
         FabricCampingRecipes.register();
 
@@ -36,7 +35,7 @@ public class RegistryFabric {
 
     public static final CreativeModeTab CREATIVE_TAB = FabricItemGroup.builder()
             .icon(() -> new ItemStack(CampingBlocks.GRILL))
-            .title(Component.translatable("itemGroup.camping"))
+            .title(Component.translatable("itemGroup.camping").setStyle(Style.EMPTY.withColor(0x556B2F)))
             .displayItems((itemDisplayParameters, output) -> CampingItems.CREATIVE_TAB_ITEMS.forEach(output::accept))
             .build();
 

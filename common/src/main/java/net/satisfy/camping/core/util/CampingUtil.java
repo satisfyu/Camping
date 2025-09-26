@@ -1,20 +1,11 @@
 package net.satisfy.camping.core.util;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.List;
-import java.util.Objects;
-
 public class CampingUtil {
-
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
         VoxelShape[] buffer = new VoxelShape[]{shape, Shapes.empty()};
         int times = (to.get2DDataValue() - from.get2DDataValue() + 4) % 4;

@@ -1,5 +1,7 @@
 package net.satisfy.camping.platform;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -11,8 +13,6 @@ import net.satisfy.camping.core.world.item.BackpackBlockItem;
 import net.satisfy.camping.core.world.item.EnderpackBlockItem;
 import net.satisfy.camping.optional.trinkets.TrinketsHelper;
 import net.satisfy.camping.platform.services.IPlatformHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.function.BiFunction;
 

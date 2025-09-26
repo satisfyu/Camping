@@ -1,8 +1,8 @@
 package net.satisfy.camping.core.util;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 
@@ -55,10 +55,16 @@ public class GrillingUtil {
 
     public static void addGrilledTooltip(ItemStack itemStack, List<Component> tooltip) {
         if (isGrilled(itemStack)) {
-            tooltip.add(Component.translatable("tooltip.camping.grilled").withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("tooltip.camping.grilled")
+                    .setStyle(Style.EMPTY.withColor(0x556B2F)));
+
             GrillingUtil.FoodValue value = getAdditionalFoodValue(itemStack);
-            tooltip.add(Component.translatable("tooltip.camping.grilled.nutrition", value.nutrition()).withStyle(ChatFormatting.GREEN));
-            tooltip.add(Component.translatable("tooltip.camping.grilled.saturationModifier", value.saturationModifier()).withStyle(ChatFormatting.GREEN));
+
+            tooltip.add(Component.translatable("tooltip.camping.grilled.nutrition", value.nutrition())
+                    .setStyle(Style.EMPTY.withColor(0xDAA520)));
+
+            tooltip.add(Component.translatable("tooltip.camping.grilled.saturationModifier", value.saturationModifier())
+                    .setStyle(Style.EMPTY.withColor(0xDAA520)));
         }
     }
 }

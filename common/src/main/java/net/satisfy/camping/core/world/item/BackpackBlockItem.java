@@ -8,6 +8,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Equipable;
 import net.minecraft.world.level.block.Block;
 import net.satisfy.camping.core.util.BackpackVariant;
+import org.jetbrains.annotations.NotNull;
 
 public class BackpackBlockItem extends BlockItem implements Equipable {
 
@@ -33,12 +34,12 @@ public class BackpackBlockItem extends BlockItem implements Equipable {
     }
 
     @Override
-    public EquipmentSlot getEquipmentSlot() {
+    public @NotNull EquipmentSlot getEquipmentSlot() {
         return EquipmentSlot.CHEST;
     }
 
     @Override
-    public SoundEvent getEquipSound() {
+    public @NotNull SoundEvent getEquipSound() {
         return ArmorMaterials.LEATHER.getEquipSound();
     }
 }

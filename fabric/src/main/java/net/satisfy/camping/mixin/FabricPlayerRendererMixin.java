@@ -1,13 +1,10 @@
 package net.satisfy.camping.mixin;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.satisfy.camping.client.renderer.entity.layers.BackpackRenderLayer;
 import net.satisfy.camping.client.renderer.entity.layers.EnderpackRenderLayer;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;

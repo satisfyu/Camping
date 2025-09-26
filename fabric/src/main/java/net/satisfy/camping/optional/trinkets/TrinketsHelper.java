@@ -36,7 +36,6 @@ public class TrinketsHelper {
         TrinketsApi.registerTrinket(CampingItems.ENDERPACK, new BackpackTrinket());
     }
 
-    /** Returns ItemStack.EMPTY by default */
     public static ItemStack getBackpackFromTrinkets(Player player) {
         AtomicReference<ItemStack> returned = new AtomicReference<>(ItemStack.EMPTY);
 

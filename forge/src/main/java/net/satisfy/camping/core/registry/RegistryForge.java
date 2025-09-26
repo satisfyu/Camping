@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
@@ -27,8 +26,6 @@ public class RegistryForge {
         bind(Registries.CREATIVE_MODE_TAB, RegistryForge::registerTab);
 
         bind(Registries.MENU, CampingScreenHandlers::register);
-
-        bind(Registries.ENTITY_TYPE, CampingEntities::register);
 
         bind(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, ForgeCampingLootModifiers::register);
         bind(ForgeRegistries.Keys.RECIPE_SERIALIZERS, ForgeCampingRecipes::register);

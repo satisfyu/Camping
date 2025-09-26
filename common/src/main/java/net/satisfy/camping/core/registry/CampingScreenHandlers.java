@@ -10,8 +10,6 @@ import net.satisfy.camping.platform.Services;
 import java.util.function.BiConsumer;
 
 public class CampingScreenHandlers {
-
-    // public static final MenuType<BackpackScreenHandler> BACKPACK = new MenuType<>(BackpackScreenHandler::new, FeatureFlags.VANILLA_SET);
     public static final MenuType<BackpackScreenHandler> BACKPACK = Services.PLATFORM.createMenuType(BackpackScreenHandler::new, FeatureFlags.VANILLA_SET);
 
     public static void register(BiConsumer<MenuType<?>, ResourceLocation> consumer) {

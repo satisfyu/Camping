@@ -20,13 +20,6 @@ public class BackpackTrinket implements Trinket {
         return !alreadyEquippedBackpack(player);
     }
 
-    /**
-     * Checks if the player has a BackpackItem or EnderpackItem already equipped
-     * in any armor or trinket slots.
-     *
-     * @param player The player to check for equipped backpacks.
-     * @return True if a backpack or enderbag is already equipped; otherwise, false.
-     */
     public static boolean alreadyEquippedBackpack(Player player) {
 
         for (ItemStack itemStack : player.getArmorSlots()) {

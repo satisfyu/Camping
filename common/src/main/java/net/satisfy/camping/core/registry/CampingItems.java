@@ -1,12 +1,14 @@
 package net.satisfy.camping.core.registry;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.ItemLike;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.core.util.BackpackVariant;
 import net.satisfy.camping.core.world.item.*;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +19,12 @@ public class CampingItems {
 
     public static final Item MARSHMALLOW = new MarshmallowItem(false, new Item.Properties().food(CampingFoods.MARSHMALLOW));
     public static final Item ROASTED_MARSHMALLOW = new MarshmallowItem(true, new Item.Properties().food(CampingFoods.ROASTED_MARSHMALLOW));
-    public static final Item MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(false, new Item.Properties());
-    public static final Item ROASTED_MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(true, new Item.Properties());
+    public static final Item MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(new Item.Properties());
+    public static final Item ROASTED_MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(new Item.Properties());
+
 
     public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
-    public static final Item MOSQUITO_SPAWN_EGG = new ModSpawnEggItem(() -> CampingEntities.MOSQUITO, new Item.Properties().stacksTo(16));
-    public static final Item MOSQUITO_REPELLENT = new MosquitoRepellentItem(new Item.Properties().stacksTo(16));
 
     public static final Item ENDERPACK = new EnderpackBlockItem(CampingBlocks.ENDERPACK, Camping.identifier("textures/model/enderpack.png"));
     public static final Item ENDERBAG = new EnderpackBlockItem(CampingBlocks.ENDERBAG, Camping.identifier("textures/model/enderbag.png"));
@@ -39,9 +40,7 @@ public class CampingItems {
     public static final List<ItemLike> CREATIVE_TAB_ITEMS = new ArrayList<>();
     public static void register(BiConsumer<Item, ResourceLocation> consumer) {
 
-        consumer.accept(new BlockItem(CampingBlocks.TURNED_CAMPFIRE, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(CampingBlocks.TURNED_CAMPFIRE));
-        consumer.accept(new BlockItem(CampingBlocks.STICK_CAMPFIRE, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(CampingBlocks.STICK_CAMPFIRE));
-        consumer.accept(new BlockItem(CampingBlocks.GRILL, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(CampingBlocks.GRILL));
+            consumer.accept(new BlockItem(CampingBlocks.GRILL, new Item.Properties()), BuiltInRegistries.BLOCK.getKey(CampingBlocks.GRILL));
 
         consumer.accept(MARSHMALLOW, Camping.identifier("marshmallow"));
         consumer.accept(ROASTED_MARSHMALLOW, Camping.identifier("roasted_marshmallow"));
@@ -50,8 +49,6 @@ public class CampingItems {
 
         consumer.accept(WALKING_STICK, Camping.identifier("walking_stick"));
         consumer.accept(MULTITOOL, Camping.identifier("multitool"));
-        consumer.accept(MOSQUITO_SPAWN_EGG, Camping.identifier("mosquito_spawn_egg"));
-        consumer.accept(MOSQUITO_REPELLENT, Camping.identifier("mosquito_repellent"));
 
         consumer.accept(ENDERPACK, Camping.identifier("enderpack"));
         consumer.accept(ENDERBAG, Camping.identifier("enderbag"));
@@ -73,8 +70,6 @@ public class CampingItems {
         CREATIVE_TAB_ITEMS.add(WANDERER_BAG);
         CREATIVE_TAB_ITEMS.add(WALKING_STICK);
         CREATIVE_TAB_ITEMS.add(MULTITOOL);
-        CREATIVE_TAB_ITEMS.add(MOSQUITO_SPAWN_EGG);
-        CREATIVE_TAB_ITEMS.add(MOSQUITO_REPELLENT);
         CREATIVE_TAB_ITEMS.add(MARSHMALLOW);
         CREATIVE_TAB_ITEMS.add(ROASTED_MARSHMALLOW);
         CREATIVE_TAB_ITEMS.add(MARSHMALLOW_ON_A_STICK);

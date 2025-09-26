@@ -1,10 +1,13 @@
 package net.satisfy.camping.core.world.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.GameRules;
@@ -17,8 +20,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.satisfy.camping.core.registry.CampingBlocks;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class TentBlock extends HorizontalDirectionalBlock {
 
     public static final EnumProperty<DoubleBlockHalf> HALF;
@@ -33,7 +41,7 @@ public class TentBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter getter, BlockPos pos, BlockState state) {
+    public @NotNull ItemStack getCloneItemStack(BlockGetter getter, BlockPos pos, BlockState state) {
         if (this instanceof TentMainBlock tentMainBlock) {
             DyeColor color = tentMainBlock.getColor();
             return new ItemStack(CampingBlocks.TENT_MAIN.get(color.getName()));
@@ -58,5 +66,10 @@ public class TentBlock extends HorizontalDirectionalBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING);
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("tooltip.camping.canbeplaced").setStyle(Style.EMPTY.withColor(0x556B2F).withItalic(true)));
     }
 }
