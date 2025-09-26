@@ -30,8 +30,6 @@
   "block.camping.enderpack": "§5Enderpack",
   "block.camping.goodybag": "§cGoodybag",
   "block.camping.grill": "Grill",
-  "block.camping.stick_campfire": "Stick Campfire",
-  "block.camping.turned_campfire": "Turned Campfire",
   "block.camping.large_backpack": "§aHiking Backpack",
   "block.camping.sheepbag": "§6Sheepbag",
   "block.camping.sleeping_bag_black": "Black Sleeping Bag",
@@ -127,12 +125,9 @@
 
   "item.camping.walking_stick": "Walking Stick",
   "item.camping.multitool": "Multitool",
-  "item.camping.mosquito_spawn_egg": "Mosquito Spawn Egg",
-  "item.camping.mosquito_repellent": "Mosquito Repellent",
   "item.camping.marshmallow": "Marshmallow",
   "item.camping.roasted_marshmallow": "Roasted Marshmallow",
   "item.camping.marshmallow_on_a_stick": "Marshmallow on a Stick",
-  "item.camping.roasted_marshmallow_on_a_stick": "Roasted Marshmallow on a Stick",
 
   "key.camping.category": "[Let's Do] Camping",
   "key.camping.open": "Open Backpack",
@@ -150,6 +145,7 @@
   "tooltip.camping.multitool": "Right-Click to rotate Blocks",
   "tooltip.camping.canbeplaced": "Can be placed",
 
+  "tooltip.camping.marshmallow_stage.default": "Untoasted",
   "tooltip.camping.marshmallow_stage.warmed": "Warmed",
   "tooltip.camping.marshmallow_stage.melted": "Melted",
   "tooltip.camping.marshmallow_stage.charred": "Charred",

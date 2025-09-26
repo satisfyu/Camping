@@ -37,8 +37,6 @@ public class CampingClientForge {
         });
 
         modEventBus.addListener((Consumer<EntityRenderersEvent.RegisterLayerDefinitions>) event -> {
-            event.registerLayerDefinition(MosquitoModel.MOSQUITO_LAYER, MosquitoModel::createBodyLayer);
-
             event.registerLayerDefinition(EnderpackModel.LAYER_LOCATION, EnderpackModel::createBodyLayer);
             event.registerLayerDefinition(EnderbagModel.LAYER_LOCATION, EnderbagModel::createBodyLayer);
             event.registerLayerDefinition(GoodybagModel.LAYER_LOCATION, GoodybagModel::createBodyLayer);

@@ -1,6 +1,32 @@
 {
-  "parent": "item/generated",
+  "parent": "item/handheld",
   "textures": {
     "layer0": "camping:item/marshmallow_on_a_stick"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "camping:item/marshmallow_on_a_stick_warmed"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "camping:item/marshmallow_on_a_stick_melted"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "camping:item/marshmallow_on_a_stick_charred"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 4
+      },
+      "model": "camping:item/marshmallow_on_a_stick_totally_burnt"
+    }
+  ]
 }

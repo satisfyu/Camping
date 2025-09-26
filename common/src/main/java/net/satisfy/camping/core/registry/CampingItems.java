@@ -20,8 +20,6 @@ public class CampingItems {
     public static final Item MARSHMALLOW = new MarshmallowItem(false, new Item.Properties().food(CampingFoods.MARSHMALLOW));
     public static final Item ROASTED_MARSHMALLOW = new MarshmallowItem(true, new Item.Properties().food(CampingFoods.ROASTED_MARSHMALLOW));
     public static final Item MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(new Item.Properties());
-    public static final Item ROASTED_MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(new Item.Properties());
-
 
     public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
@@ -45,7 +43,6 @@ public class CampingItems {
         consumer.accept(MARSHMALLOW, Camping.identifier("marshmallow"));
         consumer.accept(ROASTED_MARSHMALLOW, Camping.identifier("roasted_marshmallow"));
         consumer.accept(MARSHMALLOW_ON_A_STICK, Camping.identifier("marshmallow_on_a_stick"));
-        consumer.accept(ROASTED_MARSHMALLOW_ON_A_STICK, Camping.identifier("roasted_marshmallow_on_a_stick"));
 
         consumer.accept(WALKING_STICK, Camping.identifier("walking_stick"));
         consumer.accept(MULTITOOL, Camping.identifier("multitool"));
@@ -73,7 +70,6 @@ public class CampingItems {
         CREATIVE_TAB_ITEMS.add(MARSHMALLOW);
         CREATIVE_TAB_ITEMS.add(ROASTED_MARSHMALLOW);
         CREATIVE_TAB_ITEMS.add(MARSHMALLOW_ON_A_STICK);
-        CREATIVE_TAB_ITEMS.add(ROASTED_MARSHMALLOW_ON_A_STICK);
 
         CampingBlocks.SLEEPING_BAGS.forEach((s, block) -> {
             consumer.accept(new BlockItem(block, new Item.Properties()),  BuiltInRegistries.BLOCK.getKey(block));

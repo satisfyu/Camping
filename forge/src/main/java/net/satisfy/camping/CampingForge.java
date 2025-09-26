@@ -20,6 +20,7 @@ import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.satisfy.camping.core.config.ForgeCampingConfig;
@@ -36,30 +37,33 @@ public class CampingForge {
 
     public static IEventBus EVENT_BUS;
     public static Pair<ForgeCampingConfig, ForgeConfigSpec> CONFIG;
-    
+
     public CampingForge(FMLJavaModLoadingContext context) {
 
         CampingForge.EVENT_BUS = context.getModEventBus();
 
-        context.registerConfig(ModConfig.Type.COMMON, ForgeCampingConfig.SPEC, "camping");
+        context.registerConfig(ModConfig.Type.COMMON, ForgeCampingConfig.SPEC, "camping-common.toml");
         EVENT_BUS.addListener(ForgeCampingConfig::onModConfigEvent);
 
         Camping.init();
-        RegistryForge.register(CampingForge.EVENT_BUS); // ensure items/blocks are registered before reference on client
-        if (FMLEnvironment.dist == Dist.CLIENT) new CampingClientForge(CampingForge.EVENT_BUS);
+        RegistryForge.register(CampingForge.EVENT_BUS);
+        if (FMLEnvironment.dist == Dist.CLIENT) EVENT_BUS.addListener(CampingForge::onClientSetup);
         ForgeCampingNetwork.register();
 
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onLivingHurt);
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onItemTooltip);
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onPlayerSetSpawn);
         MinecraftForge.EVENT_BUS.addListener(CampingForge::onRegisterCapabilities);
-        MinecraftForge.EVENT_BUS.addListener(CampingForge::onRegisterAttributes);
+    }
+
+    private static void onClientSetup(FMLClientSetupEvent event) {
+        new CampingClientForge(CampingForge.EVENT_BUS);
     }
 
     public static void onLivingHurt(final LivingHurtEvent event) {
         if (!(event.getSource().getEntity() instanceof LivingEntity livingAttacker)) return;
         ItemStack stack = livingAttacker.getMainHandItem();
-        if (stack.is(CampingItems.MARSHMALLOW_ON_A_STICK) || stack.is(CampingItems.ROASTED_MARSHMALLOW_ON_A_STICK)) {
+        if (stack.is(CampingItems.MARSHMALLOW_ON_A_STICK)) {
             if (!event.getEntity().hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) event.getEntity().addEffect(new MobEffectInstance(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 3, 2, false, true, false)));
         }
     }
@@ -78,14 +82,6 @@ public class CampingForge {
         event.register(IBackpackWrapper.class);
     }
 
-    public static void onRegisterAttributes(final EntityAttributeCreationEvent event) {
-        event.put(CampingEntities.MOSQUITO, AttributeSupplier.builder().add(Attributes.MAX_HEALTH, 0.5D).add(Attributes.KNOCKBACK_RESISTANCE, 0).add(Attributes.MOVEMENT_SPEED).add(Attributes.ARMOR, 0).add(Attributes.ARMOR_TOUGHNESS, 0).add(Attributes.FOLLOW_RANGE, 16.0F).add(Attributes.ATTACK_KNOCKBACK, 0).add(Attributes.ATTACK_DAMAGE, 0.5f).build());
-    }
-
-    /**
-     * Users may not be using Forge 47.4.0 yet, provide the original mod constructor to avoid errors.
-     * @author Jason13
-     */
     @SuppressWarnings({"removal"})
     public CampingForge() {
         this(FMLJavaModLoadingContext.get());

@@ -43,7 +43,7 @@ public class CampingFabric implements ModInitializer {
     public static void onLivingHurt(DamageSource source, float amount, LivingEntity attackedEntity) {
         if (!(source.getEntity() instanceof LivingEntity livingAttacker)) return;
         ItemStack stack = livingAttacker.getMainHandItem();
-        if (stack.is(CampingItems.MARSHMALLOW_ON_A_STICK) || stack.is(CampingItems.ROASTED_MARSHMALLOW_ON_A_STICK)) {
+        if (stack.is(CampingItems.MARSHMALLOW_ON_A_STICK)) {
             if (!attackedEntity.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) attackedEntity.addEffect(new MobEffectInstance(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 3, 2, false, true, false)));
         }
     }
