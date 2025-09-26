@@ -1,8 +1,0 @@
-{
-  "parent": "camping:block/template_stick_campfire",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "fire": "minecraft:block/campfire_fire",
-    "lit_log": "minecraft:block/campfire_log_lit"
-  }
-}

@@ -10,6 +10,7 @@
     }
   ],
   "result": {
-    "item": "camping:marshmallow"
+    "item": "camping:marshmallow",
+    "count": 4
   }
 }
