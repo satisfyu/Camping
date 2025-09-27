@@ -8,7 +8,7 @@ import net.satisfy.camping.core.world.loot.AddItemModifier;
 
 import java.util.function.BiConsumer;
 
-public class ForgeCampingLootModifiers {
+public class NeoForgeCampingLootModifiers {
 
     public static final MapCodec<? extends IGlobalLootModifier> ADD_ITEM = AddItemModifier.CODEC;
 

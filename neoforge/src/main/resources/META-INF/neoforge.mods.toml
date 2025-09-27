@@ -1,0 +1,37 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+license = "${license}"
+
+[[mixins]]
+config = "camping-neoforge.mixins.json"
+
+[[mods]]
+modId = "camping"
+version = "${version}"
+displayName = "${mod_name}"
+displayURL = "https://github.com/Let-s-Do-Collection/Let-s-Do-Collection"
+logoFile = "${mod_id}.png"
+credits = "${credits}"
+authors = "${mod_author}"
+description = '''${description}'''
+
+[[dependencies.camping]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[21.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.camping]]
+modId = "minecraft"
+mandatory = true
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.camping]]
+modId = "curios"
+mandatory = false
+versionRange = "[0,)"
+ordering = "AFTER"
+side = "BOTH"

@@ -8,31 +8,28 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import net.satisfy.camping.Camping;
-import net.satisfy.camping.CampingForge;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class RegistryForge {
+public class NeoForgeRegistry {
 
     public static void register(IEventBus modEventBus) {
-        bind(Registries.BLOCK, CampingBlocks::register);
-        bind(Registries.BLOCK_ENTITY_TYPE, CampingBlockEntities::register);
-        bind(Registries.ITEM, CampingItems::register);
-        bind(Registries.CREATIVE_MODE_TAB, RegistryForge::registerTab);
-
-        bind(Registries.MENU, CampingScreenHandlers::register);
-
-        bind(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, ForgeCampingLootModifiers::register);
-        bind(ForgeRegistries.Keys.RECIPE_SERIALIZERS, ForgeCampingRecipes::register);
+        bind(modEventBus, Registries.BLOCK, CampingBlocks::register);
+        bind(modEventBus, Registries.BLOCK_ENTITY_TYPE, CampingBlockEntities::register);
+        bind(modEventBus, Registries.ITEM, CampingItems::register);
+        bind(modEventBus, Registries.CREATIVE_MODE_TAB, NeoForgeRegistry::registerTab);
+        bind(modEventBus, Registries.MENU, CampingScreenHandlers::register);
+        bind(modEventBus, NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, NeoForgeCampingLootModifiers::register);
+        bind(modEventBus, Registries.RECIPE_SERIALIZER, NeoForgeCampingRecipes::register);
     }
 
-    private static <T> void bind(ResourceKey<Registry<T>> registry, Consumer<BiConsumer<T, ResourceLocation>> source) {
-        CampingForge.EVENT_BUS.addListener((RegisterEvent event) -> {
+    private static <T> void bind(IEventBus bus, ResourceKey<Registry<T>> registry, Consumer<BiConsumer<T, ResourceLocation>> source) {
+        bus.addListener((RegisterEvent event) -> {
             if (registry.equals(event.getRegistryKey())) {
                 source.accept((t, rl) -> event.register(registry, rl, () -> t));
             }
@@ -43,7 +40,7 @@ public class RegistryForge {
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
             .icon(() -> new ItemStack(CampingBlocks.GRILL))
             .title(Component.translatable("itemGroup.camping"))
-            .displayItems((itemDisplayParameters, output) -> CampingItems.CREATIVE_TAB_ITEMS.forEach(output::accept))
+            .displayItems((p, out) -> CampingItems.CREATIVE_TAB_ITEMS.forEach(out::accept))
             .build();
 
     public static void registerTab(BiConsumer<CreativeModeTab, ResourceLocation> consumer) {

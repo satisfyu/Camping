@@ -13,15 +13,27 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.satisfy.camping.CampingForge;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.satisfy.camping.platform.services.IRegisterHelper;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class ForgeRegisterHelper implements IRegisterHelper {
+public class NeoForgeRegisterHelper implements IRegisterHelper {
+    private IEventBus bus;
+
+    public NeoForgeRegisterHelper() {}
+
+    public NeoForgeRegisterHelper(IEventBus bus) {
+        this.bus = bus;
+    }
+
+    private IEventBus getBus() {
+        return bus != null ? bus : ModLoadingContext.get().getActiveContainer().getEventBus();
+    }
 
     @Override
     public <T extends BlockEntity> BlockEntityType<T> blockEntity(BiFunction<BlockPos, BlockState, T> func, Block... blocks) {
@@ -30,7 +42,7 @@ public class ForgeRegisterHelper implements IRegisterHelper {
 
     @Override
     public <T extends BlockEntity> void blockEntityRenderer(BlockEntityType<T> type, Function<BlockEntityRendererProvider.Context, BlockEntityRenderer<T>> rendererConstructor) {
-        CampingForge.EVENT_BUS.addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) event -> {
+        getBus().addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) event -> {
             event.registerBlockEntityRenderer(type, rendererConstructor::apply);
         });
     }
@@ -42,7 +54,7 @@ public class ForgeRegisterHelper implements IRegisterHelper {
 
     @Override
     public <T extends Entity> void entityRenderer(EntityType<T> type, Function<EntityRendererProvider.Context, EntityRenderer<T>> rendererConstructor) {
-        CampingForge.EVENT_BUS.addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) event -> {
+        getBus().addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) event -> {
             event.registerEntityRenderer(type, rendererConstructor::apply);
         });
     }

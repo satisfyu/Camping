@@ -22,37 +22,19 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ForgeCuriosHelper {
-
-    /** Returns ItemStack.EMPTY by default */
+public class NeoForgeCuriosHelper {
     public static ItemStack getBackpackFromCurios(Player player) {
         AtomicReference<ItemStack> returned = new AtomicReference<>(ItemStack.EMPTY);
 
         CuriosApi.getCuriosInventory(player).ifPresent(curioInventory -> {
-            curioInventory.findFirstCurio(CampingItems.SMALL_BACKPACK).ifPresent(slotResult -> {
-                returned.set(slotResult.stack());
-            });
-            curioInventory.findFirstCurio(CampingItems.LARGE_BACKPACK).ifPresent(slotResult -> {
-                returned.set(slotResult.stack());
-            });
-            curioInventory.findFirstCurio(CampingItems.WANDERER_BAG).ifPresent(slotResult -> {
-                returned.set(slotResult.stack());
-            });
-            curioInventory.findFirstCurio(CampingItems.WANDERER_BACKPACK).ifPresent(slotResult -> {
-                returned.set(slotResult.stack());
-            });
-            curioInventory.findFirstCurio(CampingItems.GOODYBAG).ifPresent(slotResult -> {
-                returned.set(slotResult.stack());
-            });
-            curioInventory.findFirstCurio(CampingItems.SHEEPBAG).ifPresent(slotResult -> {
-                returned.set(slotResult.stack());
-            });
-            curioInventory.findFirstCurio(CampingItems.ENDERBAG).ifPresent(slotResult -> {
-                returned.set(slotResult.stack());
-            });
-            curioInventory.findFirstCurio(CampingItems.ENDERPACK).ifPresent(slotResult -> {
-                returned.set(slotResult.stack());
-            });
+            curioInventory.findFirstCurio(CampingItems.SMALL_BACKPACK).ifPresent(slotResult -> returned.set(slotResult.stack()));
+            curioInventory.findFirstCurio(CampingItems.LARGE_BACKPACK).ifPresent(slotResult -> returned.set(slotResult.stack()));
+            curioInventory.findFirstCurio(CampingItems.WANDERER_BAG).ifPresent(slotResult -> returned.set(slotResult.stack()));
+            curioInventory.findFirstCurio(CampingItems.WANDERER_BACKPACK).ifPresent(slotResult -> returned.set(slotResult.stack()));
+            curioInventory.findFirstCurio(CampingItems.GOODYBAG).ifPresent(slotResult -> returned.set(slotResult.stack()));
+            curioInventory.findFirstCurio(CampingItems.SHEEPBAG).ifPresent(slotResult -> returned.set(slotResult.stack()));
+            curioInventory.findFirstCurio(CampingItems.ENDERBAG).ifPresent(slotResult -> returned.set(slotResult.stack()));
+            curioInventory.findFirstCurio(CampingItems.ENDERPACK).ifPresent(slotResult -> returned.set(slotResult.stack()));
         });
 
         return returned.get();
@@ -76,7 +58,7 @@ public class ForgeCuriosHelper {
             BackpackBlockItem backpack = (BackpackBlockItem) itemStack.getItem();
             Model model = BackpackRegistry.getBodyModel(backpack, ((HumanoidModel<?>) renderLayerParent.getModel()).body);
             BackpackRenderLayer.performTranslations(poseStack, backpack.variant, slotContext.entity().isCrouching());
-            model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(backpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(backpack.getTexture())), i, OverlayTexture.NO_OVERLAY);
         }
     }
 
@@ -91,12 +73,11 @@ public class ForgeCuriosHelper {
             final boolean isEnderPack = enderpack == CampingItems.ENDERPACK;
 
             poseStack.pushPose();
-
             if (isEnderBag) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
             if (isEnderPack) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
-
             if (slotContext.entity().isCrouching()) poseStack.translate(0, -0.0625f - (0.0625f / 8f), (0.0625f) / 10.0f);
-            model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(enderpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+
+            model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(enderpack.getTexture())), i, OverlayTexture.NO_OVERLAY);
             poseStack.popPose();
         }
     }

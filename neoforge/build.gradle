@@ -9,8 +9,8 @@ base {
 
 repositories {
     mavenCentral()
-    maven { url "https://maven.blamejared.com/" } // JEI
-    maven { url "https://maven.theillusivec4.top/" } // Curios
+    maven { url "https://maven.blamejared.com/" }
+    maven { url "https://maven.theillusivec4.top/" }
     maven {
         url "https://cursemaven.com"
         content { includeGroup "curse.maven" }
@@ -23,14 +23,17 @@ neoForge {
     runs {
         client {
             client()
+            gameDirectory = file('run')
             sourceSet = sourceSets.main
         }
         server {
             server()
+            gameDirectory = file('run')
             sourceSet = sourceSets.main
         }
         data {
             data()
+            gameDirectory = file('run')
             programArguments = [
                     "--mod", mod_id,
                     "--all",
@@ -42,38 +45,30 @@ neoForge {
     }
 
     mods {
-        "${mod_id}" {
-            sourceSet sourceSets.main
-        }
-        "common" {
-            sourceSet project(":common").sourceSets.main
+        register(mod_id) {
+            sourceSet(sourceSets.main)
+            sourceSet(project(":common").sourceSets.main)
         }
     }
 }
+
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
     implementation project(":common")
     annotationProcessor "org.spongepowered:mixin:0.8.5-SNAPSHOT:processor"
-
-    // JEI
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${rootProject.jei_version}"
-    runtimeOnly  "mezz.jei:jei-${minecraft_version}-neoforge:${rootProject.jei_version}"
-
-    // Curios
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${rootProject.jei_version}"
     implementation "top.theillusivec4.curios:curios-neoforge:${rootProject.curios_version}"
-
-    // Lootr (CurseMaven)
-    implementation "curse.maven:lootr-361276:6330326"
 }
 
 tasks.withType(JavaCompile).configureEach {
-    source(project(":common").sourceSets.main.allSource)
     options.encoding = 'UTF-8'
     options.release.set(21)
 }
 
 processResources {
-    from project(":common").sourceSets.main.resources
+    inputs.property 'version', project.version
+    filesMatching('META-INF/neoforge.mods.toml') { expand version: project.version }
 }

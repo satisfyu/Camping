@@ -1,13 +1,11 @@
 package net.satisfy.camping;
 
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.PlayerSkin;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.satisfy.camping.client.gui.screens.inventory.BackpackScreen;
 import net.satisfy.camping.client.model.EnderbagModel;
 import net.satisfy.camping.client.model.EnderpackModel;
@@ -20,20 +18,21 @@ import net.satisfy.camping.client.model.WandererBagModel;
 import net.satisfy.camping.client.renderer.entity.layers.BackpackRenderLayer;
 import net.satisfy.camping.client.renderer.entity.layers.EnderpackRenderLayer;
 import net.satisfy.camping.core.registry.CampingScreenHandlers;
-import net.satisfy.camping.optional.ForgeCuriosHelper;
+import net.satisfy.camping.optional.NeoForgeCuriosHelper;
 import net.satisfy.camping.platform.Services;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
 
-public class CampingClientForge {
+public class CampingClientNeoForge {
 
-    public CampingClientForge(IEventBus modEventBus) {
+    public CampingClientNeoForge(IEventBus modEventBus) {
         modEventBus.addListener((Consumer<FMLClientSetupEvent>) event -> event.enqueueWork(() -> {
             CampingClient.init();
-            MenuScreens.register(CampingScreenHandlers.BACKPACK, BackpackScreen::new);
-            if (Services.PLATFORM.isModLoaded("curios")) ForgeCuriosHelper.registerRenderersForCurios();
+            if (Services.PLATFORM.isModLoaded("curios")) NeoForgeCuriosHelper.registerRenderersForCurios();
         }));
+        modEventBus.addListener((Consumer<RegisterMenuScreensEvent>) event -> {
+            event.register(CampingScreenHandlers.BACKPACK, BackpackScreen::new);
+        });
         modEventBus.addListener((Consumer<EntityRenderersEvent.RegisterLayerDefinitions>) event -> {
             event.registerLayerDefinition(EnderpackModel.LAYER_LOCATION, EnderpackModel::createBodyLayer);
             event.registerLayerDefinition(EnderbagModel.LAYER_LOCATION, EnderbagModel::createBodyLayer);
@@ -45,16 +44,16 @@ public class CampingClientForge {
             event.registerLayerDefinition(WandererBagModel.LAYER_LOCATION, WandererBagModel::createBodyLayer);
         });
         modEventBus.addListener((Consumer<EntityRenderersEvent.AddLayers>) event -> {
-            addLayerToPlayerSkin(event, "default", EnderpackRenderLayer::new);
-            addLayerToPlayerSkin(event, "slim", EnderpackRenderLayer::new);
-            addLayerToPlayerSkin(event, "default", BackpackRenderLayer::new);
-            addLayerToPlayerSkin(event, "slim", BackpackRenderLayer::new);
+            PlayerRenderer wide = event.getSkin(PlayerSkin.Model.WIDE);
+            if (wide != null) {
+                wide.addLayer(new EnderpackRenderLayer(wide));
+                wide.addLayer(new BackpackRenderLayer(wide));
+            }
+            PlayerRenderer slim = event.getSkin(PlayerSkin.Model.SLIM);
+            if (slim != null) {
+                slim.addLayer(new EnderpackRenderLayer(slim));
+                slim.addLayer(new BackpackRenderLayer(slim));
+            }
         });
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private static <E extends Player, M extends HumanoidModel<E>> void addLayerToPlayerSkin(EntityRenderersEvent.AddLayers event, String skinName, Function<LivingEntityRenderer<E, M>, ? extends RenderLayer<E, M>> factory) {
-        LivingEntityRenderer renderer = event.getSkin(skinName);
-        if (renderer != null) renderer.addLayer(factory.apply(renderer));
     }
 }

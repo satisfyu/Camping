@@ -7,7 +7,7 @@ import net.satisfy.camping.core.world.recipe.ForgeBackpackUpgradeRecipe;
 
 import java.util.function.BiConsumer;
 
-public class ForgeCampingRecipes {
+public class NeoForgeCampingRecipes {
 
     public static final RecipeSerializer<ForgeBackpackUpgradeRecipe> BACKPACK_UPGRADE = new ForgeBackpackUpgradeRecipe.Serializer();
 

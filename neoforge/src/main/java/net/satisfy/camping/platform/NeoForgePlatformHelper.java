@@ -7,22 +7,22 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLPaths;
 import net.satisfy.camping.core.world.item.BackpackBlockItem;
 import net.satisfy.camping.core.world.item.EnderpackBlockItem;
-import net.satisfy.camping.optional.ForgeCuriosHelper;
+import net.satisfy.camping.optional.NeoForgeCuriosHelper;
 import net.satisfy.camping.platform.services.IPlatformHelper;
 
 import java.util.function.BiFunction;
 
-public class ForgePlatformHelper implements IPlatformHelper {
+public class NeoForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public String getPlatformName() {
 
-        return "Forge";
+        return "NeoForge";
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public <T extends AbstractContainerMenu> MenuType<T> createMenuType(BiFunction<Integer, Inventory, T> o, FeatureFlagSet vanillaSet) {
-        return new MenuType<T>(o::apply, vanillaSet);
+        return new MenuType<>(o::apply, vanillaSet);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
         if (chestSlotItem.getItem() instanceof BackpackBlockItem || chestSlotItem.getItem() instanceof EnderpackBlockItem) {
             return chestSlotItem;
         }
-        else if (Services.PLATFORM.isModLoaded("curios")) return ForgeCuriosHelper.getBackpackFromCurios(player);
+        else if (Services.PLATFORM.isModLoaded("curios")) return NeoForgeCuriosHelper.getBackpackFromCurios(player);
 
         return ItemStack.EMPTY;
     }
