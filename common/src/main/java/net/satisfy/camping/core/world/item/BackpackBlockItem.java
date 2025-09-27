@@ -1,7 +1,9 @@
 package net.satisfy.camping.core.world.item;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.BlockItem;
@@ -39,7 +41,6 @@ public class BackpackBlockItem extends BlockItem implements Equipable {
     }
 
     @Override
-    public @NotNull SoundEvent getEquipSound() {
-        return ArmorMaterials.LEATHER.getEquipSound();
-    }
-}
+    public @NotNull Holder<SoundEvent> getEquipSound() {
+        return SoundEvents.ARMOR_EQUIP_LEATHER;
+    }}

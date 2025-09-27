@@ -1,38 +1,41 @@
 package net.satisfy.camping.core.world.recipe;
 
-import com.google.gson.JsonObject;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
-import javax.annotation.Nullable;
 import java.util.function.Function;
 
 public class RecipeWrapperSerializer<T extends Recipe<?>, R extends Recipe<?> & IWrapperRecipe<T>> implements RecipeSerializer<R> {
 
     private final Function<T, R> initialize;
-    private final RecipeSerializer<T> recipeSerializer;
+    private final RecipeSerializer<T> base;
 
-    public RecipeWrapperSerializer(Function<T, R> initialize, RecipeSerializer<T> recipeSerializer) {
+    public RecipeWrapperSerializer(Function<T, R> initialize, RecipeSerializer<T> base) {
         this.initialize = initialize;
-        this.recipeSerializer = recipeSerializer;
+        this.base = base;
     }
 
     @Override
-    public R fromJson(ResourceLocation recipeId, JsonObject json) {
-        return initialize.apply(recipeSerializer.fromJson(recipeId, json));
-    }
-
-    @Nullable
-    @Override
-    public R fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-        T compose = recipeSerializer.fromNetwork(recipeId, buffer);
-        return compose == null ? null : initialize.apply(compose);
+    public MapCodec<R> codec() {
+        return base.codec().xmap(initialize, R::getCompose);
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, R recipe) {
-        recipeSerializer.toNetwork(buffer, recipe.getCompose());
+    public StreamCodec<RegistryFriendlyByteBuf, R> streamCodec() {
+        StreamCodec<RegistryFriendlyByteBuf, T> inner = base.streamCodec();
+        return new StreamCodec<>() {
+            @Override
+            public R decode(RegistryFriendlyByteBuf buf) {
+                return initialize.apply(inner.decode(buf));
+            }
+
+            @Override
+            public void encode(RegistryFriendlyByteBuf buf, R value) {
+                inner.encode(buf, value.getCompose());
+            }
+        };
     }
 }

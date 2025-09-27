@@ -1,6 +1,7 @@
 package net.satisfy.camping.core.world.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.satisfy.camping.core.registry.CampingBlocks;
 import net.satisfy.camping.core.registry.CampingItems;
+import org.jetbrains.annotations.NotNull;
 
 public class EnderpackBlockItem extends BlockItem implements Equipable {
 
@@ -41,8 +43,8 @@ public class EnderpackBlockItem extends BlockItem implements Equipable {
     }
 
     @Override
-    public SoundEvent getEquipSound() {
-        return ArmorMaterials.LEATHER.getEquipSound();
+    public @NotNull Holder<SoundEvent> getEquipSound() {
+        return SoundEvents.ARMOR_EQUIP_LEATHER;
     }
 
     @Override

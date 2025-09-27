@@ -1,14 +1,18 @@
 package net.satisfy.camping.optional.trinkets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketsApi;
 import dev.emi.trinkets.api.client.TrinketRenderer;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.LivingEntity;
@@ -86,9 +90,18 @@ public class TrinketsHelper {
         @Override
         public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, LivingEntity livingEntity, float v, float v1, float v2, float v3, float v4, float v5) {
             BackpackBlockItem backpack = (BackpackBlockItem) itemStack.getItem();
-            Model model = BackpackRegistry.getBodyModel(backpack, ((HumanoidModel<?>) entityModel).body);
+            Model m = BackpackRegistry.getBodyModel(backpack, ((HumanoidModel<?>) entityModel).body);
+            ModelPart part;
+            if (m instanceof HumanoidModel<?> hm) {
+                part = hm.body;
+            } else if (m instanceof HierarchicalModel<?> h) {
+                part = h.root();
+            } else {
+                return;
+            }
             BackpackRenderLayer.performTranslations(poseStack, backpack.variant, livingEntity.isCrouching());
-            model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(backpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            VertexConsumer vc = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(backpack.getTexture()));
+            part.render(poseStack, vc, i, OverlayTexture.NO_OVERLAY);
         }
     }
 
@@ -97,18 +110,28 @@ public class TrinketsHelper {
         @Override
         public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, LivingEntity entity, float v, float v1, float v2, float v3, float v4, float v5) {
             EnderpackBlockItem enderpack = (EnderpackBlockItem) itemStack.getItem();
-            Model model = BackpackRegistry.getBodyModel(enderpack, ((HumanoidModel<?>) entityModel).body);
+            Model m = BackpackRegistry.getBodyModel(enderpack, ((HumanoidModel<?>) entityModel).body);
 
-            final boolean isEnderBag = enderpack == CampingItems.ENDERBAG;
-            final boolean isEnderPack = enderpack == CampingItems.ENDERPACK;
+            boolean isEnderBag = enderpack == CampingItems.ENDERBAG;
+            boolean isEnderPack = enderpack == CampingItems.ENDERPACK;
 
             poseStack.pushPose();
-
             if (isEnderBag) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
             if (isEnderPack) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
-
             if (entity.isCrouching()) poseStack.translate(0, -0.0625f - (0.0625f / 8f), (0.0625f) / 10.0f);
-            model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(enderpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+
+            ModelPart part;
+            if (m instanceof HumanoidModel<?> hm) {
+                part = hm.body;
+            } else if (m instanceof HierarchicalModel<?> h) {
+                part = h.root();
+            } else {
+                poseStack.popPose();
+                return;
+            }
+
+            VertexConsumer vc = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(enderpack.getTexture()));
+            part.render(poseStack, vc, i, OverlayTexture.NO_OVERLAY);
             poseStack.popPose();
         }
     }

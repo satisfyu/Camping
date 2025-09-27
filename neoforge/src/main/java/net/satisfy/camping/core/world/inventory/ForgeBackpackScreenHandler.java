@@ -5,6 +5,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.satisfy.camping.core.world.BackpackContainer;
 import net.satisfy.camping.platform.Services;
+import org.jetbrains.annotations.NotNull;
 
 public class ForgeBackpackScreenHandler extends BackpackScreenHandler {
 
@@ -13,7 +14,7 @@ public class ForgeBackpackScreenHandler extends BackpackScreenHandler {
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return Services.PLATFORM.getEquippedBackpack(player) != null && !Services.PLATFORM.getEquippedBackpack(player).isEmpty();
     }
 }

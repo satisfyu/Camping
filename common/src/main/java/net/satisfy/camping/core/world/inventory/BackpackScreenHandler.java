@@ -15,6 +15,9 @@ import net.satisfy.camping.core.registry.CampingTags;
 import net.satisfy.camping.core.world.BackpackContainer;
 import net.satisfy.camping.core.world.block.BackpackBlock;
 import net.satisfy.camping.core.world.block.entity.BackpackBlockEntity;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class BackpackScreenHandler extends AbstractContainerMenu {
     private final BackpackContainer container;
@@ -34,20 +37,20 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
             for (int k = 0; k < 8; ++k) {
                 this.addSlot(new Slot(container, k + j * 8, 17 + k * 18, 12 + j * 18) {
                     @Override
-                    public boolean mayPlace(ItemStack stack) {
+                    public boolean mayPlace(@NotNull ItemStack stack) {
                         return !stack.is(CampingTags.BACKPACK_BLACKLIST);
                     }
                 });
             }
         }
-        int playerInventoryYOffset = 1;
+        int oy = 1;
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 9; ++k) {
-                this.addSlot(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 85 + j * 18 + playerInventoryYOffset));
+                this.addSlot(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 85 + j * 18 + oy));
             }
         }
         for (int j = 0; j < 9; ++j) {
-            this.addSlot(new Slot(playerInventory, j, 8 + j * 18, 143 + playerInventoryYOffset));
+            this.addSlot(new Slot(playerInventory, j, 8 + j * 18, 143 + oy));
         }
     }
 
@@ -56,33 +59,23 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int i) {
-        if (i >= 0 && i < this.slots.size()) {
-            ItemStack itemStack = ItemStack.EMPTY;
-            Slot slot = this.slots.get(i);
-            if (slot.hasItem()) {
-                ItemStack itemStack2 = slot.getItem();
-                itemStack = itemStack2.copy();
-                if (i < BackpackBlockEntity.CONTAINER_SIZE) {
-                    if (!this.moveItemStackTo(itemStack2, BackpackBlockEntity.CONTAINER_SIZE, this.slots.size(), true)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (!this.moveItemStackTo(itemStack2, 0, BackpackBlockEntity.CONTAINER_SIZE, false)) {
-                    return ItemStack.EMPTY;
-                }
-                if (itemStack2.isEmpty()) {
-                    slot.setByPlayer(ItemStack.EMPTY);
-                } else {
-                    slot.setChanged();
-                }
-                if (itemStack2.getCount() == itemStack.getCount()) {
-                    return ItemStack.EMPTY;
-                }
-                slot.onTake(player, itemStack2);
-            }
-            return itemStack;
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int i) {
+        if (i < 0 || i >= this.slots.size()) return ItemStack.EMPTY;
+        ItemStack ret = ItemStack.EMPTY;
+        Slot slot = this.slots.get(i);
+        if (!slot.hasItem()) return ItemStack.EMPTY;
+        ItemStack in = slot.getItem();
+        ret = in.copy();
+        if (i < BackpackBlockEntity.CONTAINER_SIZE) {
+            if (!this.moveItemStackTo(in, BackpackBlockEntity.CONTAINER_SIZE, this.slots.size(), true)) return ItemStack.EMPTY;
+        } else if (!this.moveItemStackTo(in, 0, BackpackBlockEntity.CONTAINER_SIZE, false)) {
+            return ItemStack.EMPTY;
         }
-        return ItemStack.EMPTY;
+        if (in.isEmpty()) slot.setByPlayer(ItemStack.EMPTY);
+        else slot.setChanged();
+        if (in.getCount() == ret.getCount()) return ItemStack.EMPTY;
+        slot.onTake(player, in);
+        return ret;
     }
 
     @Override
@@ -92,33 +85,29 @@ public class BackpackScreenHandler extends AbstractContainerMenu {
             this.player.closeContainer();
             return;
         }
-        if (!this.portable) {
-            if (this.container instanceof BackpackContainer) {
-                this.container.setChanged();
-            }
-            if (this.player.distanceToSqr(this.blockPos.getX() + 0.5, this.blockPos.getY() + 0.5, this.blockPos.getZ() + 0.5) > 64.0) {
-                this.player.closeContainer();
+        if (!this.player.level().isClientSide) {
+            this.container.setChanged();
+            if (!this.portable) {
+                if (this.player.distanceToSqr(this.blockPos.getX() + 0.5, this.blockPos.getY() + 0.5, this.blockPos.getZ() + 0.5) > 64.0) {
+                    this.player.closeContainer();
+                }
             }
         }
     }
 
     @Override
-    public void removed(Player player) {
+    public void removed(@NotNull Player player) {
         super.removed(player);
         this.container.stopOpen(player);
-        if (this.container instanceof BackpackContainer) {
-            this.container.setChanged();
-        }
+        if (!player.level().isClientSide) this.container.setChanged();
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        if (this.portable) {
-            return true;
-        }
-        BlockState checkedState = player.level().getBlockState(this.blockPos);
-        Block checkedBlock = checkedState.getBlock();
-        boolean validBlock = checkedBlock instanceof BackpackBlock && (player.level().getBlockEntity(this.blockPos) != null && !player.level().getBlockEntity(this.blockPos).isRemoved());
-        return this.container.stillValid(player) && (validBlock || (checkedBlock == Blocks.AIR && player.distanceToSqr(blockPos.getX(), blockPos.getY(), blockPos.getZ()) < 2.0D));
+    public boolean stillValid(@NotNull Player player) {
+        if (this.portable) return true;
+        BlockState s = player.level().getBlockState(this.blockPos);
+        Block b = s.getBlock();
+        boolean ok = b instanceof BackpackBlock && (player.level().getBlockEntity(this.blockPos) != null && !Objects.requireNonNull(player.level().getBlockEntity(this.blockPos)).isRemoved());
+        return this.container.stillValid(player) && (ok || (b == Blocks.AIR && player.distanceToSqr(blockPos.getX(), blockPos.getY(), blockPos.getZ()) < 2.0D));
     }
 }

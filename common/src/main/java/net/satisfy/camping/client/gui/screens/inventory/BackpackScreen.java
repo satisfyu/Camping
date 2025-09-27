@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.satisfy.camping.Camping;
 import net.satisfy.camping.core.world.inventory.BackpackScreenHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class BackpackScreen extends AbstractContainerScreen<BackpackScreenHandler> {
     private static final ResourceLocation CONTAINER_LOCATION = Camping.identifier("textures/gui/backpack.png");
@@ -24,8 +25,8 @@ public class BackpackScreen extends AbstractContainerScreen<BackpackScreenHandle
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int i, int j, float f) {
-        this.renderBackground(guiGraphics);
+    public void render(@NotNull GuiGraphics guiGraphics, int i, int j, float f) {
+        this.renderBackground(guiGraphics, i, j, f);
         super.render(guiGraphics, i, j, f);
         this.renderTooltip(guiGraphics, i, j);
     }

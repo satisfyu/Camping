@@ -8,8 +8,7 @@
         "${mod_author}"
     ],
     "contact": {
-        "homepage": "https://modrinth.com/mod/lets-do-camping",
-        "sources": "https://github.com/satisfyu/Camping"
+        "homepage": "https://github.com/Let-s-Do-Collection/Let-s-Do-Collection"
     },
     "license": "${license}",
     "icon": "${mod_id}.png",
@@ -29,19 +28,17 @@
         ]
     },
     "mixins": [
-        "${mod_id}.mixins.json",
         "${mod_id}.fabric.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=0.14",
-        "fabric": "*",
-        "minecraft": "${minecraft_version}",
-        "java": ">=17",
-        "cloth-config": ">=11.1.136"
+        "fabricloader": ">=0.16.0",
+        "fabric-api": "*",
+        "minecraft": "1.21.1",
+        "java": ">=21",
+        "cloth-config": "*"
     },
     "suggests": {
-        "modmenu": ">=7.2.2",
-        "trinkets": ">=3.7.1"
+        "modmenu": "*",
+        "trinkets": ">=3.10.0"
     }
 }
-  

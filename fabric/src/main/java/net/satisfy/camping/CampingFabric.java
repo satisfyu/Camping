@@ -21,30 +21,27 @@ import net.satisfy.camping.optional.trinkets.TrinketsHelper;
 import net.satisfy.camping.platform.Services;
 
 public class CampingFabric implements ModInitializer {
-    
     @Override
     public void onInitialize() {
         AutoConfig.register(FabricCampingConfig.class, GsonConfigSerializer::new);
         Camping.init();
         RegistryFabric.register();
-
-        FabricCampingNetwork.registerServerPacketReceivers();
-
+        FabricCampingNetwork.registerCommon();
+        FabricCampingNetwork.registerServer();
         if (Services.PLATFORM.isModLoaded("trinkets")) TrinketsHelper.registerItemsAsTrinkets();
-
         LivingEvents.LIVING_HURT.register(CampingFabric::onLivingHurt);
         EntitySleepEvents.ALLOW_SETTING_SPAWN.register(CampingFabric::onPlayerSetSpawn);
     }
 
-    public static boolean onPlayerSetSpawn(Player player, BlockPos blockPos) {
-        return !(player.level().getBlockState(blockPos).getBlock() instanceof SleepingBagBlock);
+    public static boolean onPlayerSetSpawn(Player player, BlockPos pos) {
+        return !(player.level().getBlockState(pos).getBlock() instanceof SleepingBagBlock);
     }
 
-    public static void onLivingHurt(DamageSource source, float amount, LivingEntity attackedEntity) {
-        if (!(source.getEntity() instanceof LivingEntity livingAttacker)) return;
-        ItemStack stack = livingAttacker.getMainHandItem();
+    public static void onLivingHurt(DamageSource source, float amount, LivingEntity target) {
+        if (!(source.getEntity() instanceof LivingEntity attacker)) return;
+        ItemStack stack = attacker.getMainHandItem();
         if (stack.is(CampingItems.MARSHMALLOW_ON_A_STICK)) {
-            if (!attackedEntity.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) attackedEntity.addEffect(new MobEffectInstance(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 3, 2, false, true, false)));
+            if (!target.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) target.addEffect(new MobEffectInstance(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2, false, true, false)));
         }
     }
 }

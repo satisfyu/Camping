@@ -7,7 +7,7 @@ public class Camping {
     public static void init() {
     }
 
-    public static ResourceLocation identifier(String value) {
-        return new ResourceLocation(Constants.MOD_ID, value);
+    public static ResourceLocation identifier(String name) {
+        return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name);
     }
 }

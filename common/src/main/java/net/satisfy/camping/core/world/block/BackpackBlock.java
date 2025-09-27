@@ -1,16 +1,23 @@
 package net.satisfy.camping.core.world.block;
 
+import com.mojang.serialization.MapCodec;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -23,7 +30,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -32,33 +38,51 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.util.BackpackVariant;
 import net.satisfy.camping.core.util.CampingUtil;
+import net.satisfy.camping.core.world.BackpackContainer;
 import net.satisfy.camping.core.world.block.entity.BackpackBlockEntity;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.ParametersAreNullableByDefault;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@MethodsReturnNonnullByDefault
 public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
-
-    public static final ResourceLocation CONTENTS = new ResourceLocation("contents");
-
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-
     public static final Map<BackpackVariant, Map<Direction, VoxelShape>> SHAPES;
 
     private final BackpackVariant variant;
+    private final MapCodec<BackpackBlock> codec;
 
     public BackpackBlock(Properties properties, BackpackVariant variant) {
         super(properties);
         this.variant = variant;
+        this.codec = simpleCodec(p -> new BackpackBlock(p, this.variant));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity living, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, living, stack);
+        if (level.getBlockEntity(pos) instanceof BackpackBlockEntity bbe) {
+            NonNullList<ItemStack> items = BackpackContainer.readFromItem(stack);
+            for (int i = 0; i < items.size(); i++) bbe.setItem(i, items.get(i));
+            bbe.setChanged();
+
+        }
     }
 
     public BackpackVariant getVariant() {
         return variant;
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return this.codec;
     }
 
     @Override
@@ -77,9 +101,22 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        FluidState fluidState = blockPlaceContext.getLevel().getFluidState(blockPlaceContext.getClickedPos());
-        return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!level.isClientSide && !state.is(newState.getBlock())) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof BackpackBlockEntity backpack) {
+                dropBlockWithContents(level, pos, backpack);
+            }
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        FluidState fs = ctx.getLevel().getFluidState(ctx.getClickedPos());
+        return this.defaultBlockState()
+                .setValue(FACING, ctx.getHorizontalDirection().getOpposite())
+                .setValue(WATERLOGGED, fs.getType() == Fluids.WATER);
     }
 
     @Override
@@ -93,36 +130,30 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     @Override
-    public boolean isPathfindable(BlockState $$0, BlockGetter $$1, BlockPos $$2, PathComputationType $$3) {
-        return false;
-    }
-
-    @Override
-    public boolean hasAnalogOutputSignal(BlockState blockState) {
+    public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos blockPos) {
-        return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(blockPos));
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
-        BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
-            builder = builder.withDynamicDrop(CONTENTS, consumer -> {
-                for (int i = 0; i < backpackBlockEntity.getContainerSize(); ++i) {
-                    consumer.accept(backpackBlockEntity.getItem(i));
-                }
-            });
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+        ItemStack out = new ItemStack(this.asItem());
+        BlockEntity be = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (be instanceof BackpackBlockEntity bbe) {
+            NonNullList<ItemStack> items = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
+            for (int i = 0; i < items.size(); i++) items.set(i, bbe.getItem(i));
+            BackpackContainer.writeToItem(out, items);
         }
-        return super.getDrops(blockState, builder);
+        return List.of(out);
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new BackpackBlockEntity(blockPos, blockState);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new BackpackBlockEntity(pos, state);
     }
 
     private Item getBackpackItem() {
@@ -136,65 +167,54 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         };
     }
 
-    private void dropBlockWithContents(Level level, BlockPos blockPos, BackpackBlockEntity backpackBlockEntity) {
-        ItemStack itemStack = new ItemStack(getBackpackItem());
-        backpackBlockEntity.saveToItem(itemStack);
-        if (backpackBlockEntity.hasCustomName()) {
-            itemStack.setHoverName(backpackBlockEntity.getCustomName());
+    private void dropBlockWithContents(Level level, BlockPos pos, BackpackBlockEntity be) {
+        ItemStack stack = new ItemStack(getBackpackItem());
+        be.saveToItem(stack, level.registryAccess());
+        if (be.hasCustomName()) {
+            stack.set(DataComponents.CUSTOM_NAME, be.getCustomName());
         }
-        ItemEntity itemEntity = new ItemEntity(level, blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, itemStack);
-        itemEntity.setDefaultPickUpDelay();
-        level.addFreshEntity(itemEntity);
+        ItemEntity ie = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+        ie.setDefaultPickUpDelay();
+        level.addFreshEntity(ie);
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
-        BlockEntity blockEntity = level.getBlockEntity(blockPos);
-        if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
-            dropBlockWithContents(level, blockPos, backpackBlockEntity);
-        }
-        super.playerWillDestroy(level, blockPos, blockState, player);
+    protected ItemInteractionResult useItemOn(ItemStack held, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
-
-        if (level.isClientSide) return InteractionResult.SUCCESS;
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (player.isSpectator()) return InteractionResult.CONSUME;
-
-        BlockEntity blockEntity = level.getBlockEntity(blockPos);
-        if (blockEntity instanceof BackpackBlockEntity backpack) {
-
+        if (level.isClientSide) return InteractionResult.SUCCESS;
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof BackpackBlockEntity backpack) {
             if (player.isShiftKeyDown()) {
-                level.destroyBlock(blockPos, true);
-                dropBlockWithContents(level, blockPos, backpack);
+                level.destroyBlock(pos, false);
                 return InteractionResult.CONSUME;
             }
-
             player.openMenu(backpack);
             player.awardStat(Stats.OPEN_CHEST);
             return InteractionResult.CONSUME;
         }
-
         return InteractionResult.PASS;
     }
 
-    private static Map<Direction, VoxelShape> generateShapes(Supplier<VoxelShape> shapeSupplier) {
-        Map<Direction, VoxelShape> shapeMap = new HashMap<>();
-        for (Direction direction : Direction.Plane.HORIZONTAL) {
-            shapeMap.put(direction, CampingUtil.rotateShape(Direction.NORTH, direction, shapeSupplier.get()));
+    private static Map<Direction, VoxelShape> generateShapes(Supplier<VoxelShape> supplier) {
+        Map<Direction, VoxelShape> map = new HashMap<>();
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            map.put(dir, CampingUtil.rotateShape(Direction.NORTH, dir, supplier.get()));
         }
-        return shapeMap;
+        return map;
     }
 
     static {
-        SHAPES = net.minecraft.Util.make(new HashMap<>(), map -> {
-            map.put(BackpackVariant.SMALL_BACKPACK, generateShapes(BackpackBlockShapes.SMALL_BACKPACK));
-            map.put(BackpackVariant.LARGE_BACKPACK, generateShapes(BackpackBlockShapes.LARGE_BACKPACK));
-            map.put(BackpackVariant.WANDERER_BACKPACK, generateShapes(BackpackBlockShapes.WANDERER_BACKPACK));
-            map.put(BackpackVariant.WANDERER_BAG, generateShapes(BackpackBlockShapes.WANDERER_BAG));
-            map.put(BackpackVariant.GOODYBAG, generateShapes(BackpackBlockShapes.GOODYBAG));
-            map.put(BackpackVariant.SHEEPBAG, generateShapes(BackpackBlockShapes.SHEEPBAG));
-        });
+        SHAPES = new HashMap<>();
+        SHAPES.put(BackpackVariant.SMALL_BACKPACK, generateShapes(BackpackBlockShapes.SMALL_BACKPACK));
+        SHAPES.put(BackpackVariant.LARGE_BACKPACK, generateShapes(BackpackBlockShapes.LARGE_BACKPACK));
+        SHAPES.put(BackpackVariant.WANDERER_BACKPACK, generateShapes(BackpackBlockShapes.WANDERER_BACKPACK));
+        SHAPES.put(BackpackVariant.WANDERER_BAG, generateShapes(BackpackBlockShapes.WANDERER_BAG));
+        SHAPES.put(BackpackVariant.GOODYBAG, generateShapes(BackpackBlockShapes.GOODYBAG));
+        SHAPES.put(BackpackVariant.SHEEPBAG, generateShapes(BackpackBlockShapes.SHEEPBAG));
     }
 }

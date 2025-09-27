@@ -1,19 +1,20 @@
 package net.satisfy.camping.core.world.block;
 
+import com.mojang.serialization.MapCodec;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -49,7 +50,7 @@ import java.util.function.Supplier;
 
 public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
-    private static final float FIRE_DAMAGE = 1.0f;
+    public static final MapCodec<GrillBlock> CODEC = simpleCodec(GrillBlock::new);
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -63,19 +64,49 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, true).setValue(WATERLOGGED, false).setValue(FACING, Direction.NORTH));
     }
 
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
-        BlockEntity blockEntity = level.getBlockEntity(blockPos);
-        if (blockEntity instanceof GrillBlockEntity grillBlockEntity) {
-            ItemStack itemStack = player.getItemInHand(interactionHand);
-            Optional<CampfireCookingRecipe> optional = grillBlockEntity.getCookableRecipe(itemStack);
-            if (optional.isPresent()) {
-                if (!level.isClientSide && grillBlockEntity.placeFood(player, player.getAbilities().instabuild ? itemStack.copy() : itemStack, optional.get().getCookingTime())) {
-                    return InteractionResult.SUCCESS;
-                }
-                return InteractionResult.CONSUME;
-            }
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level,
+                                              BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        BlockEntity be = level.getBlockEntity(pos);
+        if (!(be instanceof GrillBlockEntity grill)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
-        return InteractionResult.PASS;
+
+        // Optional: nur wenn der Grill brennt darf man was drauflegen
+        if (!state.getValue(LIT)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        var opt = grill.getCookableRecipe(stack);
+        if (opt.isEmpty()) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        // WICHTIG: auf dem Client nur Erfolg signalisieren -> Server führt Logik aus
+        if (level.isClientSide) {
+            return ItemInteractionResult.SUCCESS;
+        }
+
+        int time = opt.get().getCookingTime();
+
+        // Nur EIN Item platzieren
+        ItemStack one = stack.copyWithCount(1);
+
+        if (grill.placeFood(player, one, time)) {
+            if (!player.getAbilities().instabuild) {
+                stack.shrink(1); // nur wenn placeFood NICHT selbst verkleinert
+            }
+            // Server: Interaktion konsumiert
+            return ItemInteractionResult.CONSUME;
+        }
+
+        // Slot voll o.Ä.: trotzdem handled
+        return ItemInteractionResult.CONSUME;
     }
 
     @Override
@@ -94,33 +125,32 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        boolean waterlogged = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        boolean waterlogged = ctx.getLevel().getFluidState(ctx.getClickedPos()).getType() == Fluids.WATER;
         return this.defaultBlockState()
                 .setValue(WATERLOGGED, waterlogged)
                 .setValue(LIT, !waterlogged)
-                .setValue(FACING, context.getHorizontalDirection());
+                .setValue(FACING, ctx.getHorizontalDirection());
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction dir, BlockState neighbor, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+        return super.updateShape(state, dir, neighbor, level, pos, neighborPos);
     }
 
     @Override
     public void stepOn(Level world, BlockPos pos, BlockState state, Entity entity) {
-        if (state.getValue(LIT) && entity instanceof LivingEntity livingEntity && !EnchantmentHelper.hasFrostWalker(livingEntity)) {
-            entity.hurt(world.damageSources().hotFloor(), FIRE_DAMAGE);
+        if (state.getValue(LIT) && entity instanceof Player) {
+            entity.hurt(world.damageSources().hotFloor(), 1.0F);
         }
-        super.stepOn(world, pos, state, entity);
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
-        return new GrillBlockEntity(blockPos, blockState);
+    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return new GrillBlockEntity(pos, state);
     }
 
     @Override
@@ -141,15 +171,15 @@ public class GrillBlock extends BaseEntityBlock implements SimpleWaterloggedBloc
             shape = Shapes.join(shape, Shapes.box(0.375, 0.75, 0.0625, 0.625, 0.875, 0.125), BooleanOp.OR);
             return shape;
         };
-        SHAPE = net.minecraft.Util.make(new HashMap<>(), map -> {
-            for (Direction direction : Direction.Plane.HORIZONTAL.stream().toList()) {
-                map.put(direction, CampingUtil.rotateShape(Direction.NORTH, direction, VOXEL_SHAPE_SUPPLIER.get()));
+        SHAPE = Util.make(new HashMap<>(), map -> {
+            for (Direction dir : Direction.Plane.HORIZONTAL.stream().toList()) {
+                map.put(dir, CampingUtil.rotateShape(Direction.NORTH, dir, VOXEL_SHAPE_SUPPLIER.get()));
             }
         });
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.camping.canbeplaced").setStyle(Style.EMPTY.withColor(0x556B2F).withItalic(true)));
     }
 }

@@ -1,27 +1,30 @@
 package net.satisfy.camping.core.world.recipe;
 
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.Level;
 import net.satisfy.camping.core.registry.FabricCampingRecipes;
 import net.satisfy.camping.core.world.item.BackpackBlockItem;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedHashSet;
 import java.util.Optional;
-import java.util.Set;
 
-public class FabricBackpackUpgradeRecipe extends ShapedRecipe implements IWrapperRecipe<ShapedRecipe> {
+public class FabricBackpackUpgradeRecipe implements CraftingRecipe, IWrapperRecipe<ShapedRecipe> {
 
-    public static final Set<ResourceLocation> REGISTERED_RECIPES = new LinkedHashSet<>();
     private final ShapedRecipe compose;
 
     public FabricBackpackUpgradeRecipe(ShapedRecipe compose) {
-        super(compose.getId(), compose.getGroup(), compose.category(), compose.getWidth(), compose.getHeight(), compose.getIngredients(), compose.result);
         this.compose = compose;
-        REGISTERED_RECIPES.add(compose.getId());
     }
 
     @Override
@@ -30,42 +33,77 @@ public class FabricBackpackUpgradeRecipe extends ShapedRecipe implements IWrappe
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return FabricCampingRecipes.BACKPACK_UPGRADE;
     }
 
     @Override
-    public boolean isSpecial() {
-        return true;
-    }
-
-    private Optional<ItemStack> getBackpack(CraftingContainer inv) {
-        for (int slot = 0; slot < inv.getContainerSize(); slot++) {
-            ItemStack slotStack = inv.getItem(slot);
-            if (slotStack.getItem() instanceof BackpackBlockItem) {
-                return Optional.of(slotStack);
-            }
-        }
-
-        return Optional.empty();
+    public @NotNull String getGroup() {
+        return compose.getGroup();
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
-        ItemStack upgradedBackpack = super.assemble(inv, registryAccess);
-        getBackpack(inv).flatMap(backpack -> Optional.ofNullable(backpack.getTag())).ifPresent(tag -> upgradedBackpack.setTag(tag.copy()));
+    public @NotNull CraftingBookCategory category() {
+        return compose.category();
+    }
 
-//        upgradedBackpack.getCapability(CampingForge.BACKPACK_WRAPPER_CAPABILITY).ifPresent(wrapper -> {
-//            BackpackBlockItem backpackItem = ((BackpackBlockItem) upgradedBackpack.getItem());
-//            wrapper.setSlotNumbers(backpackItem.getNumberOfSlots(), backpackItem.getNumberOfUpgradeSlots());
-//        });
+    @Override
+    public @NotNull ItemStack getResultItem(HolderLookup.@NotNull Provider provider) {
+        return compose.getResultItem(provider);
+    }
 
-        BackpackWrapperLookup.get(upgradedBackpack).ifPresent(wrapper -> {
-            BackpackBlockItem backpackItem = ((BackpackBlockItem) upgradedBackpack.getItem());
-            wrapper.setSlotNumbers(backpackItem.getNumberOfSlots(), backpackItem.getNumberOfUpgradeSlots());
+    @Override
+    public @NotNull NonNullList<Ingredient> getIngredients() {
+        return compose.getIngredients();
+    }
+
+    @Override
+    public boolean showNotification() {
+        return compose.showNotification();
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int w, int h) {
+        return compose.canCraftInDimensions(w, h);
+    }
+
+    @Override
+    public boolean matches(@NotNull CraftingInput input, @NotNull Level level) {
+        return compose.matches(input, level);
+    }
+
+    @Override
+    public @NotNull ItemStack assemble(@NotNull CraftingInput input, HolderLookup.@NotNull Provider provider) {
+        ItemStack upgraded = compose.assemble(input, provider);
+        getBackpack(input).ifPresent(backpack -> {
+            CustomData data = backpack.get(DataComponents.CUSTOM_DATA);
+            if (data != null) {
+                CompoundTag tagCopy = data.copyTag();
+                upgraded.set(DataComponents.CUSTOM_DATA, CustomData.of(tagCopy));
+            }
         });
+        BackpackWrapperLookup.get(upgraded).ifPresent(wrapper -> {
+            BackpackBlockItem item = (BackpackBlockItem) upgraded.getItem();
+            wrapper.setSlotNumbers(item.getNumberOfSlots(), item.getNumberOfUpgradeSlots());
+        });
+        return upgraded;
+    }
 
-        return upgradedBackpack;
+    @Override
+    public boolean isIncomplete() {
+        return compose.isIncomplete();
+    }
+
+    private Optional<ItemStack> getBackpack(CraftingInput input) {
+        int w = input.width();
+        int h = input.height();
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                ItemStack s = input.getItem(x + y * w);
+                if (s.getItem() instanceof BackpackBlockItem) return Optional.of(s);
+            }
+        }
+        return Optional.empty();
     }
 
     public static class Serializer extends RecipeWrapperSerializer<ShapedRecipe, FabricBackpackUpgradeRecipe> {

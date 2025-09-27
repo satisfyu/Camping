@@ -39,7 +39,7 @@ public class EnderpackRenderLayer extends RenderLayer<AbstractClientPlayer, Play
 
         if (abstractClientPlayer.isCrouching()) poseStack.translate(0, -0.0625f - (0.0625f / 8f), (0.0625f) / 10.0f);
 
-        model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(enderpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(enderpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         poseStack.popPose();
     }
 }

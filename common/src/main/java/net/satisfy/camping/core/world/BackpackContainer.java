@@ -1,121 +1,73 @@
 package net.satisfy.camping.core.world;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.ContainerListener;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.StackedContentsCompatible;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.satisfy.camping.core.world.block.entity.BackpackBlockEntity;
-import net.satisfy.camping.platform.Services;
+import net.satisfy.camping.core.world.item.BackpackBlockItem;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.function.Predicate;
 
-@SuppressWarnings("all")
 public class BackpackContainer implements Container, StackedContentsCompatible {
-    private NonNullList<ItemStack> stacks = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> stacks;
+    private final Player player;
+    private final EquipmentSlot slot;
 
-
-    private List<ContainerListener> listeners;
-
-    private  Player player;
-
-    public BackpackContainer(NonNullList<ItemStack> itemStacks) {
-        this.stacks = itemStacks;
+    public static BackpackContainer forEquipment(Player p, EquipmentSlot s) {
+        
+        ItemStack stack = p.getItemBySlot(s);
+        NonNullList<ItemStack> items = readFromItem(stack);
+        return new BackpackContainer(items, p, s);
     }
 
-    public BackpackContainer(NonNullList<ItemStack> itemStacks,  Player player) {
-        this(itemStacks);
-        this.player = player;
+    public BackpackContainer(NonNullList<ItemStack> stacks) { this(stacks, null, null); }
+    public BackpackContainer(NonNullList<ItemStack> stacks, Player player, EquipmentSlot slot) {
+        this.stacks = stacks; this.player = player; this.slot = slot;
     }
 
-    @Override
-    public int getContainerSize() {
-        return BackpackBlockEntity.CONTAINER_SIZE;
+    @Override public int getContainerSize() { return BackpackBlockEntity.CONTAINER_SIZE; }
+    @Override public boolean isEmpty() { for (ItemStack s : stacks) if (!s.isEmpty()) return false; return true; }
+    @Override public @NotNull ItemStack getItem(int i) { return stacks.get(i); }
+    @Override public @NotNull ItemStack removeItem(int i, int j) { ItemStack out = ContainerHelper.removeItem(stacks, i, j); if (!out.isEmpty()) setChanged(); return out; }
+    @Override public @NotNull ItemStack removeItemNoUpdate(int i) { return ContainerHelper.takeItem(stacks, i); }
+    @Override public void setItem(int i, @NotNull ItemStack itemStack) { stacks.set(i, itemStack); setChanged(); }
+    @Override public boolean stillValid(Player p) { return !p.isDeadOrDying(); }
+    @Override public void clearContent() { for (int i = 0; i < stacks.size(); i++) stacks.set(i, ItemStack.EMPTY); setChanged(); }
+    @Override public void fillStackedContents(@NotNull StackedContents sc) { for (ItemStack s : stacks) sc.accountStack(s); setChanged(); }
+
+    @Override public void setChanged() {
+        if (player == null || player.level().isClientSide || slot == null) return;
+        ItemStack eq = player.getItemBySlot(slot);
+        if (eq.isEmpty() || !(eq.getItem() instanceof BackpackBlockItem)) return;
+        if (allEmpty(stacks)) eq.remove(DataComponents.CONTAINER);
+        else eq.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(stacks));
+        player.setItemSlot(slot, eq);
+        player.getInventory().setChanged();
     }
 
-    @Override
-    public boolean isEmpty() {
-        return this.stacks.stream().allMatch(Predicate.isEqual(ItemStack.EMPTY));
+    public List<ItemStack> getStacks() { return stacks; }
+
+    public static void writeToItem(ItemStack stack, NonNullList<ItemStack> items) {
+        if (allEmpty(items)) stack.remove(DataComponents.CONTAINER);
+        else stack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(items));
     }
 
-    @Override
-    public ItemStack getItem(int i) {
-        return stacks.get(i);
+    public static NonNullList<ItemStack> readFromItem(ItemStack stack) {
+        NonNullList<ItemStack> list = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
+        stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).copyInto(list);
+        return list;
     }
 
-    @Override
-    public ItemStack removeItem(int i, int j) {
-        return ContainerHelper.removeItem(stacks, i, j);
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int i) {
-        return ContainerHelper.takeItem(this.stacks, i);
-    }
-
-    @Override
-    public void setItem(int i, ItemStack itemStack) {
-        stacks.set(i, itemStack);
-        this.setChanged();
-    }
-
-    @Override
-    public boolean stillValid(Player player) {
-        return !player.isDeadOrDying();
-    }
-
-    @Override
-    public void clearContent() {
-        this.stacks.clear();
-        this.setChanged();
-    }
-
-    @Override
-    public void fillStackedContents(StackedContents stackedContents) {
-        for (ItemStack itemStack : this.stacks) {
-            stackedContents.accountStack(itemStack);
-        }
-        this.setChanged();
-    }
-
-    @Override
-    public void setChanged() {
-
-        if (this.player == null) return;
-
-        NonNullList<ItemStack> itemStacks = NonNullList.withSize(24, ItemStack.EMPTY);
-
-        CompoundTag blockEntityTag = BlockItem.getBlockEntityData(Services.PLATFORM.getEquippedBackpack(this.player));
-
-        if (blockEntityTag == null) {
-            CompoundTag compoundTag = new CompoundTag();
-            ContainerHelper.saveAllItems(compoundTag, NonNullList.withSize(24, ItemStack.EMPTY));
-            ItemStack itemStack1 = Services.PLATFORM.getEquippedBackpack(this.player);
-            itemStack1.addTagElement("BlockEntityTag", compoundTag);
-            blockEntityTag = BlockItem.getBlockEntityData(itemStack1);
-        }
-
-        ContainerHelper.loadAllItems(blockEntityTag, itemStacks);
-
-        List<ItemStack> itemStacks1 = this.stacks;
-        List<ItemStack> itemStacks2 = itemStacks;
-
-        if (itemStacks1.equals(itemStacks2)) return;
-        else {
-            CompoundTag compoundTag = new CompoundTag();
-            ContainerHelper.saveAllItems(compoundTag, this.stacks);
-            Services.PLATFORM.getEquippedBackpack(this.player).addTagElement("BlockEntityTag", compoundTag);
-        }
-    }
-
-    public List<ItemStack> getStacks() {
-        return stacks;
+    private static boolean allEmpty(NonNullList<ItemStack> items) {
+        for (ItemStack s : items) if (!s.isEmpty()) return false;
+        return true;
     }
 }
-

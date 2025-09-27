@@ -2,6 +2,7 @@ package net.satisfy.camping.core.world.item;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -9,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -23,15 +25,17 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.satisfy.camping.core.registry.CampingItems;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -49,66 +53,88 @@ public class MarshmallowOnAStickItem extends Item {
         super(properties);
     }
 
-    @Override
-    public boolean isEdible() {
-        return true;
+    private static CompoundTag getOrCreateData(ItemStack stack) {
+        CustomData d = stack.get(DataComponents.CUSTOM_DATA);
+        return d == null ? new CompoundTag() : d.copyTag();
+    }
+
+    private static void saveData(ItemStack stack, CompoundTag tag) {
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 
     @Override
     public @NotNull UseAnim getUseAnimation(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(NBT_ROASTING) ? UseAnim.NONE : UseAnim.EAT;
+        CompoundTag tag = getOrCreateData(stack);
+        return tag.getBoolean(NBT_ROASTING) ? UseAnim.NONE : UseAnim.EAT;
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        CompoundTag tag = getOrCreateData(stack);
         return tag.getBoolean(NBT_ROASTING) ? 72000 : 32;
     }
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = getOrCreateData(stack);
         if (!tag.contains(NBT_STAGE)) tag.putString(NBT_STAGE, "default");
-        boolean roasting = isCampfireTargeted(level, player);
+        BlockHitResult bhr = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
+        boolean roasting = bhr.getType() == HitResult.Type.BLOCK && level.getBlockState(bhr.getBlockPos()).getBlock() instanceof CampfireBlock;
         tag.putBoolean(NBT_ROASTING, roasting);
         if (roasting) {
             tag.putInt(NBT_TICKS, 0);
-            int target = 40 + level.random.nextInt(60); // 2–5 Sekunden
-            tag.putInt(NBT_TARGET, target);
+            tag.putInt(NBT_TARGET, 40 + level.random.nextInt(60));
+            saveData(stack, tag);
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(stack);
         }
-        player.startUsingItem(hand);
-        return roasting ? InteractionResultHolder.consume(stack) : ItemUtils.startUsingInstantly(level, player, hand);
+        saveData(stack, tag);
+        return ItemUtils.startUsingInstantly(level, player, hand);
     }
 
-    private boolean isCampfireTargeted(Level level, Player player) {
-        BlockHitResult bhr = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        BlockState state = level.getBlockState(bhr.getBlockPos());
-        if (!(state.getBlock() instanceof CampfireBlock)) return false;
-        if (state.hasProperty(CampfireBlock.LIT)) return state.getValue(CampfireBlock.LIT);
-        return true;
+    @Override
+    public InteractionResult useOn(UseOnContext ctx) {
+        Level level = ctx.getLevel();
+        BlockState state = level.getBlockState(ctx.getClickedPos());
+        if (!(state.getBlock() instanceof CampfireBlock)) return InteractionResult.PASS;
+        if (state.hasProperty(CampfireBlock.LIT) && !state.getValue(CampfireBlock.LIT)) return InteractionResult.PASS;
+        Player player = ctx.getPlayer();
+        if (player == null) return InteractionResult.PASS;
+        ItemStack stack = ctx.getItemInHand();
+        CompoundTag tag = getOrCreateData(stack);
+        if (!tag.contains(NBT_STAGE)) tag.putString(NBT_STAGE, "default");
+        tag.putBoolean(NBT_ROASTING, true);
+        tag.putInt(NBT_TICKS, 0);
+        tag.putInt(NBT_TARGET, 40 + level.random.nextInt(60));
+        saveData(stack, tag);
+        player.startUsingItem(ctx.getHand());
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity user, int timeLeft) {
-        stack.getOrCreateTag().remove(NBT_TICKS);
-        stack.getOrCreateTag().remove(NBT_TARGET);
-        stack.getOrCreateTag().remove(NBT_ROASTING);
+        CompoundTag tag = getOrCreateData(stack);
+        tag.remove(NBT_TICKS);
+        tag.remove(NBT_TARGET);
+        tag.remove(NBT_ROASTING);
+        saveData(stack, tag);
     }
 
     @Override
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, Level level, LivingEntity entity) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = getOrCreateData(stack);
         if (tag.getBoolean(NBT_ROASTING)) {
             tag.remove(NBT_ROASTING);
+            saveData(stack, tag);
             return stack;
         }
         FoodProperties props = resolveBaseFood(stack);
         if (entity instanceof Player player) {
-            player.getFoodData().eat(props.getNutrition(), props.getSaturationModifier());
-            for (var pair : props.getEffects()) {
-                if (level.random.nextFloat() < pair.getSecond()) {
-                    entity.addEffect(new MobEffectInstance(pair.getFirst()));
+            player.getFoodData().eat(props.nutrition(), props.saturation());
+            for (FoodProperties.PossibleEffect e : props.effects()) {
+                if (level.random.nextFloat() < e.probability()) {
+                    entity.addEffect(new MobEffectInstance(e.effect()));
                 }
             }
             String s = tag.getString(NBT_STAGE);
@@ -127,7 +153,7 @@ public class MarshmallowOnAStickItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotIndex, boolean isSelected) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = getOrCreateData(stack);
         if (!tag.contains(NBT_STAGE)) tag.putString(NBT_STAGE, "default");
         String stage = tag.getString(NBT_STAGE);
         int modelData = switch (stage) {
@@ -137,15 +163,20 @@ public class MarshmallowOnAStickItem extends Item {
             case "totally_burnt" -> 4;
             default -> 0;
         };
-        stack.getOrCreateTag().putInt("CustomModelData", modelData);
+        tag.putInt("CustomModelData", modelData);
+        saveData(stack, tag);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
+        CompoundTag tag = getOrCreateData(stack);
         if (level.isClientSide) {
-            if (!stack.getOrCreateTag().getBoolean(NBT_ROASTING)) return;
+            if (!tag.getBoolean(NBT_ROASTING)) return;
             if (!(entity instanceof Player player)) return;
-            if (!isCampfireTargeted(level, player)) return;
+            BlockHitResult bhr = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
+            if (bhr.getType() != HitResult.Type.BLOCK) return;
+            BlockState bs = level.getBlockState(bhr.getBlockPos());
+            if (!(bs.getBlock() instanceof CampfireBlock)) return;
 
             Vec3 look = player.getLookAngle();
             Vec3 right = look.cross(new Vec3(0, 1, 0)).normalize();
@@ -188,9 +219,10 @@ public class MarshmallowOnAStickItem extends Item {
                 level.addParticle(ParticleTypes.SMOKE, sx, sy, sz, 0, 0.02, 0);
             }
         } else {
-            if (!stack.getOrCreateTag().getBoolean(NBT_ROASTING)) return;
+            if (!tag.getBoolean(NBT_ROASTING)) return;
             if (!(entity instanceof ServerPlayer)) return;
-            CompoundTag tag = stack.getOrCreateTag();
+            if (!entity.isUsingItem()) return;
+            if (entity.getUseItem() != stack) return;
             int ticks = tag.getInt(NBT_TICKS) + 1;
             tag.putInt(NBT_TICKS, ticks);
             int target = tag.getInt(NBT_TARGET);
@@ -199,44 +231,49 @@ public class MarshmallowOnAStickItem extends Item {
                 int nextTarget = 40 + level.random.nextInt(60);
                 tag.putInt(NBT_TARGET, nextTarget);
                 tag.putInt(NBT_TICKS, 0);
+                saveData(stack, tag);
+            } else {
+                saveData(stack, tag);
             }
         }
     }
 
     private void advanceStage(ItemStack stack, Level level, LivingEntity entity) {
-        String s = stack.getOrCreateTag().getString(NBT_STAGE);
+        CompoundTag tag = getOrCreateData(stack);
+        String s = tag.getString(NBT_STAGE);
         if (s.isEmpty()) s = "default";
         int idx = getStageIndex(s);
         if (idx < STAGES.length - 1) {
-            stack.getOrCreateTag().putString(NBT_STAGE, STAGES[idx + 1]);
+            tag.putString(NBT_STAGE, STAGES[idx + 1]);
             int nextTarget = 40 + level.random.nextInt(60);
-            stack.getOrCreateTag().putInt(NBT_TARGET, nextTarget);
-            stack.getOrCreateTag().putInt(NBT_TICKS, 0);
+            tag.putInt(NBT_TARGET, nextTarget);
+            tag.putInt(NBT_TICKS, 0);
+            saveData(stack, tag);
             spawnParticles(entity.position(), stack, level, level.random);
         }
     }
 
     private FoodProperties resolveBaseFood(ItemStack stack) {
-        String s = stack.getOrCreateTag().getString(NBT_STAGE);
+        String s = getOrCreateData(stack).getString(NBT_STAGE);
         if (s.isEmpty()) s = "default";
         if (s.equals("default")) {
-            FoodProperties b = Items.COOKIE.getFoodProperties();
+            FoodProperties b = new ItemStack(Items.COOKIE).get(DataComponents.FOOD);
             assert b != null;
-            return new FoodProperties.Builder().nutrition(b.getNutrition()).saturationMod(b.getSaturationModifier()).alwaysEat().build();
+            return new FoodProperties.Builder().nutrition(b.nutrition()).saturationModifier(b.saturation()).alwaysEdible().build();
         }
         if (s.equals("warmed")) {
-            FoodProperties b = Items.APPLE.getFoodProperties();
+            FoodProperties b = new ItemStack(Items.APPLE).get(DataComponents.FOOD);
             assert b != null;
-            return new FoodProperties.Builder().nutrition(b.getNutrition()).saturationMod(b.getSaturationModifier()).alwaysEat().build();
+            return new FoodProperties.Builder().nutrition(b.nutrition()).saturationModifier(b.saturation()).alwaysEdible().build();
         }
         if (s.equals("melted")) {
-            FoodProperties b = Items.BREAD.getFoodProperties();
+            FoodProperties b = new ItemStack(Items.BREAD).get(DataComponents.FOOD);
             assert b != null;
-            return new FoodProperties.Builder().nutrition(b.getNutrition()).saturationMod(b.getSaturationModifier()).alwaysEat().build();
+            return new FoodProperties.Builder().nutrition(b.nutrition()).saturationModifier(b.saturation()).alwaysEdible().build();
         }
-        FoodProperties b = Items.ROTTEN_FLESH.getFoodProperties();
+        FoodProperties b = new ItemStack(Items.ROTTEN_FLESH).get(DataComponents.FOOD);
         assert b != null;
-        return new FoodProperties.Builder().nutrition(b.getNutrition()).saturationMod(b.getSaturationModifier()).alwaysEat().build();
+        return new FoodProperties.Builder().nutrition(b.nutrition()).saturationModifier(b.saturation()).alwaysEdible().build();
     }
 
     private static int getStageIndex(String stage) {
@@ -254,8 +291,9 @@ public class MarshmallowOnAStickItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        String s = stack.getOrCreateTag().getString(NBT_STAGE);
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag tooltipFlag) {
+        CompoundTag tag = getOrCreateData(itemStack);
+        String s = tag.getString(NBT_STAGE);
         if (s.isEmpty()) s = "default";
         tooltip.add(Component.translatable("tooltip.camping.marshmallow_stage." + s).withStyle(ChatFormatting.WHITE));
     }

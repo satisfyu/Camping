@@ -55,7 +55,7 @@ public class BackpackRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
         poseStack.pushPose();
 
         performTranslations(poseStack, backpack.variant, abstractClientPlayer.isCrouching());
-        model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(backpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        model.renderToBuffer(poseStack, multiBufferSource.getBuffer(model.renderType(backpack.getTexture())), i, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         poseStack.popPose();
     }

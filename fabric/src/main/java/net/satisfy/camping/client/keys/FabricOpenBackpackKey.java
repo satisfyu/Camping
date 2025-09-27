@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.KeyMapping;
-import net.satisfy.camping.core.network.FabricCampingNetwork;
+import net.satisfy.camping.core.network.packet.FabricOpenBackpackC2SPacket;
 import org.lwjgl.glfw.GLFW;
 
 public class FabricOpenBackpackKey {
@@ -21,8 +21,8 @@ public class FabricOpenBackpackKey {
             while (OPEN_BACKPACK.consumeClick()) {
                 if (client.player != null && client.screen == null) {
                     long now = System.nanoTime();
-                    if (now - lastSendNs >= 150_000_000L && ClientPlayNetworking.canSend(FabricCampingNetwork.Packets.OPEN_BACKPACK)) {
-                        ClientPlayNetworking.send(FabricCampingNetwork.Packets.OPEN_BACKPACK, net.fabricmc.fabric.api.networking.v1.PacketByteBufs.create());
+                    if (now - lastSendNs >= 150_000_000L && ClientPlayNetworking.canSend(FabricOpenBackpackC2SPacket.TYPE)) {
+                        ClientPlayNetworking.send(FabricOpenBackpackC2SPacket.INSTANCE);
                         lastSendNs = now;
                     }
                 }

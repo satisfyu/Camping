@@ -1,10 +1,13 @@
 package net.satisfy.camping.core.world.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
@@ -15,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -40,6 +44,7 @@ import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.util.CampingUtil;
 import net.satisfy.camping.core.util.EnderpackVariant;
 import net.satisfy.camping.core.world.block.entity.EnderpackBlockEntity;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -57,11 +62,18 @@ public class EnderpackBlock extends BaseEntityBlock implements SimpleWaterlogged
     public static final Map<EnderpackVariant, Map<Direction, VoxelShape>> SHAPES;
 
     private final EnderpackVariant variant;
+    private final MapCodec<EnderpackBlock> codec;
 
     public EnderpackBlock(Properties properties, EnderpackVariant variant) {
         super(properties);
         this.variant = variant;
+        this.codec = simpleCodec(p -> new EnderpackBlock(p, this.variant));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return this.codec;
     }
 
     @Override
@@ -70,9 +82,9 @@ public class EnderpackBlock extends BaseEntityBlock implements SimpleWaterlogged
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        FluidState fluidState = blockPlaceContext.getLevel().getFluidState(blockPlaceContext.getClickedPos());
-        return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        FluidState fs = ctx.getLevel().getFluidState(ctx.getClickedPos());
+        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, fs.getType() == Fluids.WATER);
     }
 
     @Override
@@ -81,7 +93,7 @@ public class EnderpackBlock extends BaseEntityBlock implements SimpleWaterlogged
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+    public @NotNull ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
         if (state.getBlock() instanceof EnderpackBlock enderpack) {
             if (enderpack.variant == EnderpackVariant.ENDERPACK) return new ItemStack(CampingItems.ENDERPACK);
             if (enderpack.variant == EnderpackVariant.ENDERBAG) return new ItemStack(CampingItems.ENDERBAG);
@@ -90,31 +102,38 @@ public class EnderpackBlock extends BaseEntityBlock implements SimpleWaterlogged
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (player.isCrouching()) {
             level.destroyBlock(pos, false);
-            level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(CampingItems.ENDERPACK)));
-        }
-        else {
-            player.openMenu(new SimpleMenuProvider((id, inventory, playerX) -> ChestMenu.threeRows(id, inventory, player.getEnderChestInventory()), CampingItems.ENDERPACK.getName(new ItemStack(CampingItems.ENDERPACK))));
+            ItemStack drop = new ItemStack(this.variant == EnderpackVariant.ENDERPACK ? CampingItems.ENDERPACK : CampingItems.ENDERBAG);
+            ItemEntity ie = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
+            ie.setDefaultPickUpDelay();
+            level.addFreshEntity(ie);
+            return InteractionResult.CONSUME;
+        } else {
+            player.openMenu(new SimpleMenuProvider((id, inv, p) -> ChestMenu.threeRows(id, inv, player.getEnderChestInventory()), CampingItems.ENDERPACK.getName(new ItemStack(CampingItems.ENDERPACK))));
             player.awardStat(Stats.OPEN_ENDERCHEST);
             return InteractionResult.SUCCESS;
         }
-        return InteractionResult.PASS;
     }
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        for(int i = 0; i < 3; ++i) {
-            int posMultiplier = random.nextInt(2) * 2 - 1;
-            int speedMultiplier = random.nextInt(2) * 2 - 1;
-            double xPos = (double)pos.getX() + 0.5 + 0.25 * (double)posMultiplier;
-            double yPos = (float)pos.getY() + random.nextFloat();
-            double zPos = (double)pos.getZ() + 0.5 + 0.25 * (double)speedMultiplier;
-            double xSpeed = random.nextFloat() * (float)posMultiplier;
-            double ySpeed = ((double)random.nextFloat() - 0.5) * 0.125;
-            double zSpeed = random.nextFloat() * (float)speedMultiplier;
-            level.addParticle(ParticleTypes.PORTAL, xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
+        for (int i = 0; i < 3; ++i) {
+            int pm = random.nextInt(2) * 2 - 1;
+            int sm = random.nextInt(2) * 2 - 1;
+            double x = pos.getX() + 0.5 + 0.25 * pm;
+            double y = pos.getY() + random.nextFloat();
+            double z = pos.getZ() + 0.5 + 0.25 * sm;
+            double vx = random.nextFloat() * pm;
+            double vy = (random.nextFloat() - 0.5) * 0.125;
+            double vz = random.nextFloat() * sm;
+            level.addParticle(ParticleTypes.PORTAL, x, y, z, vx, vy, vz);
         }
     }
 
@@ -125,7 +144,28 @@ public class EnderpackBlock extends BaseEntityBlock implements SimpleWaterlogged
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, CampingBlockEntities.ENDERPACK, (levelX, pos, stateX, enderpack) -> enderpack.tick(levelX, pos, stateX, enderpack));
+        return createTickerHelper(type, CampingBlockEntities.ENDERPACK, (lvl, p, s, be) -> be.tick(lvl, p, s, be));
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!level.isClientSide && !state.is(newState.getBlock())) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof EnderpackBlockEntity enderpack) {
+                dropSelf(level, pos, enderpack);
+            }
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    private void dropSelf(Level level, BlockPos pos, EnderpackBlockEntity be) {
+        ItemStack stack = new ItemStack(this.variant == EnderpackVariant.ENDERPACK ? CampingItems.ENDERPACK : CampingItems.ENDERBAG);
+        if (be.hasCustomName()) {
+            stack.set(DataComponents.CUSTOM_NAME, be.getCustomName());
+        }
+        ItemEntity ie = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+        ie.setDefaultPickUpDelay();
+        level.addFreshEntity(ie);
     }
 
     @Override
@@ -159,9 +199,8 @@ public class EnderpackBlock extends BaseEntityBlock implements SimpleWaterlogged
             shape = Shapes.join(shape, Shapes.box(0.4375, 0.5, 0.375, 0.5625, 0.625, 0.4375), BooleanOp.OR);
             return shape;
         };
-        SHAPES = net.minecraft.Util.make(new HashMap<>(), map -> {
-            map.put(EnderpackVariant.ENDERPACK, generateShapes(ENDERPACK));
-            map.put(EnderpackVariant.ENDERBAG, generateShapes(ENDERBAG));
-        });
+        SHAPES = new HashMap<>();
+        SHAPES.put(EnderpackVariant.ENDERPACK, generateShapes(ENDERPACK));
+        SHAPES.put(EnderpackVariant.ENDERBAG, generateShapes(ENDERBAG));
     }
 }

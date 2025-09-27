@@ -32,7 +32,7 @@ public class EnderbagModel<T extends Entity> extends EntityModel<T> implements B
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int i2) {
         poseStack.pushPose();
         enderbag.render(poseStack, buffer, packedLight, packedOverlay);
         poseStack.popPose();
@@ -47,4 +47,5 @@ public class EnderbagModel<T extends Entity> extends EntityModel<T> implements B
     public void copyBody(ModelPart model) {
         enderbag.copyFrom(model);
     }
+
 }

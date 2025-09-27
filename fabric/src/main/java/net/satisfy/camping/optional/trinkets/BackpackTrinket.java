@@ -36,6 +36,7 @@ public class BackpackTrinket implements Trinket {
             Map<String, Map<String, TrinketInventory>> inventoryMap = component.getInventory();
 
             for (Map<String, TrinketInventory> trinketGroup : inventoryMap.values()) {
+
                 for (TrinketInventory trinketInventory : trinketGroup.values()) {
                     for (int i = 0; i < trinketInventory.getContainerSize(); i++) {
                         ItemStack trinketStack = trinketInventory.getItem(i);

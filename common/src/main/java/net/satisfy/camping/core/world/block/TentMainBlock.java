@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@SuppressWarnings("deprecation")
 public class TentMainBlock extends TentBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF;
     private final DyeColor color;

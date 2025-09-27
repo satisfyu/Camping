@@ -1,16 +1,21 @@
 package net.satisfy.camping.core.network;
 
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.resources.ResourceLocation;
-import net.satisfy.camping.Camping;
 import net.satisfy.camping.core.network.packet.FabricOpenBackpackC2SPacket;
 
-public class FabricCampingNetwork {
-    public static class Packets {
-        public static final ResourceLocation OPEN_BACKPACK = Camping.identifier("open_backpack");
+public final class FabricCampingNetwork {
+    private static boolean commonDone;
+
+    public static void registerCommon() {
+        if (commonDone) return;
+        commonDone = true;
+        PayloadTypeRegistry.playC2S().register(FabricOpenBackpackC2SPacket.TYPE, FabricOpenBackpackC2SPacket.CODEC);
     }
 
-    public static void registerServerPacketReceivers() {
-        ServerPlayNetworking.registerGlobalReceiver(Packets.OPEN_BACKPACK, (server, player, handler, buf, responseSender) -> server.execute(() -> FabricOpenBackpackC2SPacket.receive(player)));
+    public static void registerServer() {
+        ServerPlayNetworking.registerGlobalReceiver(FabricOpenBackpackC2SPacket.TYPE, (p, c) -> c.server().execute(() -> FabricOpenBackpackC2SPacket.receive(c.player())));
     }
+
+    public static void registerClient() {}
 }

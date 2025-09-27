@@ -37,7 +37,7 @@ public class SmallBackpackModel<T extends Entity> extends EntityModel<T> impleme
 
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int i2) {
         poseStack.pushPose();
         small_backpack.render(poseStack, buffer, packedLight, packedOverlay);
         poseStack.popPose();

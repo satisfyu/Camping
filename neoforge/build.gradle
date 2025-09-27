@@ -1,0 +1,79 @@
+plugins {
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.+'
+}
+
+base {
+    archivesName = "${mod_id}-neoforge-${minecraft_version}"
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://maven.blamejared.com/" } // JEI
+    maven { url "https://maven.theillusivec4.top/" } // Curios
+    maven {
+        url "https://cursemaven.com"
+        content { includeGroup "curse.maven" }
+    }
+}
+
+neoForge {
+    version = neoforge_version
+
+    runs {
+        client {
+            client()
+            sourceSet = sourceSets.main
+        }
+        server {
+            server()
+            sourceSet = sourceSets.main
+        }
+        data {
+            data()
+            programArguments = [
+                    "--mod", mod_id,
+                    "--all",
+                    "--output", file('src/generated/resources/').absolutePath,
+                    "--existing", file('src/main/resources/').absolutePath
+            ]
+            sourceSet = sourceSets.main
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+        "common" {
+            sourceSet project(":common").sourceSets.main
+        }
+    }
+}
+
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
+dependencies {
+    implementation project(":common")
+    annotationProcessor "org.spongepowered:mixin:0.8.5-SNAPSHOT:processor"
+
+    // JEI
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${rootProject.jei_version}"
+    runtimeOnly  "mezz.jei:jei-${minecraft_version}-neoforge:${rootProject.jei_version}"
+
+    // Curios
+    implementation "top.theillusivec4.curios:curios-neoforge:${rootProject.curios_version}"
+
+    // Lootr (CurseMaven)
+    implementation "curse.maven:lootr-361276:6330326"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    source(project(":common").sourceSets.main.allSource)
+    options.encoding = 'UTF-8'
+    options.release.set(21)
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+}
