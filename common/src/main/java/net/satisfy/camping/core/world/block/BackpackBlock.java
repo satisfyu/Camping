@@ -102,12 +102,6 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!level.isClientSide && !state.is(newState.getBlock())) {
-            BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof BackpackBlockEntity backpack) {
-                dropBlockWithContents(level, pos, backpack);
-            }
-        }
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
@@ -169,10 +163,13 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
 
     private void dropBlockWithContents(Level level, BlockPos pos, BackpackBlockEntity be) {
         ItemStack stack = new ItemStack(getBackpackItem());
-        be.saveToItem(stack, level.registryAccess());
-        if (be.hasCustomName()) {
-            stack.set(DataComponents.CUSTOM_NAME, be.getCustomName());
-        }
+
+        NonNullList<ItemStack> items = NonNullList.withSize(BackpackBlockEntity.CONTAINER_SIZE, ItemStack.EMPTY);
+        for (int i = 0; i < items.size(); i++) items.set(i, be.getItem(i));
+        BackpackContainer.writeToItem(stack, items);
+
+        if (be.hasCustomName()) stack.set(DataComponents.CUSTOM_NAME, be.getCustomName());
+
         ItemEntity ie = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
         ie.setDefaultPickUpDelay();
         level.addFreshEntity(ie);

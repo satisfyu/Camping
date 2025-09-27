@@ -7,9 +7,9 @@ import net.satisfy.camping.core.world.BackpackContainer;
 import net.satisfy.camping.platform.Services;
 import org.jetbrains.annotations.NotNull;
 
-public class ForgeBackpackScreenHandler extends BackpackScreenHandler {
+public class NeoForgeBackpackScreenHandler extends BackpackScreenHandler {
 
-    public ForgeBackpackScreenHandler(int id, Inventory inv, BackpackContainer container, BlockPos pos) {
+    public NeoForgeBackpackScreenHandler(int id, Inventory inv, BackpackContainer container, BlockPos pos) {
         super(id, inv, container, pos);
     }
 

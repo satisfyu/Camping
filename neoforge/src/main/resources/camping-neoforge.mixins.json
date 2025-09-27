@@ -3,14 +3,15 @@
   "minVersion": "0.8",
   "package": "net.satisfy.camping.mixin",
   "refmap": "${mod_id}.refmap.json",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "NeoForgeItemInHandRendererMixin",
     "NeoForgeItemMixin",
     "NeoForgePlayerEatMixin",
     "NeoForgeWanderingTraderMixin"
   ],
-  "client": [],
+  "client": [
+    "NeoForgeItemInHandRendererMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1
