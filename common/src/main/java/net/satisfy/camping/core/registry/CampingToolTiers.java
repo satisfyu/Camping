@@ -13,7 +13,7 @@ public enum CampingToolTiers implements Tier {
 
     @Override
     public int getUses() {
-        return 0;
+        return 256;
     }
 
     @Override

@@ -2,7 +2,7 @@
   "parent": "camping:main/get_a_small_backpack",
   "display": {
     "icon": {
-      "item": "camping:wanderer_backpack"
+      "id": "camping:wanderer_backpack"
     },
     "title": {
       "translate": "advancement.camping.get_a_wanderer_backpack.title"

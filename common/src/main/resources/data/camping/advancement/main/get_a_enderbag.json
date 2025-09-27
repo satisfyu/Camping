@@ -2,7 +2,7 @@
   "parent": "camping:main/get_a_small_backpack",
   "display": {
     "icon": {
-      "item": "camping:enderbag"
+      "id": "camping:enderbag"
     },
     "title": {
       "translate": "advancement.camping.get_a_enderbag.title"

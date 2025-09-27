@@ -2,6 +2,7 @@
   "parent": "camping:main/root",
   "criteria": {
     "use_beef_on_grill": {
+      "trigger": "minecraft:item_used_on_block",
       "conditions": {
         "location": [
           {
@@ -13,7 +14,9 @@
                 ]
               }
             }
-          },
+          }
+        ],
+        "item": [
           {
             "condition": "minecraft:match_tool",
             "predicate": {
@@ -23,8 +26,7 @@
             }
           }
         ]
-      },
-      "trigger": "minecraft:item_used_on_block"
+      }
     }
   },
   "display": {
@@ -35,7 +37,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "camping:grill"
+      "id": "camping:grill"
     },
     "show_toast": true,
     "title": {

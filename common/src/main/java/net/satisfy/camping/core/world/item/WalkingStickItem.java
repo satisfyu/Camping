@@ -1,9 +1,7 @@
 package net.satisfy.camping.core.world.item;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,29 +15,21 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.camping.Camping;
-import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.registry.CampingToolTiers;
 
 public class WalkingStickItem extends TieredItem {
-
     private static final double ATTACK_DAMAGE = 1.0D;
-    private static final double ATTACK_SPEED = -2.0D;
+    private static final double ATTACK_SPEED = 1.0D;
+    private static final double MOVE_SPEED_BONUS = 0.05D;
 
     public WalkingStickItem(Properties properties) {
         super(CampingToolTiers.STICK, properties.attributes(
                 ItemAttributeModifiers.builder()
                         .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Camping.identifier("walking_stick.attack_damage"), ATTACK_DAMAGE, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
                         .add(Attributes.ATTACK_SPEED, new AttributeModifier(Camping.identifier("walking_stick.attack_speed"), ATTACK_SPEED, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                        .add(Attributes.MOVEMENT_SPEED, new AttributeModifier(Camping.identifier("walking_stick.movement_speed"), MOVE_SPEED_BONUS, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND)
                         .build()
         ));
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotIndex, boolean isSelected) {
-        if (!isSelected || !(entity instanceof Player player)) return;
-        if (!player.getCooldowns().isOnCooldown(CampingItems.WALKING_STICK)) {
-            player.getCooldowns().addCooldown(CampingItems.WALKING_STICK, 100);
-        }
     }
 
     @Override

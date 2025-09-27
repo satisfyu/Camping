@@ -2,13 +2,13 @@ package net.satisfy.camping.core.world.item;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -26,6 +26,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -47,6 +48,7 @@ public class MarshmallowOnAStickItem extends Item {
     private static final String NBT_ROASTING = "marshmallowRoasting";
     private static final String NBT_TICKS = "roastTicks";
     private static final String NBT_TARGET = "roastTarget";
+    private static final String NBT_POS = "roastPos";
     private static final String[] STAGES = {"default", "warmed", "melted", "charred", "totally_burnt"};
 
     public MarshmallowOnAStickItem(Properties properties) {
@@ -60,6 +62,19 @@ public class MarshmallowOnAStickItem extends Item {
 
     private static void saveData(ItemStack stack, CompoundTag tag) {
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+    }
+
+    private static void syncHand(ServerPlayer p, InteractionHand hand) {
+        ItemStack s = p.getItemInHand(hand);
+        p.setItemInHand(hand, s);
+        p.getInventory().setChanged();
+        p.containerMenu.broadcastChanges();
+    }
+
+    private static void setStageOn(ItemStack stack, String stage) {
+        CompoundTag t = getOrCreateData(stack);
+        t.putString(NBT_STAGE, stage);
+        saveData(stack, t);
     }
 
     @Override
@@ -85,8 +100,10 @@ public class MarshmallowOnAStickItem extends Item {
         if (roasting) {
             tag.putInt(NBT_TICKS, 0);
             tag.putInt(NBT_TARGET, 40 + level.random.nextInt(60));
+            tag.putLong(NBT_POS, bhr.getBlockPos().asLong());
             saveData(stack, tag);
             player.startUsingItem(hand);
+            if (!level.isClientSide && player instanceof ServerPlayer sp) syncHand(sp, hand);
             return InteractionResultHolder.consume(stack);
         }
         saveData(stack, tag);
@@ -107,8 +124,10 @@ public class MarshmallowOnAStickItem extends Item {
         tag.putBoolean(NBT_ROASTING, true);
         tag.putInt(NBT_TICKS, 0);
         tag.putInt(NBT_TARGET, 40 + level.random.nextInt(60));
+        tag.putLong(NBT_POS, ctx.getClickedPos().asLong());
         saveData(stack, tag);
         player.startUsingItem(ctx.getHand());
+        if (!level.isClientSide && player instanceof ServerPlayer sp) syncHand(sp, ctx.getHand());
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
@@ -118,7 +137,9 @@ public class MarshmallowOnAStickItem extends Item {
         tag.remove(NBT_TICKS);
         tag.remove(NBT_TARGET);
         tag.remove(NBT_ROASTING);
+        tag.remove(NBT_POS);
         saveData(stack, tag);
+        if (user instanceof ServerPlayer sp) syncHand(sp, sp.getUsedItemHand());
     }
 
     @Override
@@ -126,7 +147,9 @@ public class MarshmallowOnAStickItem extends Item {
         CompoundTag tag = getOrCreateData(stack);
         if (tag.getBoolean(NBT_ROASTING)) {
             tag.remove(NBT_ROASTING);
+            tag.remove(NBT_POS);
             saveData(stack, tag);
+            if (entity instanceof ServerPlayer sp) syncHand(sp, sp.getUsedItemHand());
             return stack;
         }
         FoodProperties props = resolveBaseFood(stack);
@@ -155,6 +178,7 @@ public class MarshmallowOnAStickItem extends Item {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotIndex, boolean isSelected) {
         CompoundTag tag = getOrCreateData(stack);
         if (!tag.contains(NBT_STAGE)) tag.putString(NBT_STAGE, "default");
+
         String stage = tag.getString(NBT_STAGE);
         int modelData = switch (stage) {
             case "warmed" -> 1;
@@ -163,94 +187,94 @@ public class MarshmallowOnAStickItem extends Item {
             case "totally_burnt" -> 4;
             default -> 0;
         };
-        tag.putInt("CustomModelData", modelData);
+
+        if (modelData == 0) {
+            stack.remove(DataComponents.CUSTOM_MODEL_DATA);
+        } else {
+            stack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(modelData));
+        }
+
         saveData(stack, tag);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingUseDuration) {
-        CompoundTag tag = getOrCreateData(stack);
-        if (level.isClientSide) {
-            if (!tag.getBoolean(NBT_ROASTING)) return;
-            if (!(entity instanceof Player player)) return;
-            BlockHitResult bhr = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-            if (bhr.getType() != HitResult.Type.BLOCK) return;
-            BlockState bs = level.getBlockState(bhr.getBlockPos());
-            if (!(bs.getBlock() instanceof CampfireBlock)) return;
-
-            Vec3 look = player.getLookAngle();
-            Vec3 right = look.cross(new Vec3(0, 1, 0)).normalize();
-            Vec3 up = right.cross(look).normalize();
-
-            double baseX = player.getX() + look.x * 0.4 + right.x * 0.15;
-            double baseY = player.getY() + 1.3 + up.y * 0.1;
-            double baseZ = player.getZ() + look.z * 0.4 + right.z * 0.15;
-
-            double itemX = 0.125, itemY = 0.0, itemZ = 0.0;
-            float itemChance = 0.10f;
-
-            double dripX = 0.145, dripY = -0.05, dripZ = 0.0;
-            float dripChance = 0.075f;
-
-            double smokeX = 0.12, smokeY = 0.22, smokeZ = 0.0;
-            float smokeChance = 0.12f;
-
-            if ((remainingUseDuration & 7) == 0 && level.random.nextFloat() < itemChance) {
-                double ix = baseX + right.x * itemX + up.x * itemY + look.x * itemZ;
-                double iy = baseY + right.y * itemX + up.y * itemY + look.y * itemZ;
-                double iz = baseZ + right.z * itemX + up.z * itemY + look.z * itemZ;
-                level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(CampingItems.MARSHMALLOW)), ix, iy, iz, 0, 0, 0);
-            }
-
-            if ((remainingUseDuration & 15) == 0 && level.random.nextFloat() < dripChance) {
-                double dx = baseX + right.x * dripX + up.x * dripY + look.x * dripZ;
-                double dy = baseY + right.y * dripX + up.y * dripY + look.y * dripZ;
-                double dz = baseZ + right.z * dripX + up.z * dripY + look.z * dripZ;
-                double dvx = (level.random.nextDouble() - 0.5) * 0.02;
-                double dvy = -0.06 - level.random.nextDouble() * 0.04;
-                double dvz = (level.random.nextDouble() - 0.5) * 0.02;
-                level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(CampingItems.MARSHMALLOW)), dx, dy, dz, dvx, dvy, dvz);
-            }
-
-            if ((remainingUseDuration & 7) == 0 && level.random.nextFloat() < smokeChance) {
-                double sx = baseX + right.x * smokeX + up.x * smokeY + look.x * smokeZ;
-                double sy = baseY + right.y * smokeX + up.y * smokeY + look.y * smokeZ;
-                double sz = baseZ + right.z * smokeX + up.z * smokeY + look.z * smokeZ;
-                level.addParticle(ParticleTypes.SMOKE, sx, sy, sz, 0, 0.02, 0);
-            }
-        } else {
-            if (!tag.getBoolean(NBT_ROASTING)) return;
-            if (!(entity instanceof ServerPlayer)) return;
-            if (!entity.isUsingItem()) return;
-            if (entity.getUseItem() != stack) return;
+        if (!level.isClientSide) {
+            if (!(entity instanceof ServerPlayer sp)) return;
+            InteractionHand hand = sp.getUsedItemHand();
+            ItemStack use = sp.getItemInHand(hand);
+            if (use.isEmpty() || !use.is(this)) return;
+            CompoundTag tag = getOrCreateData(use);
+            if (!tag.getBoolean(NBT_ROASTING) || !tag.contains(NBT_POS)) return;
+            BlockPos pos = BlockPos.of(tag.getLong(NBT_POS));
+            BlockState bs = level.getBlockState(pos);
+            boolean lit = bs.getBlock() instanceof CampfireBlock && (!bs.hasProperty(CampfireBlock.LIT) || bs.getValue(CampfireBlock.LIT));
+            if (!lit) return;
             int ticks = tag.getInt(NBT_TICKS) + 1;
             tag.putInt(NBT_TICKS, ticks);
             int target = tag.getInt(NBT_TARGET);
             if (target > 0 && ticks >= target) {
-                advanceStage(stack, level, entity);
-                int nextTarget = 40 + level.random.nextInt(60);
-                tag.putInt(NBT_TARGET, nextTarget);
-                tag.putInt(NBT_TICKS, 0);
-                saveData(stack, tag);
+                String s = tag.getString(NBT_STAGE);
+                if (s.isEmpty()) s = "default";
+                int idx = getStageIndex(s);
+                if (idx < STAGES.length - 1) {
+                    setStageOn(use, STAGES[idx + 1]);
+                }
+                CompoundTag t2 = getOrCreateData(use);
+                t2.putInt(NBT_TARGET, 40 + level.random.nextInt(60));
+                t2.putInt(NBT_TICKS, 0);
+                saveData(use, t2);
+                syncHand(sp, hand);
             } else {
-                saveData(stack, tag);
+                saveData(use, tag);
             }
+            return;
+        }
+
+        CompoundTag tag = getOrCreateData(stack);
+        if (!tag.getBoolean(NBT_ROASTING)) return;
+        if (!(entity instanceof Player player)) return;
+        if (!tag.contains(NBT_POS)) return;
+        BlockPos pos = BlockPos.of(tag.getLong(NBT_POS));
+        BlockState bs = level.getBlockState(pos);
+        if (!(bs.getBlock() instanceof CampfireBlock)) return;
+
+        Vec3 look = player.getLookAngle();
+        Vec3 right = look.cross(new Vec3(0, 1, 0)).normalize();
+        Vec3 up = right.cross(look).normalize();
+
+        double baseX = player.getX() + look.x * 0.4 + right.x * 0.15;
+        double baseY = player.getY() + 1.3 + up.y * 0.1;
+        double baseZ = player.getZ() + look.z * 0.4 + right.z * 0.15;
+
+        if ((remainingUseDuration & 7) == 0 && level.random.nextFloat() < 0.10f) {
+            double ix = baseX + right.x * 0.125;
+            double iy = baseY + right.y * 0.125;
+            double iz = baseZ + right.z * 0.125;
+            level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(CampingItems.MARSHMALLOW)), ix, iy, iz, 0, 0, 0);
+        }
+
+        if ((remainingUseDuration & 15) == 0 && level.random.nextFloat() < 0.075f) {
+            double dx = baseX + right.x * 0.145 + up.x * -0.05;
+            double dy = baseY + right.y * 0.145 + up.y * -0.05;
+            double dz = baseZ + right.z * 0.145 + up.z * -0.05;
+            double dvx = (level.random.nextDouble() - 0.5) * 0.02;
+            double dvy = -0.06 - level.random.nextDouble() * 0.04;
+            double dvz = (level.random.nextDouble() - 0.5) * 0.02;
+            level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(CampingItems.MARSHMALLOW)), dx, dy, dz, dvx, dvy, dvz);
+        }
+
+        if ((remainingUseDuration & 7) == 0 && level.random.nextFloat() < 0.12f) {
+            double sx = baseX + right.x * 0.12 + up.x * 0.22;
+            double sy = baseY + right.y * 0.12 + up.y * 0.22;
+            double sz = baseZ + right.z * 0.12 + up.z * 0.22;
+            level.addParticle(ParticleTypes.SMOKE, sx, sy, sz, 0, 0.02, 0);
         }
     }
 
-    private void advanceStage(ItemStack stack, Level level, LivingEntity entity) {
-        CompoundTag tag = getOrCreateData(stack);
-        String s = tag.getString(NBT_STAGE);
-        if (s.isEmpty()) s = "default";
-        int idx = getStageIndex(s);
-        if (idx < STAGES.length - 1) {
-            tag.putString(NBT_STAGE, STAGES[idx + 1]);
-            int nextTarget = 40 + level.random.nextInt(60);
-            tag.putInt(NBT_TARGET, nextTarget);
-            tag.putInt(NBT_TICKS, 0);
-            saveData(stack, tag);
-            spawnParticles(entity.position(), stack, level, level.random);
-        }
+    private static int getStageIndex(String stage) {
+        for (int i = 0; i < STAGES.length; i++) if (STAGES[i].equals(stage)) return i;
+        return 0;
     }
 
     private FoodProperties resolveBaseFood(ItemStack stack) {
@@ -274,20 +298,6 @@ public class MarshmallowOnAStickItem extends Item {
         FoodProperties b = new ItemStack(Items.ROTTEN_FLESH).get(DataComponents.FOOD);
         assert b != null;
         return new FoodProperties.Builder().nutrition(b.nutrition()).saturationModifier(b.saturation()).alwaysEdible().build();
-    }
-
-    private static int getStageIndex(String stage) {
-        for (int i = 0; i < STAGES.length; i++) {
-            if (STAGES[i].equals(stage)) return i;
-        }
-        return 0;
-    }
-
-    private void spawnParticles(Vec3 pos, ItemStack stack, Level level, RandomSource random) {
-        for (int i = 0; i < 10; i++) {
-            Vec3 m = new Vec3((random.nextDouble() - 0.5) * 0.2, (random.nextDouble() - 0.5) * 0.2, (random.nextDouble() - 0.5) * 0.2);
-            level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, stack), pos.x, pos.y + 1.0, pos.z, m.x, m.y, m.z);
-        }
     }
 
     @Override

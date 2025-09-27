@@ -2,7 +2,7 @@
   "parent": "camping:main/get_a_small_backpack",
   "display": {
     "icon": {
-      "item": "camping:sheepbag"
+      "id": "camping:sheepbag"
     },
     "title": {
       "translate": "advancement.camping.get_a_sheepbag.title"

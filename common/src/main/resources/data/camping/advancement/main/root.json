@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "camping:sleeping_bag_red"
+      "id": "camping:sleeping_bag_red"
     },
     "title": {
       "translate": "advancement.camping.root.title"

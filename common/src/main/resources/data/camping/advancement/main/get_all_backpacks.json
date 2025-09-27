@@ -2,7 +2,7 @@
   "parent": "camping:main/get_a_enderpack",
   "display": {
     "icon": {
-      "item": "camping:goodybag"
+      "id": "camping:goodybag"
     },
     "title": {
       "translate": "advancement.camping.get_all_backpacks.title"

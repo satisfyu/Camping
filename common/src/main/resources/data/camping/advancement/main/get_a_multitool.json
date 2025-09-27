@@ -2,7 +2,7 @@
   "parent": "camping:main/root",
   "display": {
     "icon": {
-      "item": "camping:multitool"
+      "id": "camping:multitool"
     },
     "title": {
       "translate": "advancement.camping.get_a_multitool.title"
