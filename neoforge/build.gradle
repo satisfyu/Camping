@@ -52,14 +52,22 @@ neoForge {
     }
 }
 
-
-sourceSets.main.resources.srcDir 'src/generated/resources'
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/generated/resources'
+        }
+    }
+}
 
 dependencies {
     implementation project(":common")
+
     annotationProcessor "org.spongepowered:mixin:0.8.5-SNAPSHOT:processor"
+
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${rootProject.jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${rootProject.jei_version}"
+
     implementation "top.theillusivec4.curios:curios-neoforge:${rootProject.curios_version}"
 }
 
@@ -70,5 +78,12 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     inputs.property 'version', project.version
-    filesMatching('META-INF/neoforge.mods.toml') { expand version: project.version }
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand version: project.version
+    }
+}
+
+tasks.named('jar', Jar) {
+    from(project(':common').sourceSets.main.output)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

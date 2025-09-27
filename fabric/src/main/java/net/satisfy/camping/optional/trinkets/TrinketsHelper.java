@@ -6,10 +6,7 @@ import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketsApi;
 import dev.emi.trinkets.api.client.TrinketRenderer;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.Model;
+import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -88,50 +85,39 @@ public class TrinketsHelper {
     public static class BackpackTrinketRenderer implements TrinketRenderer {
 
         @Override
-        public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, LivingEntity livingEntity, float v, float v1, float v2, float v3, float v4, float v5) {
+        public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+            if (!(entityModel instanceof HumanoidModel<?> hm)) return;
             BackpackBlockItem backpack = (BackpackBlockItem) itemStack.getItem();
-            Model m = BackpackRegistry.getBodyModel(backpack, ((HumanoidModel<?>) entityModel).body);
-            ModelPart part;
-            if (m instanceof HumanoidModel<?> hm) {
-                part = hm.body;
-            } else if (m instanceof HierarchicalModel<?> h) {
-                part = h.root();
-            } else {
-                return;
-            }
-            BackpackRenderLayer.performTranslations(poseStack, backpack.variant, livingEntity.isCrouching());
+            Model m = BackpackRegistry.getBodyModel(backpack, hm.body);
+            ModelPart part = m instanceof HumanoidModel<?> h ? h.body : m instanceof HierarchicalModel<?> h2 ? h2.root() : null;
+            if (part == null) return;
+            poseStack.pushPose();
+            hm.body.translateAndRotate(poseStack);
+            BackpackRenderLayer.performTranslations(poseStack, backpack.variant, entity.isCrouching());
             VertexConsumer vc = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(backpack.getTexture()));
-            part.render(poseStack, vc, i, OverlayTexture.NO_OVERLAY);
+            part.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY);
+            poseStack.popPose();
         }
     }
 
     public static class EnderpackTrinketRenderer implements TrinketRenderer {
 
         @Override
-        public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, LivingEntity entity, float v, float v1, float v2, float v3, float v4, float v5) {
+        public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+            if (!(entityModel instanceof HumanoidModel<?> hm)) return;
             EnderpackBlockItem enderpack = (EnderpackBlockItem) itemStack.getItem();
-            Model m = BackpackRegistry.getBodyModel(enderpack, ((HumanoidModel<?>) entityModel).body);
-
+            Model m = BackpackRegistry.getBodyModel(enderpack, hm.body);
+            ModelPart part = m instanceof HumanoidModel<?> h ? h.body : m instanceof HierarchicalModel<?> h2 ? h2.root() : null;
+            if (part == null) return;
             boolean isEnderBag = enderpack == CampingItems.ENDERBAG;
             boolean isEnderPack = enderpack == CampingItems.ENDERPACK;
-
             poseStack.pushPose();
-            if (isEnderBag) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
-            if (isEnderPack) poseStack.translate(-0.0625f * 5f, 0, 0.0625f * 2f);
-            if (entity.isCrouching()) poseStack.translate(0, -0.0625f - (0.0625f / 8f), (0.0625f) / 10.0f);
-
-            ModelPart part;
-            if (m instanceof HumanoidModel<?> hm) {
-                part = hm.body;
-            } else if (m instanceof HierarchicalModel<?> h) {
-                part = h.root();
-            } else {
-                poseStack.popPose();
-                return;
-            }
-
+            hm.body.translateAndRotate(poseStack);
+            if (isEnderBag) poseStack.translate(-0.3125f, 0, 0.125f);
+            if (isEnderPack) poseStack.translate(-0.3125f, 0, 0.125f);
+            if (entity.isCrouching()) poseStack.translate(0, -0.0703125f, 0.00625f);
             VertexConsumer vc = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(enderpack.getTexture()));
-            part.render(poseStack, vc, i, OverlayTexture.NO_OVERLAY);
+            part.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY);
             poseStack.popPose();
         }
     }

@@ -1,7 +1,10 @@
 package net.satisfy.camping;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -17,22 +20,43 @@ import net.satisfy.camping.client.model.WandererBackpackModel;
 import net.satisfy.camping.client.model.WandererBagModel;
 import net.satisfy.camping.client.renderer.entity.layers.BackpackRenderLayer;
 import net.satisfy.camping.client.renderer.entity.layers.EnderpackRenderLayer;
+import net.satisfy.camping.client.world.block.renderer.GrillRenderer;
+import net.satisfy.camping.core.registry.CampingBlockEntities;
+import net.satisfy.camping.core.registry.CampingBlocks;
 import net.satisfy.camping.core.registry.CampingScreenHandlers;
 import net.satisfy.camping.optional.NeoForgeCuriosHelper;
 import net.satisfy.camping.platform.Services;
 
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class CampingClientNeoForge {
-
     public CampingClientNeoForge(IEventBus modEventBus) {
         modEventBus.addListener((Consumer<FMLClientSetupEvent>) event -> event.enqueueWork(() -> {
-            CampingClient.init();
+            ItemBlockRenderTypes.setRenderLayer(CampingBlocks.GRILL, RenderType.cutout());
+            for (Block block : Stream.concat(
+                    CampingBlocks.TENT_MAIN.values().stream(),
+                    Stream.concat(
+                            CampingBlocks.TENT_MAIN_HEAD.values().stream(),
+                            Stream.concat(
+                                    CampingBlocks.TENT_RIGHT.values().stream(),
+                                    CampingBlocks.TENT_HEAD_RIGHT.values().stream()
+                            )
+                    )
+            ).toList()) {
+                ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
+            }
             if (Services.PLATFORM.isModLoaded("curios")) NeoForgeCuriosHelper.registerRenderersForCurios();
         }));
+
+        modEventBus.addListener((Consumer<EntityRenderersEvent.RegisterRenderers>) event -> {
+            event.registerBlockEntityRenderer(CampingBlockEntities.GRILL, GrillRenderer::new);
+        });
+
         modEventBus.addListener((Consumer<RegisterMenuScreensEvent>) event -> {
             event.register(CampingScreenHandlers.BACKPACK, BackpackScreen::new);
         });
+
         modEventBus.addListener((Consumer<EntityRenderersEvent.RegisterLayerDefinitions>) event -> {
             event.registerLayerDefinition(EnderpackModel.LAYER_LOCATION, EnderpackModel::createBodyLayer);
             event.registerLayerDefinition(EnderbagModel.LAYER_LOCATION, EnderbagModel::createBodyLayer);
@@ -43,6 +67,7 @@ public class CampingClientNeoForge {
             event.registerLayerDefinition(WandererBackpackModel.LAYER_LOCATION, WandererBackpackModel::createBodyLayer);
             event.registerLayerDefinition(WandererBagModel.LAYER_LOCATION, WandererBagModel::createBodyLayer);
         });
+
         modEventBus.addListener((Consumer<EntityRenderersEvent.AddLayers>) event -> {
             PlayerRenderer wide = event.getSkin(PlayerSkin.Model.WIDE);
             if (wide != null) {
