@@ -21,7 +21,11 @@ public class CampingFabric implements ModInitializer {
         RegistryFabric.register();
         FabricCampingNetwork.registerCommon();
         FabricCampingNetwork.registerServer();
-        if (Services.PLATFORM.isModLoaded("trinkets")) TrinketsHelper.registerItemsAsTrinkets();
+
+        if (Services.PLATFORM.isModLoaded("trinkets")) {
+            TrinketsHelper.registerItemsAsTrinkets();
+        }
+
         EntitySleepEvents.ALLOW_SETTING_SPAWN.register(CampingFabric::onPlayerSetSpawn);
     }
 

@@ -22,7 +22,7 @@ public class BackpackRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
 
     public static void performTranslations(PoseStack poseStack, BackpackVariant type, boolean isCrouching) {
 
-        final float PIXEL = 0.0625f; // equal to 1.0f divided by 16.0f, or 1/16th of a block
+        final float PIXEL = 0.0625f;
 
         switch (type) {
             case SMALL_BACKPACK -> poseStack.translate(PIXEL * 3.0f, PIXEL * 10.0f, PIXEL * 3.0f);
@@ -39,8 +39,7 @@ public class BackpackRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
                 case LARGE_BACKPACK -> poseStack.translate(0, PIXEL * -6.5f, PIXEL * 5.5f);
                 case WANDERER_BACKPACK -> poseStack.translate(0, PIXEL * -5.5f, PIXEL * 1.5f);
                 case WANDERER_BAG -> poseStack.translate(0, PIXEL * -3.0f, PIXEL * 4.5f);
-                case SHEEPBAG -> poseStack.translate(0, PIXEL * -3.0f, PIXEL * 5.0f);
-                case GOODYBAG -> poseStack.translate(0, PIXEL * -3.0f, PIXEL * 5.0f);
+                case SHEEPBAG, GOODYBAG -> poseStack.translate(0, PIXEL * -3.0f, PIXEL * 5.0f);
             }
         }
     }

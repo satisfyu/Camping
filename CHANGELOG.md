@@ -1,6 +1,14 @@
+[2.1.1]
+
+**Fixed**
+* Wanderer Backpack missing its texture.
+* Backpacks cannot be opened when in the trinket slot
+
+***
+
 [2.1.0]
 
-**Ported to 1.21.1
+**Ported to 1.21.1**
 
 ***
 

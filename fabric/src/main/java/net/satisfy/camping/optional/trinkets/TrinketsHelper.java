@@ -22,6 +22,7 @@ import net.satisfy.camping.core.world.item.BackpackBlockItem;
 import net.satisfy.camping.core.world.item.EnderpackBlockItem;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TrinketsHelper {
@@ -82,6 +83,22 @@ public class TrinketsHelper {
         TrinketRendererRegistry.registerRenderer(CampingItems.ENDERBAG, new EnderpackTrinketRenderer());
     }
 
+    public static Optional<Tuple<SlotReference, ItemStack>> getEquippedBackpack(Player player) {
+        AtomicReference<Tuple<SlotReference, ItemStack>> out = new AtomicReference<>(null);
+        TrinketsApi.getTrinketComponent(player).ifPresent(tc -> {
+            List<Tuple<SlotReference, ItemStack>> l;
+            l = tc.getEquipped(CampingItems.SMALL_BACKPACK); if (!l.isEmpty()) { out.set(l.get(0)); return; }
+            l = tc.getEquipped(CampingItems.LARGE_BACKPACK); if (!l.isEmpty()) { out.set(l.get(0)); return; }
+            l = tc.getEquipped(CampingItems.WANDERER_BACKPACK); if (!l.isEmpty()) { out.set(l.get(0)); return; }
+            l = tc.getEquipped(CampingItems.WANDERER_BAG); if (!l.isEmpty()) { out.set(l.get(0)); return; }
+            l = tc.getEquipped(CampingItems.SHEEPBAG); if (!l.isEmpty()) { out.set(l.get(0)); return; }
+            l = tc.getEquipped(CampingItems.GOODYBAG); if (!l.isEmpty()) { out.set(l.get(0)); return; }
+            l = tc.getEquipped(CampingItems.ENDERPACK); if (!l.isEmpty()) { out.set(l.get(0)); return; }
+            l = tc.getEquipped(CampingItems.ENDERBAG); if (!l.isEmpty()) { out.set(l.get(0)); }
+        });
+        return Optional.ofNullable(out.get());
+    }
+
     public static class BackpackTrinketRenderer implements TrinketRenderer {
 
         @Override
@@ -105,17 +122,22 @@ public class TrinketsHelper {
         @Override
         public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (!(entityModel instanceof HumanoidModel<?> hm)) return;
-            EnderpackBlockItem enderpack = (EnderpackBlockItem) itemStack.getItem();
+            if (!(itemStack.getItem() instanceof EnderpackBlockItem enderpack)) return;
+
             Model m = BackpackRegistry.getBodyModel(enderpack, hm.body);
             ModelPart part = m instanceof HumanoidModel<?> h ? h.body : m instanceof HierarchicalModel<?> h2 ? h2.root() : null;
             if (part == null) return;
-            boolean isEnderBag = enderpack == CampingItems.ENDERBAG;
-            boolean isEnderPack = enderpack == CampingItems.ENDERPACK;
+
+            boolean isEnderBag = itemStack.is(CampingItems.ENDERBAG);
+            boolean isEnderPack = itemStack.is(CampingItems.ENDERPACK);
+
             poseStack.pushPose();
             hm.body.translateAndRotate(poseStack);
+
             if (isEnderBag) poseStack.translate(-0.3125f, 0, 0.125f);
             if (isEnderPack) poseStack.translate(-0.3125f, 0, 0.125f);
             if (entity.isCrouching()) poseStack.translate(0, -0.0703125f, 0.00625f);
+
             VertexConsumer vc = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(enderpack.getTexture()));
             part.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY);
             poseStack.popPose();
