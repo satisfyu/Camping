@@ -1,11 +1,19 @@
 plugins {
     id 'idea'
     id 'net.neoforged.moddev' version '2.0.+'
+    id "com.modrinth.minotaur" version "2.+"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
+}
+
+java {
+    withSourcesJar()
 }
 
 base {
     archivesName = "${mod_id}-neoforge-${minecraft_version}"
 }
+
+def changelogText = rootProject.file("CHANGELOG.md").text
 
 repositories {
     mavenCentral()
@@ -19,7 +27,6 @@ repositories {
 
 neoForge {
     version = neoforge_version
-
     runs {
         client {
             client()
@@ -43,7 +50,6 @@ neoForge {
             sourceSet = sourceSets.main
         }
     }
-
     mods {
         register(mod_id) {
             sourceSet(sourceSets.main)
@@ -62,12 +68,9 @@ sourceSets {
 
 dependencies {
     implementation project(":common")
-
     annotationProcessor "org.spongepowered:mixin:0.8.5-SNAPSHOT:processor"
-
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${rootProject.jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${rootProject.jei_version}"
-
     implementation "top.theillusivec4.curios:curios-neoforge:${rootProject.curios_version}"
 }
 
@@ -86,4 +89,37 @@ processResources {
 tasks.named('jar', Jar) {
     from(project(':common').sourceSets.main.output)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "lets-do-camping"
+    versionNumber = rootProject.version
+    versionName = "${rootProject.mod_name} ${rootProject.version} [${rootProject.minecraft_version}-neoforge]"
+    versionType = "release"
+    changelog = rootProject.file("CHANGELOG.md").exists() ? rootProject.file("CHANGELOG.md").text : " "
+    gameVersions = [rootProject.minecraft_version]
+    loaders = ["neoforge"]
+    uploadFile = tasks.named("jar")
+    dependencies {
+        required.project "curios"
+    }
+}
+
+curseforge {
+    apiKey = System.getenv("CURSEFORGE_API_KEY")
+    project {
+        id = "1072398"
+        releaseType = "release"
+        addGameVersion rootProject.minecraft_version
+        addGameVersion "NeoForge"
+        mainArtifact(tasks.named("jar").flatMap { it.archiveFile }) {
+            displayName = "${rootProject.mod_name} - ${rootProject.version} - NEOFORGE - ${rootProject.minecraft_version}"
+            changelog = changelogText
+            changelogType = "markdown"
+        }
+        relations {
+            requiredDependency "curios"
+        }
+    }
 }

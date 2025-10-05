@@ -2,18 +2,26 @@ plugins {
     id 'java'
     id 'idea'
     id 'fabric-loom' version '1.7-SNAPSHOT'
+    id "com.modrinth.minotaur" version "2.+"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
+}
+
+java {
+    withSourcesJar()
 }
 
 base {
     archivesName = "${mod_id}-fabric-${minecraft_version}"
 }
 
+def changelogText = rootProject.file("CHANGELOG.md").text
+
 repositories {
     mavenCentral()
-    maven { url "https://maven.blamejared.com/" } // JEI
-    maven { url "https://maven.shedaniel.me/" }   // Cloth Config
-    maven { url "https://maven.terraformersmc.com" } // ModMenu
-    maven { url 'https://maven.ladysnake.org/releases' } // Trinkets
+    maven { url "https://maven.blamejared.com/" }
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://maven.terraformersmc.com" }
+    maven { url "https://maven.ladysnake.org/releases" }
     maven {
         url "https://cursemaven.com"
         content { includeGroup "curse.maven" }
@@ -32,19 +40,14 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
 
-    // JEI
     modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-fabric-api:${rootProject.jei_version}"
     modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${rootProject.jei_version}"
 
-    // Cloth Config + ModMenu
     modApi include("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_fabric_version}")
     modImplementation "com.terraformersmc:modmenu:${rootProject.mod_menu_version}"
 
-    // Trinkets
     modImplementation "dev.emi:trinkets:${rootProject.trinkets_version}"
 
-
-    // Lootr
     modImplementation "curse.maven:lootr-fabric-615106:6354237"
 }
 
@@ -79,4 +82,123 @@ tasks.withType(JavaCompile).configureEach {
 
 processResources {
     from project(":common").sourceSets.main.resources
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "lets-do-camping"
+    versionNumber = rootProject.version
+    versionName = "${rootProject.mod_name} ${rootProject.version} [${rootProject.minecraft_version}-fabric]"
+    versionType = "release"
+    changelog = rootProject.file("CHANGELOG.md").exists() ? rootProject.file("CHANGELOG.md").text : " "
+    gameVersions = [rootProject.minecraft_version]
+    loaders = ["fabric"]
+
+    uploadFile = tasks.named("remapJar")
+
+    dependencies {
+        required.project "cloth-config"
+        required.project "trinkets"
+    }
+}
+
+curseforge {
+    apiKey = System.getenv("CURSEFORGE_API_KEY")
+    project {
+        id = "1072398"
+        releaseType = "release"
+        addGameVersion rootProject.minecraft_version
+        addGameVersion "Fabric"
+
+        mainArtifact(tasks.named("remapJar").flatMap { it.archiveFile }) {
+            displayName = "${rootProject.mod_name} - ${rootProject.version} - FABRIC - ${rootProject.minecraft_version}"
+            changelog = changelogText
+            changelogType = "markdown"
+        }
+
+        relations {
+            requiredDependency "cloth-config"
+            requiredDependency "trinkets"
+        }
+    }
+}
+
+def escapeJson = { String s ->
+    if (s == null) return ""
+    s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n")
+}
+
+tasks.register("releaseChangelog") {
+    group = "publishing"
+    description = "Send the latest changelog block to Discord"
+
+    doLast {
+        def discordWebhookUrl = (project.findProperty("webhook") ?: System.getenv("DISCORD_WEBHOOK_URL"))?.toString()?.trim()
+        if (!discordWebhookUrl) {
+            println "No Discord webhook set. Provide -Pwebhook=... or set DISCORD_WEBHOOK_URL"
+            return
+        }
+        println "Using Discord webhook: ${discordWebhookUrl.replaceAll('/api/webhooks/[^/]+/[^/]+$', '/api/webhooks/********/********')}"
+
+        def modName = (project.findProperty("modDisplayName") ?: rootProject.mod_name).toString()
+        def versionLabel = rootProject.version
+        def full = rootProject.file("CHANGELOG.md").exists() ? rootProject.file("CHANGELOG.md").text : ""
+        def m = (full =~ /(?s)(\[[^\]]+][\s\S]*?)(\n\*\*\*\n)/)
+        def block = m.find() ? m.group(1).trim() : full.trim()
+        if (block.length() > 1900) block = block.substring(0, 1900) + "…"
+
+        def linksMd = "[Modrinth](https://modrinth.com/mod/lets-do-camping)\n[CurseForge](https://www.curseforge.com/minecraft/mc-mods/lets-do-camping)"
+        def contentLine = "**${modName} ${versionLabel} has been released! 🎉**\n\nLearn about all changes and improvements below:"
+        def payload = """{
+  "username": "[Let’s Do] Assistant",
+  "avatar_url": "https://raw.githubusercontent.com/Let-s-Do-Collection/camping/1.21.1/common/src/main/resources/camping.png",
+  "content": "${escapeJson(contentLine)}",
+  "embeds": [{
+    "title": "**Changelog**",
+    "description": "${escapeJson(block)}",
+    "fields": [
+      { "name": "**Download it on**", "value": "${escapeJson(linksMd)}", "inline": false }
+    ]
+  }],
+  "components": [{
+    "type": 1,
+    "components": [
+      { "type": 2, "style": 5, "label": "Download on Modrinth",   "url": "https://modrinth.com/mod/lets-do-camping" },
+      { "type": 2, "style": 5, "label": "Download on CurseForge", "url": "https://www.curseforge.com/minecraft/mc-mods/lets-do-camping" }
+    ]
+  }]
+}"""
+
+        if ((project.findProperty("dryRun") ?: "false").toString().toBoolean()) {
+            println "DRY RUN — would send payload:\n${payload}"
+            return
+        }
+
+        HttpURLConnection conn = null
+        try {
+            conn = (HttpURLConnection) new URL(discordWebhookUrl).openConnection()
+            conn.setRequestMethod("POST")
+            conn.setDoOutput(true)
+            byte[] body = payload.getBytes("UTF-8")
+            conn.setRequestProperty("Content-Type", "application/json")
+            conn.setRequestProperty("Content-Length", Integer.toString(body.length))
+            conn.getOutputStream().write(body)
+            int code = conn.getResponseCode()
+            String resp = ""
+            try {
+                resp = conn.getInputStream().getText("UTF-8")
+            } catch (IOException ignored) {
+                resp = conn.getErrorStream() != null ? conn.getErrorStream().getText("UTF-8") : ""
+            }
+            println "Discord webhook response: ${code} ${conn.getResponseMessage()}"
+            if (resp) println "Response body:\n${resp}"
+            if (code == 204) println "(204 No Content is success for Discord webhooks)"
+        } finally {
+            if (conn != null) conn.disconnect()
+        }
+    }
+}
+
+tasks.named("modrinth").configure {
+    finalizedBy(tasks.named("releaseChangelog"))
 }
