@@ -6,8 +6,9 @@ import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketsApi;
 import dev.emi.trinkets.api.client.TrinketRenderer;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
-import net.minecraft.client.model.*;
-import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -40,35 +41,17 @@ public class TrinketsHelper {
 
     public static ItemStack getBackpackFromTrinkets(Player player) {
         AtomicReference<ItemStack> returned = new AtomicReference<>(ItemStack.EMPTY);
-
         TrinketsApi.getTrinketComponent(player).ifPresent(trinketComponent -> {
-            List<Tuple<SlotReference, ItemStack>> trinketList;
-
-            trinketList = trinketComponent.getEquipped(CampingItems.SMALL_BACKPACK);
-            if (!trinketList.isEmpty()) returned.set(trinketList.get(0).getB());
-
-            trinketList = trinketComponent.getEquipped(CampingItems.LARGE_BACKPACK);
-            if (!trinketList.isEmpty()) returned.set(trinketList.get(0).getB());
-
-            trinketList = trinketComponent.getEquipped(CampingItems.WANDERER_BACKPACK);
-            if (!trinketList.isEmpty()) returned.set(trinketList.get(0).getB());
-
-            trinketList = trinketComponent.getEquipped(CampingItems.WANDERER_BAG);
-            if (!trinketList.isEmpty()) returned.set(trinketList.get(0).getB());
-
-            trinketList = trinketComponent.getEquipped(CampingItems.SHEEPBAG);
-            if (!trinketList.isEmpty()) returned.set(trinketList.get(0).getB());
-
-            trinketList = trinketComponent.getEquipped(CampingItems.GOODYBAG);
-            if (!trinketList.isEmpty()) returned.set(trinketList.get(0).getB());
-
-            trinketList = trinketComponent.getEquipped(CampingItems.ENDERPACK);
-            if (!trinketList.isEmpty()) returned.set(trinketList.get(0).getB());
-
-            trinketList = trinketComponent.getEquipped(CampingItems.ENDERBAG);
-            if (!trinketList.isEmpty()) returned.set(trinketList.get(0).getB());
+            List<Tuple<SlotReference, ItemStack>> l;
+            l = trinketComponent.getEquipped(CampingItems.SMALL_BACKPACK); if (!l.isEmpty()) returned.set(l.get(0).getB());
+            l = trinketComponent.getEquipped(CampingItems.LARGE_BACKPACK); if (!l.isEmpty()) returned.set(l.get(0).getB());
+            l = trinketComponent.getEquipped(CampingItems.WANDERER_BACKPACK); if (!l.isEmpty()) returned.set(l.get(0).getB());
+            l = trinketComponent.getEquipped(CampingItems.WANDERER_BAG); if (!l.isEmpty()) returned.set(l.get(0).getB());
+            l = trinketComponent.getEquipped(CampingItems.SHEEPBAG); if (!l.isEmpty()) returned.set(l.get(0).getB());
+            l = trinketComponent.getEquipped(CampingItems.GOODYBAG); if (!l.isEmpty()) returned.set(l.get(0).getB());
+            l = trinketComponent.getEquipped(CampingItems.ENDERPACK); if (!l.isEmpty()) returned.set(l.get(0).getB());
+            l = trinketComponent.getEquipped(CampingItems.ENDERBAG); if (!l.isEmpty()) returned.set(l.get(0).getB());
         });
-
         return returned.get();
     }
 
@@ -104,15 +87,12 @@ public class TrinketsHelper {
         @Override
         public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (!(entityModel instanceof HumanoidModel<?> hm)) return;
-            BackpackBlockItem backpack = (BackpackBlockItem) itemStack.getItem();
-            Model m = BackpackRegistry.getBodyModel(backpack, hm.body);
-            ModelPart part = m instanceof HumanoidModel<?> h ? h.body : m instanceof HierarchicalModel<?> h2 ? h2.root() : null;
-            if (part == null) return;
+            if (!(itemStack.getItem() instanceof BackpackBlockItem backpack)) return;
+            Model model = BackpackRegistry.getBodyModel(backpack, hm.body);
             poseStack.pushPose();
-            hm.body.translateAndRotate(poseStack);
             BackpackRenderLayer.performTranslations(poseStack, backpack.variant, entity.isCrouching());
-            VertexConsumer vc = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(backpack.getTexture()));
-            part.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY);
+            VertexConsumer vc = multiBufferSource.getBuffer(model.renderType(backpack.getTexture()));
+            model.renderToBuffer(poseStack, vc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             poseStack.popPose();
         }
     }
@@ -123,23 +103,16 @@ public class TrinketsHelper {
         public void render(ItemStack itemStack, SlotReference slotReference, EntityModel<? extends LivingEntity> entityModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (!(entityModel instanceof HumanoidModel<?> hm)) return;
             if (!(itemStack.getItem() instanceof EnderpackBlockItem enderpack)) return;
-
-            Model m = BackpackRegistry.getBodyModel(enderpack, hm.body);
-            ModelPart part = m instanceof HumanoidModel<?> h ? h.body : m instanceof HierarchicalModel<?> h2 ? h2.root() : null;
-            if (part == null) return;
-
-            boolean isEnderBag = itemStack.is(CampingItems.ENDERBAG);
-            boolean isEnderPack = itemStack.is(CampingItems.ENDERPACK);
-
+            Model model = BackpackRegistry.getBodyModel(enderpack, hm.body);
             poseStack.pushPose();
-            hm.body.translateAndRotate(poseStack);
-
-            if (isEnderBag) poseStack.translate(-0.3125f, 0, 0.125f);
-            if (isEnderPack) poseStack.translate(-0.3125f, 0, 0.125f);
-            if (entity.isCrouching()) poseStack.translate(0, -0.0703125f, 0.00625f);
-
+            if (itemStack.is(CampingItems.ENDERBAG) || itemStack.is(CampingItems.ENDERPACK)) {
+                poseStack.translate(-0.3125f, 0, 0.125f);
+            }
+            if (entity.isCrouching()) {
+                poseStack.translate(0, -0.0703125f, 0.00625f);
+            }
             VertexConsumer vc = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(enderpack.getTexture()));
-            part.render(poseStack, vc, light, OverlayTexture.NO_OVERLAY);
+            model.renderToBuffer(poseStack, vc, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             poseStack.popPose();
         }
     }

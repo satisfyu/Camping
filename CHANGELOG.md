@@ -1,8 +1,9 @@
 [2.1.1]
 
 **Fixed**
-* Wanderer Backpack missing its texture.
-* Backpacks cannot be opened when in the trinket slot
+* Wanderer Backpack texture now displays correctly
+* Backpacks can now be opened while equipped in the Trinket slot
+* Backpacks render properly when worn in the Trinket slot
 
 ***
 
