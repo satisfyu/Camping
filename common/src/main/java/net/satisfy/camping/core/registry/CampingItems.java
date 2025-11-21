@@ -2,6 +2,7 @@ package net.satisfy.camping.core.registry;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -17,9 +18,9 @@ import java.util.function.Supplier;
 
 public class CampingItems {
 
-    public static final Item MARSHMALLOW = new MarshmallowItem(false, new Item.Properties().food(CampingFoods.MARSHMALLOW));
-    public static final Item ROASTED_MARSHMALLOW = new MarshmallowItem(true, new Item.Properties().food(CampingFoods.ROASTED_MARSHMALLOW));
-    public static final Item MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(new Item.Properties());
+    public static final Item MARSHMALLOW = new Item(new Item.Properties().food(CampingFoods.MARSHMALLOW));
+    public static final Item ROASTED_MARSHMALLOW = new Item(new Item.Properties().food(CampingFoods.ROASTED_MARSHMALLOW));
+    public static final Item MARSHMALLOW_ON_A_STICK = new MarshmallowOnAStickItem(new Item.Properties().food(Foods.COOKIE));
 
     public static final Item WALKING_STICK = new WalkingStickItem(new Item.Properties().durability(200));
     public static final Item MULTITOOL = new MultitoolItem(new Item.Properties().rarity(Rarity.COMMON).stacksTo(1).durability(92).fireResistant());
