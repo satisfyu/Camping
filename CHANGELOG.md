@@ -1,3 +1,10 @@
+[2.1.2]
+
+**Fixed**
+* Equipped backpacks losing their inventory when opened via keybinding (Curios slot)
+
+***
+
 [2.1.1]
 
 **Fixed**

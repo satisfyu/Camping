@@ -132,4 +132,8 @@ public class BackpackContainer implements Container, StackedContentsCompatible {
         for (ItemStack s : items) if (!s.isEmpty()) return false;
         return true;
     }
+
+    public NonNullList<ItemStack> getItems() {
+        return this.stacks;
+    }
 }

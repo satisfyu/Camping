@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class BackpackScreenHandler extends AbstractContainerMenu {
-    private final BackpackContainer container;
+    final BackpackContainer container;
     private final Player player;
     private final BlockPos blockPos;
     private final boolean portable;
