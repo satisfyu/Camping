@@ -12,12 +12,23 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 public class MultitoolUtil {
 
     public static void rotateBlock(Level level, BlockPos pos, BlockState state, boolean shiftKeyDown) {
-        Direction facing = state.hasProperty(BlockStateProperties.FACING) ? state.getValue(BlockStateProperties.FACING) : state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        Direction newDirection = shiftKeyDown ? facing.getCounterClockWise() : facing.getClockWise();
+        Direction newDirection;
 
-        BlockState newState = state.setValue(BlockStateProperties.HORIZONTAL_FACING, newDirection);
-        level.setBlock(pos, newState, Block.UPDATE_ALL);
-        spawnBlockParticles(level, pos, newState);
+        if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            newDirection = shiftKeyDown ? facing.getCounterClockWise() : facing.getClockWise();
+            state = state.setValue(BlockStateProperties.HORIZONTAL_FACING, newDirection);
+        } else if (state.hasProperty(BlockStateProperties.FACING)) {
+            Direction facing = state.getValue(BlockStateProperties.FACING);
+            if (facing.getAxis().isVertical()) return;
+            newDirection = shiftKeyDown ? facing.getCounterClockWise() : facing.getClockWise();
+            state = state.setValue(BlockStateProperties.FACING, newDirection);
+        } else {
+            return;
+        }
+
+        level.setBlock(pos, state, Block.UPDATE_ALL);
+        spawnBlockParticles(level, pos, state);
     }
 
     private static void spawnBlockParticles(Level level, BlockPos pos, BlockState state) {
@@ -26,12 +37,7 @@ public class MultitoolUtil {
             double y = pos.getY() + 0.5 + 0.5 * direction.getStepY();
             double z = pos.getZ() + 0.5 + 0.5 * direction.getStepZ();
 
-            level.addParticle(
-                    new BlockParticleOption(ParticleTypes.BLOCK, state),
-                    x, y, z,
-                    direction.getStepX() * 0.1,
-                    direction.getStepY() * 0.1,
-                    direction.getStepZ() * 0.1
+            level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), x, y, z, direction.getStepX() * 0.1, direction.getStepY() * 0.1, direction.getStepZ() * 0.1
             );
         }
     }

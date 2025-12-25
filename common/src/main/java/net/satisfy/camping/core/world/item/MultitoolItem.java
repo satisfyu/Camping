@@ -26,18 +26,21 @@ public class MultitoolItem extends Item {
     @Override
     public @NotNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        BlockState state = level.getBlockState(pos);
         Player player = context.getPlayer();
-
         if (player == null) return InteractionResult.PASS;
 
-        if (state.hasProperty(BlockStateProperties.FACING) || state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
-            MultitoolUtil.rotateBlock(level, pos, state, player.isShiftKeyDown());
-            return InteractionResult.SUCCESS;
+        BlockPos blockPos = context.getClickedPos();
+        BlockState blockState = level.getBlockState(blockPos);
+
+        if (!blockState.hasProperty(BlockStateProperties.FACING) && !blockState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+            return InteractionResult.PASS;
         }
 
-        return InteractionResult.PASS;
+        if (!level.isClientSide) {
+            MultitoolUtil.rotateBlock(level, blockPos, blockState, player.isShiftKeyDown());
+        }
+
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override

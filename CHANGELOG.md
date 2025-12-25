@@ -1,3 +1,12 @@
+[2.1.3]
+
+**Fixed**
+* LargeBackpack not being craftable 
+* GrilledFood not being consumed (thanks to voxu-git)
+* Multitool causing a crash when rotating certain blocks
+
+***
+
 [2.1.2]
 
 **Fixed**
