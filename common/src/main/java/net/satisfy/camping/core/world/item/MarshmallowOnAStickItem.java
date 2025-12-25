@@ -17,10 +17,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ClipContext;
@@ -47,11 +47,6 @@ public class MarshmallowOnAStickItem extends Item {
 
     public MarshmallowOnAStickItem(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public boolean isEdible() {
-        return true;
     }
 
     @Override
@@ -220,22 +215,18 @@ public class MarshmallowOnAStickItem extends Item {
         String s = stack.getOrCreateTag().getString(NBT_STAGE);
         if (s.isEmpty()) s = "default";
         if (s.equals("default")) {
-            FoodProperties b = Items.COOKIE.getFoodProperties();
-            assert b != null;
+            FoodProperties b = Foods.COOKIE;
             return new FoodProperties.Builder().nutrition(b.getNutrition()).saturationMod(b.getSaturationModifier()).alwaysEat().build();
         }
         if (s.equals("warmed")) {
-            FoodProperties b = Items.APPLE.getFoodProperties();
-            assert b != null;
+            FoodProperties b = Foods.APPLE;
             return new FoodProperties.Builder().nutrition(b.getNutrition()).saturationMod(b.getSaturationModifier()).alwaysEat().build();
         }
         if (s.equals("melted")) {
-            FoodProperties b = Items.BREAD.getFoodProperties();
-            assert b != null;
+            FoodProperties b = Foods.BREAD;
             return new FoodProperties.Builder().nutrition(b.getNutrition()).saturationMod(b.getSaturationModifier()).alwaysEat().build();
         }
-        FoodProperties b = Items.ROTTEN_FLESH.getFoodProperties();
-        assert b != null;
+        FoodProperties b = Foods.ROTTEN_FLESH;
         return new FoodProperties.Builder().nutrition(b.getNutrition()).saturationMod(b.getSaturationModifier()).alwaysEat().build();
     }
 
