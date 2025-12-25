@@ -17,7 +17,7 @@ public abstract class FabricPlayerEatMixin {
     private void camping$eat(Level level, ItemStack stack, FoodProperties props, CallbackInfoReturnable<ItemStack> cir) {
         if (!FabricCampingConfig.enableGrilling || !GrillingUtil.isGrilled(stack)) return;
         Player self=(Player)(Object)this;
-        GrillingUtil.FoodValue extra=GrillingUtil.getAdditionalFoodValue(stack);
-        self.getFoodData().eat((int)(props.nutrition()*1.25)+extra.nutrition(), props.saturation()*1.25F+extra.saturationModifier());
+        GrillingUtil.FoodValue extra = GrillingUtil.getAdditionalFoodValue(stack);
+        self.getFoodData().eat(extra.nutrition(), extra.saturationModifier());
     }
 }
