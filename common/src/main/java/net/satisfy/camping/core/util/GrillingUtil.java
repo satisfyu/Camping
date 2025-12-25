@@ -39,7 +39,15 @@ public class GrillingUtil {
         FoodProperties food = itemStack.get(DataComponents.FOOD);
         if (food != null) {
             int newNutrition = (int) (food.nutrition() * 1.25);
-            float newSaturation = food.saturation() * 1.25F;
+            float newSaturation = food.saturation() / (food.nutrition() * 2); // satpts = nutr * satmod * 2
+
+            FoodProperties boosted = new FoodProperties.Builder()
+                    .nutrition(newNutrition)
+                    .saturationModifier(newSaturation)
+                    .build();
+
+            itemStack.set(DataComponents.FOOD, boosted);
+
             CompoundTag tag = getOrCreateData(itemStack);
             tag.putInt(NUTRITION_KEY, newNutrition);
             tag.putFloat(SATURATION_KEY, newSaturation);
