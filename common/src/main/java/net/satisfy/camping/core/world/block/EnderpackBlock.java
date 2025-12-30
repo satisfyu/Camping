@@ -151,9 +151,6 @@ public class EnderpackBlock extends BaseEntityBlock implements SimpleWaterlogged
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!level.isClientSide && !state.is(newState.getBlock())) {
             BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof EnderpackBlockEntity enderpack) {
-                dropSelf(level, pos, enderpack);
-            }
         }
         super.onRemove(state, level, pos, newState, isMoving);
     }
