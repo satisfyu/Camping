@@ -1,13 +1,25 @@
 [2.1.3]
 
 **Fixed**
+- Grilled food giving max nutrition and saturation instead of a 25% increase (thanks to voxu-git)
+- Nutrition and saturation values displaying incorrectly in mods like AppleSkin (thanks to voxu-git)
+- Incorrect bag drops on shift right-click: normal backpacks dropping nothing and ender bags/backpacks dropping twice (thanks to voxu-git)
+
+**Changed**
+- Backpacks and bags are no longer equipable in the chest armor slot
+
+***
+
+[2.1.2]
+
+**Fixed**
 * LargeBackpack not being craftable 
 * GrilledFood not being consumed (thanks to voxu-git)
 * Multitool causing a crash when rotating certain blocks
 
 ***
 
-[2.1.2]
+[2.1.1-neo]
 
 **Fixed**
 * Equipped backpacks losing their inventory when opened via keybinding (Curios slot)

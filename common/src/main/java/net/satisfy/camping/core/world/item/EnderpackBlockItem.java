@@ -24,7 +24,7 @@ import net.satisfy.camping.core.registry.CampingBlocks;
 import net.satisfy.camping.core.registry.CampingItems;
 import org.jetbrains.annotations.NotNull;
 
-public class EnderpackBlockItem extends BlockItem implements Equipable {
+public class EnderpackBlockItem extends BlockItem {
 
     private final ResourceLocation texture;
 
@@ -38,21 +38,7 @@ public class EnderpackBlockItem extends BlockItem implements Equipable {
     }
 
     @Override
-    public EquipmentSlot getEquipmentSlot() {
-        return EquipmentSlot.CHEST;
-    }
-
-    @Override
-    public @NotNull Holder<SoundEvent> getEquipSound() {
-        return SoundEvents.ARMOR_EQUIP_LEATHER;
-    }
-
-    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-//        player.openMenu(new SimpleMenuProvider((containerID, inventory, playerX) -> {
-//            return ChestMenu.threeRows(containerID, inventory, player.getEnderChestInventory());
-//        }, Component.translatable("block.camping.enderpack")));
-//        return InteractionResultHolder.success(player.getItemInHand(hand));
         return InteractionResultHolder.pass(player.getItemInHand(hand));
     }
 

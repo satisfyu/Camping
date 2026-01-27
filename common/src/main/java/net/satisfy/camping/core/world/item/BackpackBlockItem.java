@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class BackpackBlockItem extends BlockItem implements Equipable {
+public class BackpackBlockItem extends BlockItem {
 
     public final BackpackVariant variant;
     private final ResourceLocation texture;
@@ -39,15 +39,4 @@ public class BackpackBlockItem extends BlockItem implements Equipable {
     public int getNumberOfUpgradeSlots() {
         return 0;
     }
-
-    @Override
-    public @NotNull EquipmentSlot getEquipmentSlot() {
-        return EquipmentSlot.CHEST;
-    }
-
-    @Override
-    public @NotNull Holder<SoundEvent> getEquipSound() {
-        return SoundEvents.ARMOR_EQUIP_LEATHER;
-    }
-
 }

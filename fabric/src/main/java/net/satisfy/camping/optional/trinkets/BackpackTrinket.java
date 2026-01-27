@@ -1,6 +1,10 @@
 package net.satisfy.camping.optional.trinkets;
 
-import dev.emi.trinkets.api.*;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.Trinket;
+import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketInventory;
+import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -17,37 +21,42 @@ public class BackpackTrinket implements Trinket {
         if (!(entity instanceof Player player)) {
             return false;
         }
-        return !alreadyEquippedBackpack(player);
+        return !alreadyEquippedBackpack(player, slot);
     }
 
-    public static boolean alreadyEquippedBackpack(Player player) {
-
-        for (ItemStack itemStack : player.getArmorSlots()) {
-            if (itemStack.getItem() instanceof BackpackBlockItem || itemStack.getItem() instanceof EnderpackBlockItem) {
-
+    public static boolean alreadyEquippedBackpack(Player player, SlotReference ignoredSlot) {
+        for (ItemStack armorStack : player.getArmorSlots()) {
+            if (isBackpackItem(armorStack)) {
                 return true;
             }
         }
 
-
         Optional<TrinketComponent> componentOptional = TrinketsApi.getTrinketComponent(player);
-        if (componentOptional.isPresent()) {
-            TrinketComponent component = componentOptional.get();
-            Map<String, Map<String, TrinketInventory>> inventoryMap = component.getInventory();
+        if (componentOptional.isEmpty()) {
+            return false;
+        }
 
-            for (Map<String, TrinketInventory> trinketGroup : inventoryMap.values()) {
+        TrinketComponent component = componentOptional.get();
+        Map<String, Map<String, TrinketInventory>> inventoryMap = component.getInventory();
 
-                for (TrinketInventory trinketInventory : trinketGroup.values()) {
-                    for (int i = 0; i < trinketInventory.getContainerSize(); i++) {
-                        ItemStack trinketStack = trinketInventory.getItem(i);
-                        if (trinketStack != null && (trinketStack.getItem() instanceof BackpackBlockItem || trinketStack.getItem() instanceof EnderpackBlockItem)) {
-
-                            return true;
-                        }
+        for (Map<String, TrinketInventory> trinketGroup : inventoryMap.values()) {
+            for (TrinketInventory trinketInventory : trinketGroup.values()) {
+                for (int slotIndex = 0; slotIndex < trinketInventory.getContainerSize(); slotIndex++) {
+                    if (ignoredSlot != null && ignoredSlot.inventory() == trinketInventory && ignoredSlot.index() == slotIndex) {
+                        continue;
+                    }
+                    ItemStack trinketStack = trinketInventory.getItem(slotIndex);
+                    if (isBackpackItem(trinketStack)) {
+                        return true;
                     }
                 }
             }
         }
+
         return false;
     }
-}
+
+    private static boolean isBackpackItem(ItemStack stack) {
+        return !stack.isEmpty() && (stack.getItem() instanceof BackpackBlockItem || stack.getItem() instanceof EnderpackBlockItem);
+    }
+} 
