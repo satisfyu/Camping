@@ -38,6 +38,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.camping.core.registry.CampingItems;
 import net.satisfy.camping.core.util.BackpackVariant;
 import net.satisfy.camping.core.util.CampingUtil;
+import net.satisfy.camping.core.util.EnderpackVariant;
 import net.satisfy.camping.core.world.BackpackContainer;
 import net.satisfy.camping.core.world.block.entity.BackpackBlockEntity;
 import org.jetbrains.annotations.NotNull;
@@ -187,6 +188,7 @@ public class BackpackBlock extends BaseEntityBlock implements SimpleWaterloggedB
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof BackpackBlockEntity backpack) {
             if (player.isShiftKeyDown()) {
+                dropBlockWithContents(level, pos, backpack);
                 level.destroyBlock(pos, false);
                 return InteractionResult.CONSUME;
             }
