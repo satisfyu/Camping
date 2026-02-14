@@ -1,39 +1,129 @@
-<p align="center"><img src="https://github.com/satisfyu/Camping/blob/main/Camping.png?raw=true" width="1200"></p>
+![Camping](https://lets-do.ch/assets/mod-logos/camping.png)
 
-<h1 align="center">Welcome to Camping!</h1>
-
-<p>How about we sleep outside today? Grab your backpack, pack the tent, grill, and sleeping bag, and let's go!</p>
-
-<h1 align="center">Available for</h1>
-<p align="center"><img src="https://imgur.com/gREqi3m.png" width="240" height="120"></p>
-
-<h1 align="center">Be Part of Our Journey</h1>
+<br>
 
 <p align="center">
-    <a title="discord" href="https://discord.gg/Vqu6wYZwdZ">
-        <img style="display: block; margin-left: auto; margin-right: auto;" src="https://1000logos.net/wp-content/uploads/2021/06/Discord-logo-2015.png" alt="" width="" height="140" />
-    </a>
-    <a title="patreon" href="https://www.patreon.com/user?u=78595058">
-    <picture>
-      <source style="display: block; margin-left: auto; margin-right: auto;" width="" height="140" media="(prefers-color-scheme: dark)" srcset="https://i.ibb.co/4R738W0/patreon-logo-icon-170869-dark.png">
-      <img style="display: block; margin-left: auto; margin-right: auto;" width="" height="140" alt="" src="https://cdn.icon-icons.com/icons2/2699/PNG/512/patreon_logo_icon_170869.png">
-    </picture>
-    </a>
+  <strong>Open Skies & Quiet Campfires</strong>
 </p>
 
-<!--
-[x] Walking Stick 
-[x] Marshmallow on-a-stick
-[] Coffee Pot & Coffee Pot Stand
-[x] New Campfire models
-[x] Campfires turn off after configurable amount of time / during rain
-[x] Campfires have a chance to ignite wood around them
-[] Twist Bread / Twisted Bread on-a-stick
-[] New grill variants
-[] Fire Pit
-[] Pillager tent variant
-[] Park bench/table set
-[] Mosquitoes rare chance during the daytime, small swarms
-[] Hotkey for rolling out the sleeping bag when using the large backpack
-[] tiki torches (to repel mosquito without spray)
--->
+<p align="center">
+  <em>The adventurous outdoor chapter of the Let's Do collection</em>
+</p>
+
+<br>
+
+<p align="center">
+  <em>"Pack light. Stay longer."</em>
+</p>
+
+<br>
+
+How about we sleep outside today? Grab your backpack, pack the tent, the grill and a sleeping bag. The trail is waiting.
+
+<br>
+
+Camping brings a simple, honest outdoor experience to your world. No unnecessary systems. Just fresh air, firelight and practical gear.
+
+<br>
+
+Step away from the village. Listen to the forest.
+
+<br>
+
+## Travel Prepared
+
+<br>
+
+- 7 new Backpacks providing 3 additional rows of storage  
+- Pure utility. No extra gimmicks  
+- Craftable bundles for compact organization  
+
+<br>
+
+Carry what matters.
+
+<br>
+
+## Camp Anywhere
+
+<br>
+
+- Tents in all colors  
+- Matching sleeping bags for every style  
+- Perfect for expeditions, roleplay or scenic builds  
+
+<br>
+
+Pitch your tent. Watch the stars.
+
+<br>
+
+## Fire & Food
+
+<br>
+
+- A functional grill for cooking meat  
+- Grilled meals provide improved nutrition and saturation  
+- Gather around the fire and share the moment  
+
+<br>
+
+Simple food tastes better outdoors.
+
+<br>
+
+<p align="center">
+  <strong>Follow the trail.</strong>
+</p>
+
+<p align="center">
+  <strong>Light the fire.</strong>
+</p>
+
+<p align="center">
+  <strong>Sleep under the stars.</strong>
+</p>
+
+<br>
+
+<p align="center">
+  <em>Have fun outdoors.</em>
+</p>
+
+<br>
+
+<p align="center">
+  <em>Dedicated to MissLilitu</em>
+</p>
+
+<br>
+
+<div align="center">
+
+# The Let’s Do Collection
+
+<br>
+
+<a href="https://lets-do.ch/mods/">
+  <img src="https://github.com/Let-s-Do-Collection/Let-s-Do-Collection/raw/main/LOGO.png?raw=true" width="350" alt="The Let’s Do Collection">
+</a>
+
+<br>
+
+# Support & Community
+
+</div>
+
+<br>
+
+<p align="center">
+  Let’s Do grows through its community.
+</p>
+
+<br>
+
+<p align="center">
+  <a href="https://github.com/Let-s-Do-Collection/Let-s-Do-Collection">GitHub</a> •
+  <a href="https://discord.gg/Jb2bgpYr">Discord</a> •
+  <a href="https://www.patreon.com/c/u78595058">Patreon</a>
+</p>
