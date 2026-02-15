@@ -1,4 +1,4 @@
-![Camping](https://lets-do.ch/assets/mod-logos/camping.png)
+![Camping](https://lets-do.ch/assets/mod-logos/camping.webp)
 
 <br>
 
