@@ -1,4 +1,6 @@
 {
+  "itemGroup.camping": "[Let's Do] Camping",
+
   "advancement.camping.get_a_bundle.desc": "Да, теперь их можно создать!",
   "advancement.camping.get_a_bundle.title": "Большие сумки!",
   "advancement.camping.get_a_enderbag.desc": "Получите эндер-сумку",
@@ -23,6 +25,7 @@
   "advancement.camping.use_beef_on_grill.title": "С хрустящей корочкой",
   "advancement.camping.use_multitool_on_sheep.desc": "Подстригите овцу с помощью мультитула",
   "advancement.camping.use_multitool_on_sheep.title": "Режим I",
+
   "block.camping.enderbag": "§5Эндер-сумка",
   "block.camping.enderpack": "§5Эндер-рюкзак",
   "block.camping.goodybag": "§cПоходный рюкзак",
@@ -112,26 +115,39 @@
   "block.camping.tent_yellow": "Жёлтая палатка",
   "block.camping.wanderer_backpack": "§9Рюкзак путешественника",
   "block.camping.wanderer_bag": "§9Сумка путешественника",
+
   "container.camping.backpack": "Рюкзак",
   "container.camping.ender_backpack": "Эндер-рюкзак",
   "container.camping.enderpack": "Эндер-сумка",
   "container.camping.large_backpack": "Большой рюкзак",
   "container.camping.small_backpack": "Маленький рюкзак",
   "container.camping.wanderer_backpack": "Рюкзак путешественника",
+
+  "item.camping.walking_stick": "Трость",
   "item.camping.multitool": "Мультитул",
-  "item.camping.multitool.mode.flint_and_steel": "Инструмент: Огниво",
-  "item.camping.multitool.mode.saw": "Инструмент: Пила",
-  "item.camping.multitool.mode.shears": "Инструмент: Ножницы",
-  "itemGroup.camping.camping_tab": "[Let's Do] Camping",
+  "item.camping.marshmallow": "Зефир",
+  "item.camping.roasted_marshmallow": "Жареный зефир",
+  "item.camping.marshmallow_on_a_stick": "Зефир на палочке",
+
   "key.camping.category": "[Let's Do] Camping",
   "key.camping.open": "Открыть рюкзак",
+
   "text.autoconfig.camping.option.enableEffect": "Регенерация здоровья во время сна",
   "text.autoconfig.camping.option.enableEffect.@PrefixText": "Спальный мешок",
   "text.autoconfig.camping.option.enableGlint": "Приготовленные на гриле предметы блестят",
   "text.autoconfig.camping.option.enableGrilling": "Позволять готовить еду на гриле",
   "text.autoconfig.camping.option.enableGrilling.@PrefixText": "Приготовление на гриле",
   "text.autoconfig.camping.title": "Настройки мода Camping (Экспериментальные)",
+
   "tooltip.camping.grilled": "Приготовлено на гриле:",
   "tooltip.camping.grilled.nutrition": "+25% Питательности",
-  "tooltip.camping.grilled.saturationModifier": "+25% Насыщения"
+  "tooltip.camping.grilled.saturationModifier": "+25% Насыщения",
+  "tooltip.camping.multitool": "ПКМ для вращения блока",
+  "tooltip.camping.canbeplaced": "Можно поставить",
+
+  "tooltip.camping.marshmallow_stage.default": "Непрожаренный",
+  "tooltip.camping.marshmallow_stage.warmed": "Подогретый",
+  "tooltip.camping.marshmallow_stage.melted": "Расплавленный",
+  "tooltip.camping.marshmallow_stage.charred": "Подгоревший",
+  "tooltip.camping.marshmallow_stage.totally_burnt": "Обуглившийся"
 }
