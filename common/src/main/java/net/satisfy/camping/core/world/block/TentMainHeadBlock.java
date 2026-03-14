@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class TentMainHeadBlock extends TentBlock {
+    
     public static final EnumProperty<DoubleBlockHalf> HALF;
     private final DyeColor color;
     private static final Supplier<VoxelShape> bottomVoxelShapeSupplier = () -> {

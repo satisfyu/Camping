@@ -1,3 +1,13 @@
+[2.1.4]
+
+**Fixed**
+- Tents now correctly break and drop when destroyed from the sealed back corner
+
+**Changed**
+- Updated ru_ru (tefnya)
+
+***
+
 [2.1.3]
 
 **Fixed**
